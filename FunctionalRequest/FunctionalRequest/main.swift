@@ -54,31 +54,28 @@ APIs.g1.request(id1)
 
 APIs.g2.request(id0)
 
-APIs.g3.request { (resp) in
-    print(resp.value!)
+APIs.g3.request {
+    print($0.value!)
 }
 
-APIs.g4.request { (resp) in
-    print(resp.value!)
+APIs.g4.request {
+    print($0.value!)
 }
 
-APIs.g5.request(id1) { (resp) in
-    print(resp.value!)
+APIs.g5.request(id1) {
+    print($0.value!)
 }
 
-APIs.g6.request(id0) { (resp) in
-    print(resp.value!)
+APIs.g6.request(id0) {
+    print($0.value!)
 }
 
-APIs.g7.request(id1) { (resp) in
-    print(resp.value!)
+APIs.g7.request(id1) {
+    print($0.value!)
 }
 
-APIs.g8.request(id0) { (resp) in
-    print(resp.value!)
+APIs.g8.request(id0) {
+    print($0.value!)
 }
-
 
 RunLoop.current.run()
-
-

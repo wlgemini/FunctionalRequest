@@ -54,7 +54,7 @@ public enum None {}
 
 /// 表示一个Requestable的Input和Output的范型参数
 ///
-/// 可以表示请求参数为JSON(也就是一个Dictionary)，或者返回值为JSON(也就是一个Dictionary)
+/// 可以表示请求参数为JSON(也就是一个Any)，或者返回值为JSON(也就是一个Any)
 ///
 public enum JSON {}
 
