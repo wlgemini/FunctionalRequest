@@ -10,10 +10,6 @@ import Alamofire
 import Foundation
 
 
-public enum NotEncodable {}
-public enum NotDecodable {}
-
-
 // Requestable
 public protocol Requestable {
     
@@ -47,61 +43,91 @@ public protocol Requestable {
 }
 
 
-// Method is available when:
-// Input is Not Encodable & Output is Not Decodable
-public extension Requestable where Input == NotEncodable, Output == NotDecodable {
-    
-    func callAsFunction() {
-        AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: { _ in })
-    }
-    
-    func callAsFunction(params: [String: Any]) {
-        AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: { _ in })
-    }
+// MARK: - Request Function
+// MARK: Input/Output Argument
+/// 表示一个Requestable的Input和Output的范型参数
+///
+/// 可以表示请求没有参数，或者忽略返回值
+///
+public enum None {}
 
-    func callAsFunction(completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
-        AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
-    }
 
-    func callAsFunction(params: [String: Any], completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
-        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
+/// 表示一个Requestable的Input和Output的范型参数
+///
+/// 可以表示请求参数为JSON(也就是一个Dictionary)，或者返回值为JSON(也就是一个Dictionary)
+///
+public enum JSON {}
+
+
+// MARK: Input == None, Output == None
+public extension Requestable where Input == None, Output == None {
+    
+    func request() {
+        AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseData(completionHandler: { _ in })
     }
 }
 
 
-// Method is available when:
-// Input is Not Encodable & Output is Decodable
-public extension Requestable where Input == NotEncodable, Output: Decodable {
+// MARK: Input == None, Output == JSON
+public extension Requestable where Input == None, Output == JSON {
     
-    func callAsFunction(completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
+    func request(completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
+        AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
+    }
+}
+
+// MARK: Input == None, Output: Decodable
+public extension Requestable where Input == None, Output: Decodable {
+    
+    func request(completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
         AF.request(self._url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._requestModifier).responseDecodable(completionHandler: completionDecodable)
     }
+}
+
+// MARK: Input == JSON, Output == None
+public extension Requestable where Input == JSON, Output == None {
     
-    func callAsFunction(params: [String: Any], completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
+    func request(_ params: [String: Any]) {
+        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseData(completionHandler: { _ in })
+    }
+}
+
+// MARK: Input: Encodable, Output == None
+public extension Requestable where Input: Encodable, Output == None {
+    
+    func request(_ params: Input) {
+        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseData(completionHandler: { _ in })
+    }
+}
+
+// MARK: Input == JSON, Output == JSON
+public extension Requestable where Input == JSON, Output == JSON {
+    
+    func request(_ params: [String: Any], completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
+        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
+    }
+}
+
+// MARK: Input: Encodable, Output == JSON
+public extension Requestable where Input: Encodable, Output == JSON {
+    
+    func request(_ params: Input, completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
+        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
+    }
+}
+
+// MARK: Input == JSON, Output: Decodable
+public extension Requestable where Input == JSON, Output: Decodable {
+    
+    func request(_ params: [String: Any], completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
         AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseDecodable(completionHandler: completionDecodable)
     }
 }
 
-
-// Method is available when:
-// Input is Encodable & Output is Not Decodable
-public extension Requestable where Input: Encodable, Output == NotDecodable {
-    
-    func callAsFunction(params: Input) {
-        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseData(completionHandler: { _ in })
-    }
-    
-    func callAsFunction(params: Input, completionJSON: @escaping (AFDataResponse<Any>) -> Void) {
-        AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseJSON(completionHandler: completionJSON)
-    }
-}
-
-
-// Method is available when:
-// Input is Encodable & Output is Decodable
+// MARK: Input: Encodable, Output: Decodable
 public extension Requestable where Input: Encodable, Output: Decodable {
     
-    func callAsFunction(params: Input, completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
+    func request(_ params: Input, completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void) {
         AF.request(self._url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._requestModifier).responseDecodable(completionHandler: completionDecodable)
     }
 }

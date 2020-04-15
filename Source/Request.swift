@@ -11,76 +11,96 @@ import Alamofire
 
 
 /// SELECT）：从服务器取出资源（一项或多项）
-struct GET<Input, Output>: Requestable {
+public struct GET<Input, Output>: Requestable {
     
-    var additionalHeaders: HTTPHeaders? = nil
+    public var additionalHeaders: HTTPHeaders? = nil
     
-    var timeoutInterval: TimeInterval? = nil
+    public var timeoutInterval: TimeInterval? = nil
     
-    let method: HTTPMethod = .get
+    public let method: HTTPMethod = .get
     
-    let api: String
+    public let api: String
     
-    var mocking: String? = nil
+    public var mocking: String? = nil
+    
+    public init(_ api: String) {
+        self.api = api
+    }
 }
 
 
 ///（CREATE）：在服务器新建一个资源
-struct POST<Input, Output>: Requestable {
+public struct POST<Input, Output>: Requestable {
     
-    var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: HTTPHeaders? = nil
     
-    var timeoutInterval: TimeInterval?
+    public var timeoutInterval: TimeInterval? = nil
     
-    let method: HTTPMethod = .post
+    public let method: HTTPMethod = .post
     
-    let api: String
+    public let api: String
     
-    var mocking: String?
+    public var mocking: String? = nil
+    
+    public init(_ api: String) {
+        self.api = api
+    }
 }
 
 
 ///（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源）
-struct PUT<Input, Output>: Requestable {
+public struct PUT<Input, Output>: Requestable {
     
-    var additionalHeaders: HTTPHeaders? = nil
+    public var additionalHeaders: HTTPHeaders? = nil
     
-    var timeoutInterval: TimeInterval? = nil
+    public var timeoutInterval: TimeInterval? = nil
     
-    let method: HTTPMethod = .put
+    public let method: HTTPMethod = .put
     
-    let api: String
+    public let api: String
     
-    var mocking: String? = nil
+    public var mocking: String? = nil
+    
+    public init(_ api: String) {
+        self.api = api
+    }
 }
 
 
 ///（UPDATE）：在服务器更新资源（客户端提供改变的属性）
-struct PATCH<Input, Output>: Requestable {
+public struct PATCH<Input, Output>: Requestable {
     
-    var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: HTTPHeaders? = nil
     
-    var timeoutInterval: TimeInterval?
+    public var timeoutInterval: TimeInterval? = nil
     
-    let method: HTTPMethod = .patch
+    public let method: HTTPMethod = .patch
     
-    let api: String
+    public let api: String
     
-    var mocking: String?
+    public var mocking: String? = nil
+    
+    public init(_ api: String) {
+        self.api = api
+    }
 }
 
 
 ///（DELETE）：从服务器删除资源
-struct DELETE<Input, Output>: Requestable {
+public struct DELETE<Input, Output>: Requestable {
     
-    var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: HTTPHeaders? = nil
     
-    var timeoutInterval: TimeInterval?
+    public var timeoutInterval: TimeInterval? = nil
     
-    let method: HTTPMethod = .delete
+    public let method: HTTPMethod = .delete
     
-    let api: String
+    public let api: String
     
-    var mocking: String?
+    public var mocking: String? = nil
+    
+    public init(_ api: String) {
+        self.api = api
+    }
 }
 
