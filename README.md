@@ -122,10 +122,10 @@ struct DELETE<Input, Output>
 ```swift
 enum None // 用于表示：Input/Output为空，也就是网络请求不需要参数，或者不关心返回值。
 
-enum JSON // 用于表示：Input/Output可能是JSON类型，也就是一个Dictionary。
+enum JSON // 用于表示：Input/Output可能是JSON类型，也就是一个Any。
 ```
 
-由于以上这些请求类型(`GET/POST/...`)有相同的功能，所以用`protocol Requestable`来抽取这些功能。
+由于这些请求类型(`GET/POST/...`)都有相同的功能，所以用`protocol Requestable`来抽取这些功能。
 
 ```swift
 protocol Requestable {
@@ -154,7 +154,7 @@ struct GET<Input, Output>: Requestable
 struct POST<Input, Output>: Requestable
 ```
 
-针对不同的`Input/Output`类型，使用`Conditional Conformance`特性来划分不同的请求方法。这使得不同类型的`Input/Output`都有属于自己的请求方法：
+针对不同的`Input/Output`类型，使用Swift的`Conditional Conformance`特性来划分不同的请求方法。这使得不同类型的`Input/Output`都有属于自己的请求方法：
 
 ```swift
 extension Requestable where Input == None, Output == None {
@@ -198,18 +198,20 @@ extension Requestable where Input: Encodable, Output: Decodable {
 
 #### 请求类型的可扩展性
 
-如果有自定义协议的请求类型，直接遵守`Requestable`协议就可以了，比如:
+如果有自定义请求类型，直接遵守`Requestable`协议就可以了，比如:
 
-```sw
-struct CUSTOM<Input, Output>: Requestable
+```swift
+struct CUSTOM<Input, Output>: Requestable {
+		let method: HTTPMethod = .custom 
+  	// ...
+}
 ```
 
-除了自定义协议这种情况，一个网络请求还应该会用更多的可配置项。比如：请求超时时间，是否使用缓存，headers，mock地址等等。
+除了自定义请求这种情况，一个网络请求还应该会用更多的可配置项。比如：请求超时时间，设置额外的headers，做mock等等。
 
 这些配置项都可以进行全局配置，使用`Configuration`来存储这些全局配置。
 
 ```swift
-Configuration.base = "https://www.xxxyyy.com/"
 Configuration.timeoutInterval = 60
 // Configuration.headers
 ```
@@ -217,14 +219,17 @@ Configuration.timeoutInterval = 60
 而不同的请求也可能会有不同的配置项，需要允许不同的请求有不同的配置项。
 
 ```swift
-login.setTimeoutInterval(2).request()
+login
+	.setTimeoutInterval(2)
+	.setMocking("http://www.mocking.com/login")
+	.request()
 ```
 
 ### 推荐用法
 
 在使用网络请求之前，首先要配置`Configuration`，至少配置一个`base`(基地址)
 
-定义网络请求:
+定义网络请求（推荐定义在一个类型内，这里定义在了`APIs`中）:
 
 ```swift
 struct APIs {
@@ -253,10 +258,10 @@ APIs.friends.request(page) {
 
 /// mock获取好友
 APIs.friends
-		.setMocking("http://www.mocking.com/friends")
-		.request(page) {
-      	print($0.value) // [Friend]
- 		}
+	.setMocking("http://www.mocking.com/friends")
+	.request(page) {
+    print($0.value) // [Friend]
+  }
 ```
 
 
