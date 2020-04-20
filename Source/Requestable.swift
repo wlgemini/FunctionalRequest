@@ -10,7 +10,7 @@ import Alamofire
 import Foundation
 
 
-// Requestable
+// MARK: - Requestable
 public protocol Requestable {
     
     /// Input type (aka params)
@@ -31,6 +31,10 @@ public protocol Requestable {
     
     /// the request method
     var method: HTTPMethod { get }
+    
+    /// the base url
+    /// will combined with `api`
+    var base: () -> String { get }
     
     /// the request api
     /// will combined with `base`
@@ -160,11 +164,7 @@ public extension Requestable {
 extension Requestable {
     
     private var _url: String {
-        guard let base  = Configuration.base else {
-            fatalError("Configuration.base not set")
-        }
-        
-        var url: String = base + self.api
+        var url: String = self.base() + self.api
         #if DEBUG
         if let mocking = self.mocking {
             url = mocking

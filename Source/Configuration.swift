@@ -14,11 +14,6 @@ import Foundation
 /// 比如 `foo`接口设置了单独的timeoutInterval，那么就会优先使用这个单独timeoutInterval
 enum Configuration {
     
-    /// 基地址，mock时会忽略它
-    /// will combined with `api`
-    /// eg: base = "http://www.wlgemini.com/", api = "foo", url = base + api = "http://www.wlgemini.com/foo"
-    static var base: String?
-    
     /// 要添加的头信息，会和具体接口中的additionalHeaders进行merge
     /// 但additionalHeaders优先级会更高，会覆盖冲突的key-value
     static var headers = HTTPHeaders()

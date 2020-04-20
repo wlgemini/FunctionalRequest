@@ -8,25 +8,32 @@
 
 import Foundation
 
-Configuration.base = "https://www.xxxyyy.com/"
+
 Configuration.timeoutInterval = 60
 // Configuration.headers
 
 
 struct APIs {
+    
+    static let base0 = "https://www.base0-dev.com/" // "https://www.base0-online.com/"
+    
+    static let base1 = "https://www.base1-dev.com/" // "https://www.base1-online.com/"
+    
+    static let base2 = "https://www.base2-dev.com/" // "https://www.base2-online.com/"
+    
 
-    static let g0 = GET<None, None>("foo")
+    static let g0 = GET<None, None>("foo", base: Self.base0)
     
-    static let g1 = GET<JSON, None>("foo")
-    static let g2 = GET<ID, None>("foo")
+    static let g1 = GET<JSON, None>("foo", base: Self.base0)
+    static let g2 = GET<ID, None>("foo", base: Self.base0)
     
-    static let g3 = GET<None, JSON>("foo")
-    static let g4 = GET<None, Persion>("foo")
+    static let g3 = GET<None, JSON>("foo", base: Self.base0)
+    static let g4 = GET<None, Persion>("foo", base: Self.base0)
     
-    static let g5 = GET<JSON, JSON>("foo")
-    static let g6 = GET<ID, JSON>("foo")
-    static let g7 = GET<JSON, Persion>("foo")
-    static let g8 = GET<ID, Persion>("foo")
+    static let g5 = GET<JSON, JSON>("foo", base: Self.base0)
+    static let g6 = GET<ID, JSON>("foo", base: Self.base0)
+    static let g7 = GET<JSON, Persion>("foo", base: Self.base0)
+    static let g8 = GET<ID, Persion>("foo", base: Self.base0)
 }
 
 struct ID: Encodable {

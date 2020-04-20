@@ -19,12 +19,19 @@ public struct GET<Input, Output>: Requestable {
     
     public let method: HTTPMethod = .get
     
+    public var base: () -> String
+    
     public let api: String
     
     public var mocking: String? = nil
     
-    public init(_ api: String) {
+    /// Init
+    /// - Parameters:
+    ///   - api: 相对地址
+    ///   - base: 基地址，changeable
+    public init(_ api: String, base: @escaping @autoclosure () -> String) {
         self.api = api
+        self.base = base
     }
 }
 
@@ -38,12 +45,19 @@ public struct POST<Input, Output>: Requestable {
     
     public let method: HTTPMethod = .post
     
+    public var base: () -> String
+    
     public let api: String
     
     public var mocking: String? = nil
     
-    public init(_ api: String) {
+    /// Init
+    /// - Parameters:
+    ///   - api: 相对地址
+    ///   - base: 基地址，changeable
+    public init(_ api: String, base: @escaping @autoclosure () -> String) {
         self.api = api
+        self.base = base
     }
 }
 
@@ -57,12 +71,19 @@ public struct PUT<Input, Output>: Requestable {
     
     public let method: HTTPMethod = .put
     
+    public var base: () -> String
+    
     public let api: String
     
     public var mocking: String? = nil
     
-    public init(_ api: String) {
+    /// Init
+    /// - Parameters:
+    ///   - api: 相对地址
+    ///   - base: 基地址，changeable
+    public init(_ api: String, base: @escaping @autoclosure () -> String) {
         self.api = api
+        self.base = base
     }
 }
 
@@ -76,12 +97,19 @@ public struct PATCH<Input, Output>: Requestable {
     
     public let method: HTTPMethod = .patch
     
+    public var base: () -> String
+    
     public let api: String
     
     public var mocking: String? = nil
     
-    public init(_ api: String) {
+    /// Init
+    /// - Parameters:
+    ///   - api: 相对地址
+    ///   - base: 基地址，changeable
+    public init(_ api: String, base: @escaping @autoclosure () -> String) {
         self.api = api
+        self.base = base
     }
 }
 
@@ -95,12 +123,19 @@ public struct DELETE<Input, Output>: Requestable {
     
     public let method: HTTPMethod = .delete
     
+    public var base: () -> String
+    
     public let api: String
     
     public var mocking: String? = nil
     
-    public init(_ api: String) {
+    /// Init
+    /// - Parameters:
+    ///   - api: 相对地址
+    ///   - base: 基地址，changeable
+    public init(_ api: String, base: @escaping @autoclosure () -> String) {
         self.api = api
+        self.base = base
     }
 }
 
