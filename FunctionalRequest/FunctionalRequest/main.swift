@@ -15,11 +15,11 @@ Configuration.timeoutInterval = 60
 
 struct APIs {
     
-    static let base0 = "https://www.base0-dev.com/" // "https://www.base0-online.com/"
+    static var base0 = "https://www.base0-dev.com/" // "https://www.base0-online.com/"
     
-    static let base1 = "https://www.base1-dev.com/" // "https://www.base1-online.com/"
+    static var base1 = "https://www.base1-dev.com/" // "https://www.base1-online.com/"
     
-    static let base2 = "https://www.base2-dev.com/" // "https://www.base2-online.com/"
+    static var base2 = "https://www.base2-dev.com/" // "https://www.base2-online.com/"
     
 
     static let g0 = GET<None, None>("foo", base: Self.base0)
