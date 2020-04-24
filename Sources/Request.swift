@@ -1,9 +1,5 @@
 //
 //  Request.swift
-//  Net
-//
-//  Created by wangluguang on 2020/4/8.
-//  Copyright © 2020 com.wlgemini. All rights reserved.
 //
 
 import Foundation
