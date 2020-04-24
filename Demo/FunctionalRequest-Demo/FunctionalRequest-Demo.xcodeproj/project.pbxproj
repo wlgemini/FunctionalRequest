@@ -3,19 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		212409B22444600600054BDE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212409B12444600600054BDE /* main.swift */; };
-		212409BA244479FB00054BDE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 212409B9244479FB00054BDE /* Alamofire */; };
-		212409C42445A58900054BDE /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212409C12445A58900054BDE /* Requestable.swift */; };
-		212409C52445A58900054BDE /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212409C22445A58900054BDE /* Configuration.swift */; };
-		212409C62445A58900054BDE /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212409C32445A58900054BDE /* Request.swift */; };
+		21A6DDA72452ECE3008D6E8A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A6DDA62452ECE3008D6E8A /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		212409AC2444600600054BDE /* CopyFiles */ = {
+		21A6DDA12452ECE3008D6E8A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -27,91 +23,81 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		212409AE2444600600054BDE /* FunctionalRequest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FunctionalRequest; sourceTree = BUILT_PRODUCTS_DIR; };
-		212409B12444600600054BDE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		212409C12445A58900054BDE /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Requestable.swift; path = ../../Source/Requestable.swift; sourceTree = "<group>"; };
-		212409C22445A58900054BDE /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = ../../Source/Configuration.swift; sourceTree = "<group>"; };
-		212409C32445A58900054BDE /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Request.swift; path = ../../Source/Request.swift; sourceTree = "<group>"; };
+		21A6DDA32452ECE3008D6E8A /* FunctionalRequest-Demo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "FunctionalRequest-Demo"; sourceTree = BUILT_PRODUCTS_DIR; };
+		21A6DDA62452ECE3008D6E8A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		212409AB2444600600054BDE /* Frameworks */ = {
+		21A6DDA02452ECE3008D6E8A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				212409BA244479FB00054BDE /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		212409A52444600600054BDE = {
+		21A6DD9A2452ECE3008D6E8A = {
 			isa = PBXGroup;
 			children = (
-				212409B02444600600054BDE /* FunctionalRequest */,
-				212409AF2444600600054BDE /* Products */,
+				21A6DDA52452ECE3008D6E8A /* FunctionalRequest-Demo */,
+				21A6DDA42452ECE3008D6E8A /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		212409AF2444600600054BDE /* Products */ = {
+		21A6DDA42452ECE3008D6E8A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				212409AE2444600600054BDE /* FunctionalRequest */,
+				21A6DDA32452ECE3008D6E8A /* FunctionalRequest-Demo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		212409B02444600600054BDE /* FunctionalRequest */ = {
+		21A6DDA52452ECE3008D6E8A /* FunctionalRequest-Demo */ = {
 			isa = PBXGroup;
 			children = (
-				212409C22445A58900054BDE /* Configuration.swift */,
-				212409C32445A58900054BDE /* Request.swift */,
-				212409C12445A58900054BDE /* Requestable.swift */,
-				212409B12444600600054BDE /* main.swift */,
+				21A6DDA62452ECE3008D6E8A /* main.swift */,
 			);
-			path = FunctionalRequest;
+			path = "FunctionalRequest-Demo";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		212409AD2444600600054BDE /* FunctionalRequest */ = {
+		21A6DDA22452ECE3008D6E8A /* FunctionalRequest-Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 212409B52444600600054BDE /* Build configuration list for PBXNativeTarget "FunctionalRequest" */;
+			buildConfigurationList = 21A6DDAA2452ECE3008D6E8A /* Build configuration list for PBXNativeTarget "FunctionalRequest-Demo" */;
 			buildPhases = (
-				212409AA2444600600054BDE /* Sources */,
-				212409AB2444600600054BDE /* Frameworks */,
-				212409AC2444600600054BDE /* CopyFiles */,
+				21A6DD9F2452ECE3008D6E8A /* Sources */,
+				21A6DDA02452ECE3008D6E8A /* Frameworks */,
+				21A6DDA12452ECE3008D6E8A /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = FunctionalRequest;
-			packageProductDependencies = (
-				212409B9244479FB00054BDE /* Alamofire */,
-			);
-			productName = FunctionalRequest;
-			productReference = 212409AE2444600600054BDE /* FunctionalRequest */;
+			name = "FunctionalRequest-Demo";
+			productName = "FunctionalRequest-Demo";
+			productReference = 21A6DDA32452ECE3008D6E8A /* FunctionalRequest-Demo */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		212409A62444600600054BDE /* Project object */ = {
+		21A6DD9B2452ECE3008D6E8A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = com.wlgemini;
 				TargetAttributes = {
-					212409AD2444600600054BDE = {
-						CreatedOnToolsVersion = 11.4;
+					21A6DDA22452ECE3008D6E8A = {
+						CreatedOnToolsVersion = 11.4.1;
 					};
 				};
 			};
-			buildConfigurationList = 212409A92444600600054BDE /* Build configuration list for PBXProject "FunctionalRequest" */;
+			buildConfigurationList = 21A6DD9E2452ECE3008D6E8A /* Build configuration list for PBXProject "FunctionalRequest-Demo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -119,35 +105,29 @@
 				en,
 				Base,
 			);
-			mainGroup = 212409A52444600600054BDE;
-			packageReferences = (
-				212409B8244479FB00054BDE /* XCRemoteSwiftPackageReference "Alamofire" */,
-			);
-			productRefGroup = 212409AF2444600600054BDE /* Products */;
+			mainGroup = 21A6DD9A2452ECE3008D6E8A;
+			productRefGroup = 21A6DDA42452ECE3008D6E8A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				212409AD2444600600054BDE /* FunctionalRequest */,
+				21A6DDA22452ECE3008D6E8A /* FunctionalRequest-Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		212409AA2444600600054BDE /* Sources */ = {
+		21A6DD9F2452ECE3008D6E8A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				212409C42445A58900054BDE /* Requestable.swift in Sources */,
-				212409C52445A58900054BDE /* Configuration.swift in Sources */,
-				212409C62445A58900054BDE /* Request.swift in Sources */,
-				212409B22444600600054BDE /* main.swift in Sources */,
+				21A6DDA72452ECE3008D6E8A /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		212409B32444600600054BDE /* Debug */ = {
+		21A6DDA82452ECE3008D6E8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -207,7 +187,7 @@
 			};
 			name = Debug;
 		};
-		212409B42444600600054BDE /* Release */ = {
+		21A6DDA92452ECE3008D6E8A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -260,7 +240,7 @@
 			};
 			name = Release;
 		};
-		212409B62444600600054BDE /* Debug */ = {
+		21A6DDAB2452ECE3008D6E8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -269,7 +249,7 @@
 			};
 			name = Debug;
 		};
-		212409B72444600600054BDE /* Release */ = {
+		21A6DDAC2452ECE3008D6E8A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -281,44 +261,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		212409A92444600600054BDE /* Build configuration list for PBXProject "FunctionalRequest" */ = {
+		21A6DD9E2452ECE3008D6E8A /* Build configuration list for PBXProject "FunctionalRequest-Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				212409B32444600600054BDE /* Debug */,
-				212409B42444600600054BDE /* Release */,
+				21A6DDA82452ECE3008D6E8A /* Debug */,
+				21A6DDA92452ECE3008D6E8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		212409B52444600600054BDE /* Build configuration list for PBXNativeTarget "FunctionalRequest" */ = {
+		21A6DDAA2452ECE3008D6E8A /* Build configuration list for PBXNativeTarget "FunctionalRequest-Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				212409B62444600600054BDE /* Debug */,
-				212409B72444600600054BDE /* Release */,
+				21A6DDAB2452ECE3008D6E8A /* Debug */,
+				21A6DDAC2452ECE3008D6E8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		212409B8244479FB00054BDE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		212409B9244479FB00054BDE /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 212409B8244479FB00054BDE /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 212409A62444600600054BDE /* Project object */;
+	rootObject = 21A6DD9B2452ECE3008D6E8A /* Project object */;
 }
