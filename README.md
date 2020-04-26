@@ -218,8 +218,10 @@ extension Requestable where Input: Encodable, Output == Data {
 
 ```swift
 struct CUSTOM<Input, Output>: Requestable {
-		let method: HTTPMethod = .custom 
-  	// ...
+	
+	let method: HTTPMethod = .custom 
+  	
+	// ...
 }
 ```
 
@@ -236,9 +238,9 @@ Configuration.timeoutInterval = 60
 
 ```swift
 login
-	.setTimeoutInterval(2)
-	.setMocking("http://www.mocking.com/login")
-	.request()
+     .setTimeoutInterval(2)
+     .setMocking("http://www.mocking.com/login")
+     .request()
 ```
 
 ### 推荐用法
@@ -249,8 +251,12 @@ login
 
 ```swift
 struct APIs {
+    
+    // base
+    static let base = "https://www.xxxyyy.com/"
+	
     // 登录
-    static let login = POST<Account, UserInfo>("api/v1/login")
+    static let login = POST<Account, UserInfo>("api/v1/login", base: Self.base)
 
     // 获取好友
     static let friends = GET<Page, [Friend]>("api/v1/friends")
