@@ -161,14 +161,6 @@ extension Requestable where Input == None, Output == None {
     func request()
 }
 
-extension Requestable where Input == None, Output == JSON {
-    func request(completionJSON: @escaping (AFDataResponse<Any>) -> Void)
-}
-
-extension Requestable where Input == None, Output: Decodable {
-    func request(completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void)
-}
-
 extension Requestable where Input == JSON, Output == None {
     func request(_ params: [String: Any])
 }
@@ -177,24 +169,48 @@ extension Requestable where Input: Encodable, Output == None {
     func request(_ params: Input)
 }
 
-extension Requestable where Input == JSON, Output == JSON {
-    func request(_ params: [String: Any], completionJSON: @escaping (AFDataResponse<Any>) -> Void)
+extension Requestable where Input == None, Output == JSON {
+    func request(completion: @escaping (AFDataResponse<Any>) -> Void)
 }
 
-extension Requestable where Input: Encodable, Output == JSON {
-    func request(_ params: Input, completionJSON: @escaping (AFDataResponse<Any>) -> Void)
+extension Requestable where Input == None, Output: Decodable {
+    func request(completion: @escaping (DataResponse<Output, AFError>) -> Void)
+}
+
+extension Requestable where Input == JSON, Output == JSON {
+    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Any>) -> Void)
 }
 
 extension Requestable where Input == JSON, Output: Decodable {
-    func request(_ params: [String: Any], completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void)
+    func request(_ params: [String: Any], completion: @escaping (DataResponse<Output, AFError>) -> Void)
+}
+
+extension Requestable where Input: Encodable, Output == JSON {
+    func request(_ params: Input, completion: @escaping (AFDataResponse<Any>) -> Void)
 }
 
 extension Requestable where Input: Encodable, Output: Decodable {
-    func request(_ params: Input, completionDecodable: @escaping (DataResponse<Output, AFError>) -> Void)
+    func request(_ params: Input, completion: @escaping (DataResponse<Output, AFError>) -> Void)
 }
 ```
 
 以上请求方法，就是`Input/Output`类型的全部情况了
+
+当然还有`Output == Data`这种特殊情况，对于希望返回`Data`数据的情况会很有用：
+
+```swift
+extension Requestable where Input == None, Output == Data {
+    func request(completion: @escaping (AFDataResponse<Data>) -> Void)
+}
+
+extension Requestable where Input == JSON, Output == Data {
+    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Data>) -> Void)
+}
+
+extension Requestable where Input: Encodable, Output == Data {
+    func request(_ params: Input, completion: @escaping (AFDataResponse<Data>) -> Void)
+}
+```
 
 #### 请求类型的可扩展性
 
