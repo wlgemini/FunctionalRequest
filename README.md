@@ -194,7 +194,7 @@ extension Requestable where Input: Encodable, Output: Decodable {
 }
 ```
 
-以上请求方法，就是`Input/Output`类型的全部情况了
+以上请求方法，就是`Input/Output`类型的大部分情况了
 
 当然还有`Output == Data`这种特殊情况，对于希望返回`Data`数据的情况会很有用：
 
