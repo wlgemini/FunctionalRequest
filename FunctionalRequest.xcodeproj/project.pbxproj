@@ -1,0 +1,825 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"FunctionalRequest::FunctionalRequestPackageTests::ProductTarget" /* FunctionalRequestPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_121 /* Build configuration list for PBXAggregateTarget "FunctionalRequestPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_124 /* PBXTargetDependency */,
+			);
+			name = FunctionalRequestPackageTests;
+			productName = FunctionalRequestPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		OBJ_102 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Package.swift */; };
+		OBJ_108 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* Configuration.swift */; };
+		OBJ_109 /* DataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* DataRequest.swift */; };
+		OBJ_110 /* DataRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* DataRequestable.swift */; };
+		OBJ_112 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Alamofire::Alamofire::Product" /* Alamofire.framework */; };
+		OBJ_119 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_130 /* FunctionalRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* FunctionalRequestTests.swift */; };
+		OBJ_131 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* XCTestManifests.swift */; };
+		OBJ_133 /* FunctionalRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */; };
+		OBJ_134 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Alamofire::Alamofire::Product" /* Alamofire.framework */; };
+		OBJ_63 /* AFError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* AFError.swift */; };
+		OBJ_64 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* Alamofire.swift */; };
+		OBJ_65 /* AlamofireExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* AlamofireExtended.swift */; };
+		OBJ_66 /* CachedResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* CachedResponseHandler.swift */; };
+		OBJ_67 /* DispatchQueue+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* DispatchQueue+Alamofire.swift */; };
+		OBJ_68 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* EventMonitor.swift */; };
+		OBJ_69 /* HTTPHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* HTTPHeaders.swift */; };
+		OBJ_70 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* HTTPMethod.swift */; };
+		OBJ_71 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* MultipartFormData.swift */; };
+		OBJ_72 /* MultipartUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* MultipartUpload.swift */; };
+		OBJ_73 /* NetworkReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* NetworkReachabilityManager.swift */; };
+		OBJ_74 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* Notifications.swift */; };
+		OBJ_75 /* OperationQueue+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* OperationQueue+Alamofire.swift */; };
+		OBJ_76 /* ParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ParameterEncoder.swift */; };
+		OBJ_77 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* ParameterEncoding.swift */; };
+		OBJ_78 /* Protected.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* Protected.swift */; };
+		OBJ_79 /* RedirectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* RedirectHandler.swift */; };
+		OBJ_80 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* Request.swift */; };
+		OBJ_81 /* RequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* RequestInterceptor.swift */; };
+		OBJ_82 /* RequestTaskMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* RequestTaskMap.swift */; };
+		OBJ_83 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* Response.swift */; };
+		OBJ_84 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_39 /* ResponseSerialization.swift */; };
+		OBJ_85 /* Result+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* Result+Alamofire.swift */; };
+		OBJ_86 /* RetryPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* RetryPolicy.swift */; };
+		OBJ_87 /* ServerTrustEvaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* ServerTrustEvaluation.swift */; };
+		OBJ_88 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* Session.swift */; };
+		OBJ_89 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_44 /* SessionDelegate.swift */; };
+		OBJ_90 /* StringEncoding+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* StringEncoding+Alamofire.swift */; };
+		OBJ_91 /* URLConvertible+URLRequestConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_46 /* URLConvertible+URLRequestConvertible.swift */; };
+		OBJ_92 /* URLEncodedFormEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* URLEncodedFormEncoder.swift */; };
+		OBJ_93 /* URLRequest+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* URLRequest+Alamofire.swift */; };
+		OBJ_94 /* URLSessionConfiguration+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* URLSessionConfiguration+Alamofire.swift */; };
+		OBJ_95 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* Validation.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2154073D2466518B00BE800F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Alamofire::Alamofire";
+			remoteInfo = Alamofire;
+		};
+		2154073E2466518B00BE800F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "FunctionalRequest::FunctionalRequest";
+			remoteInfo = FunctionalRequest;
+		};
+		2154073F2466518B00BE800F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Alamofire::Alamofire";
+			remoteInfo = Alamofire;
+		};
+		215407402466518C00BE800F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "FunctionalRequest::FunctionalRequestTests";
+			remoteInfo = FunctionalRequestTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		"Alamofire::Alamofire::Product" /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FunctionalRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"FunctionalRequest::FunctionalRequestTests::Product" /* FunctionalRequestTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = FunctionalRequestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_10 /* DataRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRequestable.swift; sourceTree = "<group>"; };
+		OBJ_13 /* FunctionalRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalRequestTests.swift; sourceTree = "<group>"; };
+		OBJ_14 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		OBJ_17 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/wangluguang/Documents/repo/FunctionalRequest/.build/checkouts/Alamofire/Package.swift; sourceTree = "<group>"; };
+		OBJ_18 /* AFError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFError.swift; sourceTree = "<group>"; };
+		OBJ_19 /* Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
+		OBJ_20 /* AlamofireExtended.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireExtended.swift; sourceTree = "<group>"; };
+		OBJ_21 /* CachedResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedResponseHandler.swift; sourceTree = "<group>"; };
+		OBJ_22 /* DispatchQueue+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_23 /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
+		OBJ_24 /* HTTPHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeaders.swift; sourceTree = "<group>"; };
+		OBJ_25 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		OBJ_26 /* MultipartFormData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartFormData.swift; sourceTree = "<group>"; };
+		OBJ_27 /* MultipartUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartUpload.swift; sourceTree = "<group>"; };
+		OBJ_28 /* NetworkReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkReachabilityManager.swift; sourceTree = "<group>"; };
+		OBJ_29 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		OBJ_30 /* OperationQueue+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OperationQueue+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_31 /* ParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
+		OBJ_32 /* ParameterEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
+		OBJ_33 /* Protected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protected.swift; sourceTree = "<group>"; };
+		OBJ_34 /* RedirectHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedirectHandler.swift; sourceTree = "<group>"; };
+		OBJ_35 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		OBJ_36 /* RequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptor.swift; sourceTree = "<group>"; };
+		OBJ_37 /* RequestTaskMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTaskMap.swift; sourceTree = "<group>"; };
+		OBJ_38 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		OBJ_39 /* ResponseSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseSerialization.swift; sourceTree = "<group>"; };
+		OBJ_40 /* Result+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_41 /* RetryPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryPolicy.swift; sourceTree = "<group>"; };
+		OBJ_42 /* ServerTrustEvaluation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerTrustEvaluation.swift; sourceTree = "<group>"; };
+		OBJ_43 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		OBJ_44 /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
+		OBJ_45 /* StringEncoding+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringEncoding+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_46 /* URLConvertible+URLRequestConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLConvertible+URLRequestConvertible.swift"; sourceTree = "<group>"; };
+		OBJ_47 /* URLEncodedFormEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedFormEncoder.swift; sourceTree = "<group>"; };
+		OBJ_48 /* URLRequest+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_49 /* URLSessionConfiguration+Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Alamofire.swift"; sourceTree = "<group>"; };
+		OBJ_50 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
+		OBJ_55 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		OBJ_56 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		OBJ_57 /* FunctionalRequest.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FunctionalRequest.podspec; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_8 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		OBJ_9 /* DataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRequest.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_111 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_112 /* Alamofire.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_132 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_133 /* FunctionalRequest.framework in Frameworks */,
+				OBJ_134 /* Alamofire.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_11 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_12 /* FunctionalRequestTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_12 /* FunctionalRequestTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_13 /* FunctionalRequestTests.swift */,
+				OBJ_14 /* XCTestManifests.swift */,
+			);
+			name = FunctionalRequestTests;
+			path = Tests/FunctionalRequestTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_15 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_16 /* Alamofire 5.1.0 */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		OBJ_16 /* Alamofire 5.1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_17 /* Package.swift */,
+				OBJ_18 /* AFError.swift */,
+				OBJ_19 /* Alamofire.swift */,
+				OBJ_20 /* AlamofireExtended.swift */,
+				OBJ_21 /* CachedResponseHandler.swift */,
+				OBJ_22 /* DispatchQueue+Alamofire.swift */,
+				OBJ_23 /* EventMonitor.swift */,
+				OBJ_24 /* HTTPHeaders.swift */,
+				OBJ_25 /* HTTPMethod.swift */,
+				OBJ_26 /* MultipartFormData.swift */,
+				OBJ_27 /* MultipartUpload.swift */,
+				OBJ_28 /* NetworkReachabilityManager.swift */,
+				OBJ_29 /* Notifications.swift */,
+				OBJ_30 /* OperationQueue+Alamofire.swift */,
+				OBJ_31 /* ParameterEncoder.swift */,
+				OBJ_32 /* ParameterEncoding.swift */,
+				OBJ_33 /* Protected.swift */,
+				OBJ_34 /* RedirectHandler.swift */,
+				OBJ_35 /* Request.swift */,
+				OBJ_36 /* RequestInterceptor.swift */,
+				OBJ_37 /* RequestTaskMap.swift */,
+				OBJ_38 /* Response.swift */,
+				OBJ_39 /* ResponseSerialization.swift */,
+				OBJ_40 /* Result+Alamofire.swift */,
+				OBJ_41 /* RetryPolicy.swift */,
+				OBJ_42 /* ServerTrustEvaluation.swift */,
+				OBJ_43 /* Session.swift */,
+				OBJ_44 /* SessionDelegate.swift */,
+				OBJ_45 /* StringEncoding+Alamofire.swift */,
+				OBJ_46 /* URLConvertible+URLRequestConvertible.swift */,
+				OBJ_47 /* URLEncodedFormEncoder.swift */,
+				OBJ_48 /* URLRequest+Alamofire.swift */,
+				OBJ_49 /* URLSessionConfiguration+Alamofire.swift */,
+				OBJ_50 /* Validation.swift */,
+			);
+			name = "Alamofire 5.1.0";
+			path = .build/checkouts/Alamofire/Source;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_11 /* Tests */,
+				OBJ_15 /* Dependencies */,
+				OBJ_51 /* Products */,
+				OBJ_55 /* LICENSE */,
+				OBJ_56 /* README.md */,
+				OBJ_57 /* FunctionalRequest.podspec */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_51 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"Alamofire::Alamofire::Product" /* Alamofire.framework */,
+				"FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */,
+				"FunctionalRequest::FunctionalRequestTests::Product" /* FunctionalRequestTests.xctest */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* Configuration.swift */,
+				OBJ_9 /* DataRequest.swift */,
+				OBJ_10 /* DataRequestable.swift */,
+			);
+			path = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		"Alamofire::Alamofire" /* Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_59 /* Build configuration list for PBXNativeTarget "Alamofire" */;
+			buildPhases = (
+				OBJ_62 /* Sources */,
+				OBJ_96 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Alamofire;
+			productName = Alamofire;
+			productReference = "Alamofire::Alamofire::Product" /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Alamofire::SwiftPMPackageDescription" /* AlamofirePackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_98 /* Build configuration list for PBXNativeTarget "AlamofirePackageDescription" */;
+			buildPhases = (
+				OBJ_101 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AlamofirePackageDescription;
+			productName = AlamofirePackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+		"FunctionalRequest::FunctionalRequest" /* FunctionalRequest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_104 /* Build configuration list for PBXNativeTarget "FunctionalRequest" */;
+			buildPhases = (
+				OBJ_107 /* Sources */,
+				OBJ_111 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_113 /* PBXTargetDependency */,
+			);
+			name = FunctionalRequest;
+			productName = FunctionalRequest;
+			productReference = "FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"FunctionalRequest::FunctionalRequestTests" /* FunctionalRequestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_126 /* Build configuration list for PBXNativeTarget "FunctionalRequestTests" */;
+			buildPhases = (
+				OBJ_129 /* Sources */,
+				OBJ_132 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_135 /* PBXTargetDependency */,
+				OBJ_136 /* PBXTargetDependency */,
+			);
+			name = FunctionalRequestTests;
+			productName = FunctionalRequestTests;
+			productReference = "FunctionalRequest::FunctionalRequestTests::Product" /* FunctionalRequestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"FunctionalRequest::SwiftPMPackageDescription" /* FunctionalRequestPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_115 /* Build configuration list for PBXNativeTarget "FunctionalRequestPackageDescription" */;
+			buildPhases = (
+				OBJ_118 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FunctionalRequestPackageDescription;
+			productName = FunctionalRequestPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 9999;
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "FunctionalRequest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_51 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"Alamofire::Alamofire" /* Alamofire */,
+				"Alamofire::SwiftPMPackageDescription" /* AlamofirePackageDescription */,
+				"FunctionalRequest::FunctionalRequest" /* FunctionalRequest */,
+				"FunctionalRequest::SwiftPMPackageDescription" /* FunctionalRequestPackageDescription */,
+				"FunctionalRequest::FunctionalRequestPackageTests::ProductTarget" /* FunctionalRequestPackageTests */,
+				"FunctionalRequest::FunctionalRequestTests" /* FunctionalRequestTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_101 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_102 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_107 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_108 /* Configuration.swift in Sources */,
+				OBJ_109 /* DataRequest.swift in Sources */,
+				OBJ_110 /* DataRequestable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_118 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_119 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_129 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_130 /* FunctionalRequestTests.swift in Sources */,
+				OBJ_131 /* XCTestManifests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_63 /* AFError.swift in Sources */,
+				OBJ_64 /* Alamofire.swift in Sources */,
+				OBJ_65 /* AlamofireExtended.swift in Sources */,
+				OBJ_66 /* CachedResponseHandler.swift in Sources */,
+				OBJ_67 /* DispatchQueue+Alamofire.swift in Sources */,
+				OBJ_68 /* EventMonitor.swift in Sources */,
+				OBJ_69 /* HTTPHeaders.swift in Sources */,
+				OBJ_70 /* HTTPMethod.swift in Sources */,
+				OBJ_71 /* MultipartFormData.swift in Sources */,
+				OBJ_72 /* MultipartUpload.swift in Sources */,
+				OBJ_73 /* NetworkReachabilityManager.swift in Sources */,
+				OBJ_74 /* Notifications.swift in Sources */,
+				OBJ_75 /* OperationQueue+Alamofire.swift in Sources */,
+				OBJ_76 /* ParameterEncoder.swift in Sources */,
+				OBJ_77 /* ParameterEncoding.swift in Sources */,
+				OBJ_78 /* Protected.swift in Sources */,
+				OBJ_79 /* RedirectHandler.swift in Sources */,
+				OBJ_80 /* Request.swift in Sources */,
+				OBJ_81 /* RequestInterceptor.swift in Sources */,
+				OBJ_82 /* RequestTaskMap.swift in Sources */,
+				OBJ_83 /* Response.swift in Sources */,
+				OBJ_84 /* ResponseSerialization.swift in Sources */,
+				OBJ_85 /* Result+Alamofire.swift in Sources */,
+				OBJ_86 /* RetryPolicy.swift in Sources */,
+				OBJ_87 /* ServerTrustEvaluation.swift in Sources */,
+				OBJ_88 /* Session.swift in Sources */,
+				OBJ_89 /* SessionDelegate.swift in Sources */,
+				OBJ_90 /* StringEncoding+Alamofire.swift in Sources */,
+				OBJ_91 /* URLConvertible+URLRequestConvertible.swift in Sources */,
+				OBJ_92 /* URLEncodedFormEncoder.swift in Sources */,
+				OBJ_93 /* URLRequest+Alamofire.swift in Sources */,
+				OBJ_94 /* URLSessionConfiguration+Alamofire.swift in Sources */,
+				OBJ_95 /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_113 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Alamofire::Alamofire" /* Alamofire */;
+			targetProxy = 2154073D2466518B00BE800F /* PBXContainerItemProxy */;
+		};
+		OBJ_124 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "FunctionalRequest::FunctionalRequestTests" /* FunctionalRequestTests */;
+			targetProxy = 215407402466518C00BE800F /* PBXContainerItemProxy */;
+		};
+		OBJ_135 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "FunctionalRequest::FunctionalRequest" /* FunctionalRequest */;
+			targetProxy = 2154073E2466518B00BE800F /* PBXContainerItemProxy */;
+		};
+		OBJ_136 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Alamofire::Alamofire" /* Alamofire */;
+			targetProxy = 2154073F2466518B00BE800F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_100 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_105 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/FunctionalRequest_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = FunctionalRequest;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = FunctionalRequest;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		OBJ_106 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/FunctionalRequest_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = FunctionalRequest;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = FunctionalRequest;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		OBJ_116 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.2.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_117 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.2.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_122 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_123 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_127 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/FunctionalRequestTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = FunctionalRequestTests;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		OBJ_128 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/FunctionalRequestTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = FunctionalRequestTests;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+					"DEBUG=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_60 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/Alamofire_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Alamofire;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = Alamofire;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		OBJ_61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = FunctionalRequest.xcodeproj/Alamofire_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = Alamofire;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = Alamofire;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		OBJ_99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_104 /* Build configuration list for PBXNativeTarget "FunctionalRequest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_105 /* Debug */,
+				OBJ_106 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_115 /* Build configuration list for PBXNativeTarget "FunctionalRequestPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_116 /* Debug */,
+				OBJ_117 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_121 /* Build configuration list for PBXAggregateTarget "FunctionalRequestPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_122 /* Debug */,
+				OBJ_123 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_126 /* Build configuration list for PBXNativeTarget "FunctionalRequestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_127 /* Debug */,
+				OBJ_128 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_2 /* Build configuration list for PBXProject "FunctionalRequest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_59 /* Build configuration list for PBXNativeTarget "Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_60 /* Debug */,
+				OBJ_61 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_98 /* Build configuration list for PBXNativeTarget "AlamofirePackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_99 /* Debug */,
+				OBJ_100 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}
