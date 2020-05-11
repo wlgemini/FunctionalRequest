@@ -35,9 +35,9 @@ enum BaseAndAPICases {
     static var base1 = "https://www.mocky.io/v2/"
 
     // api
-    static let g0 = GET<ID, Persion>("5eb663ca3100008d556999f1") // use `Configuration.base` for base url
-    static let g1 = GET<ID, Persion>("5eb663ca3100008d556999f1", base: Self.base0)
-    static let g2 = GET<ID, Persion>("5eb663ca3100008d556999f1", base: Self.base1)
+    static let g0 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4") // use `Configuration.base` for base url
+    static let g1 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base0)
+    static let g2 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base1)
 }
 
 enum CacheCases {
@@ -45,14 +45,24 @@ enum CacheCases {
     static var base0 = "https://www.mocky.io/v2/"
     
     // api
-    static let g0 = GET<ID, Persion>("5eb663ca3100008d556999f1", base: Self.base0)
+    static let g0 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base0)
 }
+
+enum RedirectCases {
+    // base
+    static var base0 = "https://www.mocky.io/v2/"
+    
+    // api
+    static let g0 = GET<ID, Persion>("5eb908ec2d00007a6e357f9f", base: Self.base0)
+}
+
+
 
 struct ID: Encodable {
     var id: String
 }
 
-struct Persion: Decodable {
+struct Persion: Decodable, Equatable {
     var name: String
     var age: Int
     var gender: Bool
@@ -111,43 +121,94 @@ final class FunctionalRequestTests: XCTestCase {
     }
     
     func testMock() {
+        let exp = XCTestExpectation()
+        
         let id0 = ID(id: "123")
         
         let mock = InputAndOutputCases.g11
-            .setMocking("http://www.mocky.io/v2/5e9421b631000080005e2dfa")
-            .setTimeoutInterval(2)
+            .setMock("http://www.mocky.io/v2/5eb8edfc2d00007a6e357ea4")
+            .setTimeoutInterval(1)
+        
         mock.request(id0) {
-            print($0.value!)
+            let p = Persion(name: "wlg", age: 18, gender: true)
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p == $0.cachedValue)
+            exp.fulfill()
         }
+        
+        wait(for: [exp], timeout: 3)
     }
     
     func testBaseAndAPI() {
-        Configuration.base = "http://www.mocky.io/v2/"
-        
+        let exp0 = XCTestExpectation()
+        let exp1 = XCTestExpectation()
+        let exp2 = XCTestExpectation()
+
         let id0 = ID(id: "123")
+        let p = Persion(name: "wlg", age: 18, gender: true)
         
-        BaseAndAPICases.g0.request(id0) {
-            print($0.value!)
+        Configuration.base = "http://www.mocky.io/v2/"
+        BaseAndAPICases
+            .g0
+            .request(id0) {
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p == $0.cachedValue)
+            exp0.fulfill()
         }
         
-        BaseAndAPICases.g1.request(id0) {
-            print($0.value!)
+        BaseAndAPICases
+            .g1
+            .request(id0) {
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p == $0.cachedValue)
+            exp1.fulfill()
         }
         
-        BaseAndAPICases.g2.request(id0) {
-            print($0.value!)
+        BaseAndAPICases
+            .g2
+            .request(id0) {
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p == $0.cachedValue)
+            exp2.fulfill()
         }
+        
+        wait(for: [exp0, exp1, exp2], timeout: 10)
     }
     
     func testCache() {
+        
+        let exp = XCTestExpectation()
+        
         let id0 = ID(id: "123")
         
         CacheCases
             .g0
-            .setCachedResponseHandler(ResponseCacher.cache)
+            .setAdditionalHeaders(HTTPHeaders(["foo": "123", "bar": "456"]))
+            .setCachedResponseHandler(ResponseCacher.doNotCache)
             .request(id0) {
-                print($0.value!)
+                let p = Persion(name: "wlg", age: 18, gender: true)
+                XCTAssert(p == $0.result.success)
+                XCTAssert(p == $0.cachedValue)
+                exp.fulfill()
             }
+        
+        wait(for: [exp], timeout: 10)
+    }
+    
+    func testRedirect() {
+        
+        let exp = XCTestExpectation()
+        
+        let id0 = ID(id: "123")
+        
+        RedirectCases.g0.setRedirectHandler(Redirector.follow).request(id0) {
+            let p = Persion(name: "wlg", age: 18, gender: true)
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p != $0.cachedValue)
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 10)
     }
 
     static var allTests = [
@@ -155,5 +216,6 @@ final class FunctionalRequestTests: XCTestCase {
         ("testMock", testMock),
         ("testBaseAndAPI", testBaseAndAPI),
         ("testCache", testCache),
+        ("testRedirect", testRedirect),
     ]
 }

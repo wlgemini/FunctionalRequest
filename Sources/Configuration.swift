@@ -2,15 +2,16 @@
 //  Configuration.swift
 //
 
-import Alamofire
 import Foundation
+import Alamofire
 
 /// 网络请求的相关设置，每个请求都会及时的应用Configuration的设置
 /// 同时，Configuration的配置优先级低于具体接口的单独配置
 /// 比如 `foo`接口设置了单独的timeoutInterval，那么就会优先使用这个单独timeoutInterval
 public enum Configuration {
     
-    /// base url
+    /// 基地址
+    /// eg: base = "http://www.wlgemini.com/", api = "foo", url = base + api = "http://www.wlgemini.com/foo"
     public static var base: String?
     
     /// 要添加的头信息，会和具体接口中的additionalHeaders进行merge
