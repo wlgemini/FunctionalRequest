@@ -27,12 +27,12 @@ public protocol DataRequestable: Any {
     
     /// A type that handles how an HTTP redirect response from a remote server should be redirected to the new request.
     /// there is a builtin type `Redirector`yout can use.
-    /// this property override the `Configuration.redirectHandler`.
+    /// this property will override the `Configuration.redirectHandler`.
     var redirectHandler: RedirectHandler? { get set }
     
     /// A type that handles whether the data task should store the HTTP response in the cache.
     /// there is a builtin type `ResponseCacher`yout can use.
-    /// this property override the `Configuration.cachedResponseHandler`.
+    /// this property will override the `Configuration.cachedResponseHandler`.
     var cachedResponseHandler: CachedResponseHandler? { get set }
     
     /// the request method
@@ -40,15 +40,15 @@ public protocol DataRequestable: Any {
     
     /// the base url
     /// will combined with `api`
+    /// this property will override the `Configuration.base`.
     var base: () -> String? { get }
     
     /// the request api
     /// will combined with `base`
-    /// eg: base = "http://www.wlgemini.com/", api = "foo", url = base + api = "http://www.wlgemini.com/foo"
     var api: String { get }
     
     /// mock to an url, only effected in debug mode
-    /// eg: the original url is "http://www.wlgemini.com/foo", the mock url is "http://www.mocking.com/foo"
+    /// eg: the original url is "http://www.wlgemini.com/foo", the mock url is "http://www.mock.com/foo"
     var mock: String? { get set }
     
     /// init a request
