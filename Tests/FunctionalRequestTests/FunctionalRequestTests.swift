@@ -56,6 +56,13 @@ enum RedirectCases {
     static let g0 = GET<ID, Persion>("5eb908ec2d00007a6e357f9f", base: Self.base0)
 }
 
+enum EventMonitorCases {
+    // base
+    static var base0 = "https://www.mocky.io/v2/"
+    
+    // api
+    static let g0 = GET<ID, Persion>("5eb908ec2d00007a6e357f9f", base: Self.base0)
+}
 
 
 struct ID: Encodable {
@@ -132,7 +139,7 @@ final class FunctionalRequestTests: XCTestCase {
         mock.request(id0) {
             let p = Persion(name: "wlg", age: 18, gender: true)
             XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue)
+            XCTAssert(p == $0.cachedValue())
             exp.fulfill()
         }
         
@@ -152,7 +159,7 @@ final class FunctionalRequestTests: XCTestCase {
             .g0
             .request(id0) {
             XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue)
+            XCTAssert(p == $0.cachedValue())
             exp0.fulfill()
         }
         
@@ -160,7 +167,7 @@ final class FunctionalRequestTests: XCTestCase {
             .g1
             .request(id0) {
             XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue)
+            XCTAssert(p == $0.cachedValue())
             exp1.fulfill()
         }
         
@@ -168,7 +175,7 @@ final class FunctionalRequestTests: XCTestCase {
             .g2
             .request(id0) {
             XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue)
+            XCTAssert(p == $0.cachedValue())
             exp2.fulfill()
         }
         
@@ -188,7 +195,7 @@ final class FunctionalRequestTests: XCTestCase {
             .request(id0) {
                 let p = Persion(name: "wlg", age: 18, gender: true)
                 XCTAssert(p == $0.result.success)
-                XCTAssert(p == $0.cachedValue)
+                XCTAssert(p == $0.cachedValue())
                 exp.fulfill()
             }
         
@@ -204,7 +211,28 @@ final class FunctionalRequestTests: XCTestCase {
         RedirectCases.g0.setRedirectHandler(Redirector.follow).request(id0) {
             let p = Persion(name: "wlg", age: 18, gender: true)
             XCTAssert(p == $0.result.success)
-            XCTAssert(p != $0.cachedValue)
+            XCTAssert(p != $0.cachedValue())
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 10)
+    }
+    
+    func testEventMonitor() {
+        let exp = XCTestExpectation()
+
+        let monitor = ClosureEventMonitor()
+        monitor.taskDidFinishCollectingMetrics = { (session, task, metrics) in
+            print("🔨:", metrics)
+        }
+        Configuration.eventMonitors = [monitor]
+        
+        let id0 = ID(id: "123")
+        
+        EventMonitorCases.g0.request(id0) {
+            let p = Persion(name: "wlg", age: 18, gender: true)
+            XCTAssert(p == $0.result.success)
+            XCTAssert(p != $0.cachedValue())
             exp.fulfill()
         }
         
@@ -217,5 +245,6 @@ final class FunctionalRequestTests: XCTestCase {
         ("testBaseAndAPI", testBaseAndAPI),
         ("testCache", testCache),
         ("testRedirect", testRedirect),
+        ("testEventMonitor", testEventMonitor),
     ]
 }

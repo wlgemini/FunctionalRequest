@@ -77,7 +77,7 @@ public extension DataRequestable where Input == None, Output == None {
     
     func request() {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -89,7 +89,7 @@ public extension DataRequestable where Input == JSON, Output == None {
     
     func request(_ params: [String: Any]) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -101,7 +101,7 @@ public extension DataRequestable where Input: Encodable, Output == None {
     
     func request(_ params: Input) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -113,7 +113,7 @@ public extension DataRequestable where Input == None, Output == Data {
     
     func request(completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -125,7 +125,7 @@ public extension DataRequestable where Input == None, Output == JSON {
     
     func request(completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseJSON(completionHandler: completion)
@@ -137,7 +137,7 @@ public extension DataRequestable where Input == None, Output: Decodable {
     
     func request(completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseDecodable(completionHandler: completion)
@@ -149,7 +149,7 @@ public extension DataRequestable where Input == JSON, Output == Data {
     
     func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -161,7 +161,7 @@ public extension DataRequestable where Input == JSON, Output == JSON {
     
     func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseJSON(completionHandler: completion)
@@ -173,7 +173,7 @@ public extension DataRequestable where Input == JSON, Output: Decodable {
     
     func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseDecodable(completionHandler: completion)
@@ -185,7 +185,7 @@ public extension DataRequestable where Input: Encodable, Output == Data {
     
     func request(_ params: Input, completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -197,7 +197,7 @@ public extension DataRequestable where Input: Encodable, Output == JSON {
     
     func request(_ params: Input, completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseJSON(completionHandler: completion)
@@ -209,7 +209,7 @@ public extension DataRequestable where Input: Encodable, Output: Decodable {
     
     func request(_ params: Input, completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = AF.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseDecodable(completionHandler: completion)
@@ -322,3 +322,6 @@ extension DataRequestable {
         req.validate()
     }
 }
+
+/// 内部使用的session
+fileprivate let _DataSession = Alamofire.Session(eventMonitors: Configuration.eventMonitors)

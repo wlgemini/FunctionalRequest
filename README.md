@@ -270,7 +270,7 @@ enum APIs {
 }
 ```
 
-#### 修改base url
+#### 需要修改base url的情况
 程序运行过程中，有可能需要切换base url的情况。
 
 对于设置`Configuration.base`的情况:
@@ -307,4 +307,18 @@ enum APIs {
 // after
 Bases.base0 = Configuration.base = "https://www.zzz.com/"
 ```
+
+#### 网络请求监控
+对于需要监控网络请求的情况，可以使用：
+```swift
+let monitor0: ClosureEventMonitor = /* init ClosureEventMonitor */
+let monitor1: ClosureEventMonitor = /* init ClosureEventMonitor */
+let monitor2: ClosureEventMonitor = /* init ClosureEventMonitor */
+
+Configuration.eventMonitors = [monitor0, monitor1, monitor2]
+
+// 登录
+APIs.login.request(account) { /* data */ }
+```
+> ⚠️注意：必须在调用网络请求之前设置`Configuration.eventMonitors`，并且调用网络请求开始后不能修改
 

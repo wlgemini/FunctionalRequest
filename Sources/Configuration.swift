@@ -41,4 +41,10 @@ public enum Configuration {
     /// 缓存策略，可以使用内置的缓存策略`ResponseCacher`，也可以自定义对`CachedResponseHandler`的实现
     /// `DataRequest.swift`中的`cachedResponseHandler`优先级更高，会覆盖掉冲突的`cachedResponseHandler`
     public static var cachedResponseHandler: CachedResponseHandler?
+    
+    /// 网络事件监控
+    ///
+    /// ⚠️注意：必须在调用网络请求之前设置，并且调用网络请求开始后不能修改
+    /// 可以使用内置的监控类`ClosureEventMonitor`，也可以自定义对`EventMonitor`的实现
+    public static var eventMonitors: [EventMonitor] = []
 }

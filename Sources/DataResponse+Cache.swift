@@ -18,11 +18,22 @@ public extension AFDataResponse {
     }
 }
 
+
+public extension AFDataResponse where Success == JSON {
+    
+    /// 解码过的缓存数据
+    func cachedValue(options: JSONSerialization.ReadingOptions = .allowFragments) -> Any? {
+        guard let data = self.cachedData else { return nil }
+        return try? JSONSerialization.jsonObject(with: data, options: options)
+    }
+}
+
+
 public extension AFDataResponse where Success: Decodable {
     
     /// 解码过的缓存数据
-    var cachedValue: Success? {
+    func cachedValue(decoder: DataDecoder = JSONDecoder()) -> Success? {
         guard let data = self.cachedData else { return nil }
-        return try? JSONDecoder().decode(Success.self, from: data)
+        return try? decoder.decode(Success.self, from: data)
     }
 }
