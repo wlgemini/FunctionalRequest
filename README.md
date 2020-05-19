@@ -322,3 +322,10 @@ APIs.login.request(account) { /* data */ }
 ```
 > ⚠️注意：必须在调用网络请求之前设置`Configuration.eventMonitors`，并且调用网络请求开始后不能修改
 
+### 接入
+使用`Cocoapods`:
+```
+target 'MyApp' do
+  pod 'FunctionalRequest'
+end
+```
