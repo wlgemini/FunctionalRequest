@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'FunctionalRequest'
-  s.version = '0.3.1'
+  s.version = '0.3.2'
   s.license = 'MIT'
   s.summary = 'Make request like a function call'
   s.homepage = 'https://github.com/wlgemini/FunctionalRequest.git'
@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/*.swift'
 
-  s.dependency 'Alamofire', '~> 5.0'
+  s.dependency 'Alamofire', '~> 5.1'
 end
