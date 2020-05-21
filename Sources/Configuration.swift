@@ -28,7 +28,7 @@ public enum Configuration {
     
     /// 要添加的头信息，会和`DataRequest.swift`中的`additionalHeaders`进行merge
     /// 但`DataRequest.swift`中的`additionalHeaders`优先级更高，会覆盖掉冲突的key-value
-    public static var headers = HTTPHeaders()
+    public static var headers: (() -> HTTPHeaders)?
     
     /// 超时时长, 用于修改`URLRequest.timeoutInterval`
     /// `DataRequest.swift`中的`timeoutInterval`优先级更高，会覆盖掉冲突的`timeoutInterval`

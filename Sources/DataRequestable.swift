@@ -286,13 +286,23 @@ extension DataRequestable {
     
     /// 合并Headers，self.additionalHeaders会覆盖Configuration.headers中冲突的key-value
     private var _headers: HTTPHeaders {
-        var headers = Configuration.headers
-        if let additionalHeaders = self.additionalHeaders {
-            for h in additionalHeaders {
-                headers.add(h)
+        var combineHeaders = HTTPHeaders()
+        
+        // Configuration.headers
+        if let headers = Configuration.headers?() {
+            for h in headers {
+                combineHeaders.add(h)
             }
         }
-        return headers
+        
+        // additionalHeaders
+        if let additionalHeaders = self.additionalHeaders {
+            for h in additionalHeaders {
+                combineHeaders.add(h)
+            }
+        }
+        
+        return combineHeaders
     }
     
     /// 修改URLRequest
