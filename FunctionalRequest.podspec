@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'FunctionalRequest'
-  s.version = '0.3.2'
+  s.version = '0.4.0'
   s.license = 'MIT'
   s.summary = 'Make request like a function call'
   s.homepage = 'https://github.com/wlgemini/FunctionalRequest.git'
