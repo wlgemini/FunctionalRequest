@@ -47,6 +47,10 @@ public protocol DataRequestable: Any {
     /// will combined with `base`
     var api: String { get }
     
+    /// the request sub api
+    /// will append to `api`
+    var subApi: String? { get set }
+    
     /// mock to an url, only effected in debug mode
     /// eg: the original url is "http://www.wlgemini.com/foo", the mock url is "http://www.mock.com/foo"
     var mock: String? { get set }
@@ -248,6 +252,13 @@ public extension DataRequestable {
         return new
     }
     
+    /// 设置sub api
+    func setSubApi(_ subApi: String) -> Self {
+        var new = self
+        new.subApi = subApi
+        return new
+    }
+    
     /// mock到指定url，需要使用绝对地址
     func setMock(_ mock: String) -> Self {
         var new = self
@@ -272,6 +283,11 @@ extension DataRequestable {
         
         // combine `base` & api
         var url: String = base + self.api
+        
+        // combine url & `subApi`
+        if let subApi = self.subApi {
+            url = url + subApi
+        }
         
         // mock only in debug mode
         #if DEBUG

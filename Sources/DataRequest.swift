@@ -23,6 +23,8 @@ public struct GET<Input, Output>: DataRequestable {
     
     public let api: String
     
+    public var subApi: String?
+    
     public var mock: String?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
@@ -48,6 +50,8 @@ public struct POST<Input, Output>: DataRequestable {
     public let base: () -> String?
     
     public let api: String
+    
+    public var subApi: String?
     
     public var mock: String?
     
@@ -75,6 +79,8 @@ public struct PUT<Input, Output>: DataRequestable {
     
     public let api: String
     
+    public var subApi: String?
+    
     public var mock: String?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
@@ -101,6 +107,8 @@ public struct PATCH<Input, Output>: DataRequestable {
     
     public let api: String
     
+    public var subApi: String?
+    
     public var mock: String?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
@@ -126,6 +134,8 @@ public struct DELETE<Input, Output>: DataRequestable {
     public let base: () -> String?
     
     public let api: String
+    
+    public var subApi: String?
     
     public var mock: String?
     
