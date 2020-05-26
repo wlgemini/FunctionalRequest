@@ -11,7 +11,7 @@ import Alamofire
 
 public extension AFDataResponse {
     
-    /// 缓存数据，目前(v0.1.0)重定向过的数据不会被缓存
+    /// 缓存数据，重定向过的数据不会被缓存
     var cachedData: Data? {
         guard let request = self.request else { return nil }
         return URLCache.shared.cachedResponse(for: request)?.data

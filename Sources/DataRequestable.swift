@@ -81,7 +81,11 @@ public extension DataRequestable where Input == None, Output == None {
     
     func request() {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -91,9 +95,15 @@ public extension DataRequestable where Input == None, Output == None {
 // MARK: Input == JSON, Output == None
 public extension DataRequestable where Input == JSON, Output == None {
     
-    func request(_ params: [String: Any]) {
+    func request(_ params: [String: Any],
+                 encoding: ParameterEncoding = URLEncoding.default) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -103,9 +113,15 @@ public extension DataRequestable where Input == JSON, Output == None {
 // MARK: Input: Encodable, Output == None
 public extension DataRequestable where Input: Encodable, Output == None {
     
-    func request(_ params: Input) {
+    func request(_ params: Input,
+                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.response(completionHandler: { _ in })
@@ -117,7 +133,11 @@ public extension DataRequestable where Input == None, Output == Data {
     
     func request(completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -127,33 +147,52 @@ public extension DataRequestable where Input == None, Output == Data {
 // MARK: Input == None, Output == JSON
 public extension DataRequestable where Input == None, Output == JSON {
     
-    func request(completion: @escaping (AFDataResponse<Any>) -> Void) {
+    func request(decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
+                 completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(completionHandler: completion)
+        req.responseJSON(options: decodingOptions,
+                         completionHandler: completion)
     }
 }
 
 // MARK: Input == None, Output: Decodable
 public extension DataRequestable where Input == None, Output: Decodable {
     
-    func request(completion: @escaping (AFDataResponse<Output>) -> Void) {
+    func request(decoder: DataDecoder = JSONDecoder(),
+                 completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: nil, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(completionHandler: completion)
+        req.responseDecodable(decoder: decoder,
+                              completionHandler: completion)
     }
 }
 
 // MARK: Input == JSON, Output == Data
 public extension DataRequestable where Input == JSON, Output == Data {
     
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Data>) -> Void) {
+    func request(_ params: [String: Any],
+                 encoding: ParameterEncoding = URLEncoding.default,
+                 completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -163,33 +202,58 @@ public extension DataRequestable where Input == JSON, Output == Data {
 // MARK: Input == JSON, Output == JSON
 public extension DataRequestable where Input == JSON, Output == JSON {
     
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Any>) -> Void) {
+    func request(_ params: [String: Any],
+                 encoding: ParameterEncoding = URLEncoding.default,
+                 decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
+                 completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(completionHandler: completion)
+        req.responseJSON(options: decodingOptions,
+                         completionHandler: completion)
     }
 }
 
 // MARK: Input == JSON, Output: Decodable
 public extension DataRequestable where Input == JSON, Output: Decodable {
     
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Output>) -> Void) {
+    func request(_ params: [String: Any],
+                 encoding: ParameterEncoding = URLEncoding.default,
+                 decoder: DataDecoder = JSONDecoder(),
+                 completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(completionHandler: completion)
+        req.responseDecodable(decoder: decoder,
+                              completionHandler: completion)
     }
 }
 
 // MARK: Input: Encodable, Output == Data
 public extension DataRequestable where Input: Encodable, Output == Data {
     
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Data>) -> Void) {
+    func request(_ params: Input,
+                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
+                 completion: @escaping (AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
         req.responseData(completionHandler: completion)
@@ -199,24 +263,42 @@ public extension DataRequestable where Input: Encodable, Output == Data {
 // MARK: Input: Encodable, Output == JSON
 public extension DataRequestable where Input: Encodable, Output == JSON {
     
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Any>) -> Void) {
+    func request(_ params: Input,
+                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
+                 decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
+                 completion: @escaping (AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(completionHandler: completion)
+        req.responseJSON(options: decodingOptions,
+                         completionHandler: completion)
     }
 }
 
 // MARK: Input: Encodable, Output: Decodable
 public extension DataRequestable where Input: Encodable, Output: Decodable {
     
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Output>) -> Void) {
+    func request(_ params: Input,
+                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
+                 decoder: DataDecoder = JSONDecoder(),
+                 completion: @escaping (AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
-        let req = _DataSession.request(url, method: self.method, parameters: params, headers: self._headers, requestModifier: self._modifyURLRequest)
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(completionHandler: completion)
+        req.responseDecodable(decoder: decoder,
+                              completionHandler: completion)
     }
 }
 

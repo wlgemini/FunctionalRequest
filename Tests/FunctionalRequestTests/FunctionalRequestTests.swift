@@ -84,7 +84,7 @@ final class FunctionalRequestTests: XCTestCase {
         let id0 = ID(id: "123")
         let id1 = ["id": "123"]
 
-        InputAndOutputCases.g1.request(id1)
+        InputAndOutputCases.g0.request()
 
         InputAndOutputCases.g1.request(id1)
 
@@ -134,7 +134,7 @@ final class FunctionalRequestTests: XCTestCase {
         
         let mock = InputAndOutputCases.g11
             .setMock("http://www.mocky.io/v2/5eb8edfc2d00007a6e357ea4")
-            .setTimeoutInterval(1)
+            .setTimeoutInterval(10)
         
         mock.request(id0) {
             let p = Persion(name: "wlg", age: 18, gender: true)
@@ -143,7 +143,7 @@ final class FunctionalRequestTests: XCTestCase {
             exp.fulfill()
         }
         
-        wait(for: [exp], timeout: 3)
+        wait(for: [exp], timeout: 10)
     }
     
     func testBaseAndAPI() {
