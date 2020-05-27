@@ -27,7 +27,11 @@ public struct GET<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
+    public var encoding: () -> ParameterEncoding = { Config.DataRequest.GET.encoding }
+            
+    public var encoder: () -> ParameterEncoder = { Config.DataRequest.GET.encoder }
+    
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
         self.base = base
     }
@@ -55,7 +59,11 @@ public struct POST<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
+    public var encoding: () -> ParameterEncoding = { Config.DataRequest.POST.encoding }
+            
+    public var encoder: () -> ParameterEncoder = { Config.DataRequest.POST.encoder }
+    
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
         self.base = base
     }
@@ -83,7 +91,11 @@ public struct PUT<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
+    public var encoding: () -> ParameterEncoding = { Config.DataRequest.PUT.encoding }
+            
+    public var encoder: () -> ParameterEncoder = { Config.DataRequest.PUT.encoder }
+    
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
         self.base = base
     }
@@ -111,7 +123,11 @@ public struct PATCH<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
+    public var encoding: () -> ParameterEncoding = { Config.DataRequest.PATCH.encoding }
+            
+    public var encoder: () -> ParameterEncoder = { Config.DataRequest.PATCH.encoder }
+    
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
         self.base = base
     }
@@ -139,7 +155,11 @@ public struct DELETE<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Configuration.base) {
+    public var encoding: () -> ParameterEncoding = { Config.DataRequest.DELETE.encoding }
+            
+    public var encoder: () -> ParameterEncoder = { Config.DataRequest.DELETE.encoder }
+    
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
         self.base = base
     }

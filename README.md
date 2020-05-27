@@ -190,11 +190,11 @@ extension Requestable where Input: Encodable, Output == Data {
 
 一个网络请求应该有更多的可配置项。比如：修改基地址、设置请求超时时间、缓存请求、设置headers、做mock等。
 这些配置项都应该允许进行全局配置，可以使用一个全局的对象来存储这些配置。
-这里使用`Configuration`来存储这些全局配置：
+这里使用`Config.DataRequest`来存储这些全局配置：
 ```swift
-Configuration.timeoutInterval = 60
-// Configuration.headers
-// Configuration.base
+Config.DataRequest.timeoutInterval = 60
+// Config.DataRequest.headers
+// Config.DataRequest.base
 // ...
 ```
 
@@ -209,7 +209,7 @@ login
 
 ### 推荐用法
 
-在使用网络请求之前，首先要配置`Configuration`，至少配置一个`base`(基地址)
+在使用网络请求之前，首先要配置`Config.DataRequest`，至少配置一个`base`(基地址)
 
 定义网络请求（推荐定义在一个`enum`类型内，这样方便归类）:
 ```swift
@@ -273,14 +273,14 @@ enum APIs {
 #### 需要修改base url的情况
 程序运行过程中，有可能需要切换base url的情况。
 
-对于设置`Configuration.base`的情况:
+对于设置`Config.DataRequest.base`的情况:
 其实直接修改就可以了，之后的请求就会应用最新的base url。
 ```swift
 // before
-Configuration.base = "https://www.xxx.com/"
+Config.DataRequest.base = "https://www.xxx.com/"
 
 // after
-Configuration.base = "https://www.yyy.com/"
+Config.DataRequest.base = "https://www.yyy.com/"
 ```
 
 对于多个base url的情况，也是一样的：
@@ -305,7 +305,7 @@ enum APIs {
 }
 
 // after
-Bases.base0 = Configuration.base = "https://www.zzz.com/"
+Bases.base0 = Config.DataRequest.base = "https://www.zzz.com/"
 ```
 
 #### 网络请求监控
@@ -315,12 +315,12 @@ let monitor0: ClosureEventMonitor = /* init ClosureEventMonitor */
 let monitor1: ClosureEventMonitor = /* init ClosureEventMonitor */
 let monitor2: ClosureEventMonitor = /* init ClosureEventMonitor */
 
-Configuration.eventMonitors = [monitor0, monitor1, monitor2]
+Config.DataRequest.eventMonitors = [monitor0, monitor1, monitor2]
 
 // 登录
 APIs.login.request(account) { /* data */ }
 ```
-> ⚠️注意：必须在调用网络请求之前设置`Configuration.eventMonitors`，并且调用网络请求开始后不能修改
+> ⚠️注意：必须在调用网络请求之前设置`Config.DataRequest.eventMonitors`，并且调用网络请求开始后不能修改
 
 ### 接入
 使用`Cocoapods`:

@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 
-public extension AFDataResponse {
+public extension Alamofire.AFDataResponse {
     
     /// 缓存数据，重定向过的数据不会被缓存
     var cachedData: Data? {
@@ -19,20 +19,20 @@ public extension AFDataResponse {
 }
 
 
-public extension AFDataResponse where Success == JSON {
+public extension Alamofire.AFDataResponse where Success == JSON {
     
     /// 解码过的缓存数据
-    func cachedValue(options: JSONSerialization.ReadingOptions = .allowFragments) -> Any? {
+    func cachedValue(options: JSONSerialization.ReadingOptions = Config.DataResponse.decodingOptions) -> Any? {
         guard let data = self.cachedData else { return nil }
         return try? JSONSerialization.jsonObject(with: data, options: options)
     }
 }
 
 
-public extension AFDataResponse where Success: Decodable {
+public extension Alamofire.AFDataResponse where Success: Decodable {
     
     /// 解码过的缓存数据
-    func cachedValue(decoder: DataDecoder = JSONDecoder()) -> Success? {
+    func cachedValue(decoder: Alamofire.DataDecoder = Config.DataResponse.decoder) -> Success? {
         guard let data = self.cachedData else { return nil }
         return try? decoder.decode(Success.self, from: data)
     }

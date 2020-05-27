@@ -91,39 +91,39 @@ final class FunctionalRequestTests: XCTestCase {
         InputAndOutputCases.g2.request(id0)
 
         InputAndOutputCases.g3.request {
-            print($0.value!)
+            print($0.value)
         }
 
         InputAndOutputCases.g4.request {
-            print($0.value!)
+            print($0.value)
         }
 
         InputAndOutputCases.g5.request {
-            print($0.value!)
+            print($0.value)
         }
 
         InputAndOutputCases.g6.request(id1) {
-            print($0.value!)
+            print($0.value)
         }
 
         InputAndOutputCases.g7.request(id1) {
-            print($0.value!)
+            print($0.value)
         }
 
         InputAndOutputCases.g8.request(id1) {
-            print($0.value!)
+            print($0.value)
         }
         
         InputAndOutputCases.g9.request(id0) {
-            print($0.value!)
+            print($0.value)
         }
         
         InputAndOutputCases.g10.request(id0) {
-            print($0.value!)
+            print($0.value)
         }
         
         InputAndOutputCases.g11.request(id0) {
-            print($0.value!)
+            print($0.value)
         }
     }
     
@@ -154,7 +154,7 @@ final class FunctionalRequestTests: XCTestCase {
         let id0 = ID(id: "123")
         let p = Persion(name: "wlg", age: 18, gender: true)
         
-        Configuration.base = "http://www.mocky.io/v2/"
+        Config.DataRequest.base = "http://www.mocky.io/v2/"
         BaseAndAPICases
             .g0
             .request(id0) {
@@ -225,7 +225,7 @@ final class FunctionalRequestTests: XCTestCase {
         monitor.taskDidFinishCollectingMetrics = { (session, task, metrics) in
             print("🔨:", metrics)
         }
-        Configuration.eventMonitors = [monitor]
+        Config.DataRequest.eventMonitors = [monitor]
         
         let id0 = ID(id: "123")
         

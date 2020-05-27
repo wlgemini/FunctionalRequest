@@ -55,6 +55,12 @@ public protocol DataRequestable: Any {
     /// eg: the original url is "http://www.wlgemini.com/foo", the mock url is "http://www.mock.com/foo"
     var mock: String? { get set }
     
+    /// for JSON encoding
+    var encoding: () -> ParameterEncoding { get set }
+            
+    /// for Encodable encoder
+    var encoder: () -> ParameterEncoder { get set }
+    
     /// init a request
     init(_ api: String, base: @escaping @autoclosure () -> String?)
 }
@@ -95,13 +101,12 @@ public extension DataRequestable where Input == None, Output == None {
 // MARK: Input == JSON, Output == None
 public extension DataRequestable where Input == JSON, Output == None {
     
-    func request(_ params: [String: Any],
-                 encoding: ParameterEncoding = URLEncoding.default) {
+    func request(_ params: [String: Any]) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoding: encoding,
+                                       encoding: self._encoding,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -113,13 +118,12 @@ public extension DataRequestable where Input == JSON, Output == None {
 // MARK: Input: Encodable, Output == None
 public extension DataRequestable where Input: Encodable, Output == None {
     
-    func request(_ params: Input,
-                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default) {
+    func request(_ params: Input) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoder: encoder,
+                                       encoder: self._encoder,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -131,7 +135,7 @@ public extension DataRequestable where Input: Encodable, Output == None {
 // MARK: Input == None, Output == Data
 public extension DataRequestable where Input == None, Output == Data {
     
-    func request(completion: @escaping (AFDataResponse<Data>) -> Void) {
+    func request(completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
@@ -147,8 +151,8 @@ public extension DataRequestable where Input == None, Output == Data {
 // MARK: Input == None, Output == JSON
 public extension DataRequestable where Input == None, Output == JSON {
     
-    func request(decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
-                 completion: @escaping (AFDataResponse<Any>) -> Void) {
+    func request(decodingOptions: JSONSerialization.ReadingOptions = Config.DataResponse.decodingOptions,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
@@ -165,8 +169,8 @@ public extension DataRequestable where Input == None, Output == JSON {
 // MARK: Input == None, Output: Decodable
 public extension DataRequestable where Input == None, Output: Decodable {
     
-    func request(decoder: DataDecoder = JSONDecoder(),
-                 completion: @escaping (AFDataResponse<Output>) -> Void) {
+    func request(decoder: Alamofire.DataDecoder = Config.DataResponse.decoder,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
@@ -184,13 +188,12 @@ public extension DataRequestable where Input == None, Output: Decodable {
 public extension DataRequestable where Input == JSON, Output == Data {
     
     func request(_ params: [String: Any],
-                 encoding: ParameterEncoding = URLEncoding.default,
-                 completion: @escaping (AFDataResponse<Data>) -> Void) {
+                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoding: encoding,
+                                       encoding: self._encoding,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -203,14 +206,13 @@ public extension DataRequestable where Input == JSON, Output == Data {
 public extension DataRequestable where Input == JSON, Output == JSON {
     
     func request(_ params: [String: Any],
-                 encoding: ParameterEncoding = URLEncoding.default,
-                 decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
-                 completion: @escaping (AFDataResponse<Any>) -> Void) {
+                 decodingOptions: JSONSerialization.ReadingOptions = Config.DataResponse.decodingOptions,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoding: encoding,
+                                       encoding: self._encoding,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -224,14 +226,13 @@ public extension DataRequestable where Input == JSON, Output == JSON {
 public extension DataRequestable where Input == JSON, Output: Decodable {
     
     func request(_ params: [String: Any],
-                 encoding: ParameterEncoding = URLEncoding.default,
-                 decoder: DataDecoder = JSONDecoder(),
-                 completion: @escaping (AFDataResponse<Output>) -> Void) {
+                 decoder: Alamofire.DataDecoder = Config.DataResponse.decoder,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoding: encoding,
+                                       encoding: self._encoding,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -245,13 +246,12 @@ public extension DataRequestable where Input == JSON, Output: Decodable {
 public extension DataRequestable where Input: Encodable, Output == Data {
     
     func request(_ params: Input,
-                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
-                 completion: @escaping (AFDataResponse<Data>) -> Void) {
+                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoder: encoder,
+                                       encoder: self._encoder,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -264,14 +264,13 @@ public extension DataRequestable where Input: Encodable, Output == Data {
 public extension DataRequestable where Input: Encodable, Output == JSON {
     
     func request(_ params: Input,
-                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
-                 decodingOptions: JSONSerialization.ReadingOptions = .allowFragments,
-                 completion: @escaping (AFDataResponse<Any>) -> Void) {
+                 decodingOptions: JSONSerialization.ReadingOptions = Config.DataResponse.decodingOptions,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoder: encoder,
+                                       encoder: self._encoder,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -285,14 +284,13 @@ public extension DataRequestable where Input: Encodable, Output == JSON {
 public extension DataRequestable where Input: Encodable, Output: Decodable {
     
     func request(_ params: Input,
-                 encoder: ParameterEncoder = URLEncodedFormParameterEncoder.default,
-                 decoder: DataDecoder = JSONDecoder(),
-                 completion: @escaping (AFDataResponse<Output>) -> Void) {
+                 decoder: Alamofire.DataDecoder = Config.DataResponse.decoder,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
                                        method: self.method,
                                        parameters: params,
-                                       encoder: encoder,
+                                       encoder: self._encoder,
                                        headers: self._headers,
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
@@ -307,7 +305,7 @@ public extension DataRequestable where Input: Encodable, Output: Decodable {
 public extension DataRequestable {
     
     /// 添加额外的headers
-    func setAdditionalHeaders(_ headers: HTTPHeaders) -> Self {
+    func setAdditionalHeaders(_ headers: Alamofire.HTTPHeaders) -> Self {
         var new = self
         new.additionalHeaders = headers
         return new
@@ -321,14 +319,14 @@ public extension DataRequestable {
     }
     
     /// 设置重定向策略，可以使用内置的重定向策略`Redirector`
-    func setRedirectHandler(_ handler: RedirectHandler) -> Self {
+    func setRedirectHandler(_ handler: Alamofire.RedirectHandler) -> Self {
         var new = self
         new.redirectHandler = handler
         return new
     }
     
     /// 设置缓存策略，可以使用内置的缓存策略`ResponseCacher`
-    func setCachedResponseHandler(_ handler: CachedResponseHandler) -> Self {
+    func setCachedResponseHandler(_ handler: Alamofire.CachedResponseHandler) -> Self {
         var new = self
         new.cachedResponseHandler = handler
         return new
@@ -349,6 +347,26 @@ public extension DataRequestable {
     }
 }
 
+public extension DataRequestable where Input == JSON {
+    
+    /// 设置encoding方式
+    func setEncoding(_ encoding: Alamofire.ParameterEncoding) -> Self {
+        var new = self
+        new.encoding = { encoding }
+        return new
+    }
+}
+
+public extension DataRequestable where Input: Encodable {
+    
+    /// 设置encoder
+    func setEncoder(_ encoder: Alamofire.ParameterEncoder) -> Self {
+        var new = self
+        new.encoder = { encoder }
+        return new
+    }
+}
+
 
 // MARK: - Private
 extension DataRequestable {
@@ -356,7 +374,7 @@ extension DataRequestable {
     /// 生成url
     private var _url: String? {
         // make sure `base` is available
-        guard let base = self.base() ?? Configuration.base else {
+        guard let base = self.base() ?? Config.DataRequest.base else {
             #if DEBUG
             print("FunctionalRequest Error: base url not set for api `\(self.api)`, request won't start.")
             #endif
@@ -383,11 +401,11 @@ extension DataRequestable {
     }
     
     /// 合并Headers，self.additionalHeaders会覆盖Configuration.headers中冲突的key-value
-    private var _headers: HTTPHeaders {
-        var combineHeaders = HTTPHeaders()
+    private var _headers: Alamofire.HTTPHeaders {
+        var combineHeaders = Alamofire.HTTPHeaders()
         
-        // Configuration.headers
-        if let headers = Configuration.headers?() {
+        // DataRequest.headers
+        if let headers = Config.DataRequest.headers?() {
             for h in headers {
                 combineHeaders.add(h)
             }
@@ -403,16 +421,26 @@ extension DataRequestable {
         return combineHeaders
     }
     
+    /// 获取encoding
+    private var _encoding: Alamofire.ParameterEncoding {
+        return self.encoding()
+    }
+    
+    /// 获取encoder
+    private var _encoder: Alamofire.ParameterEncoder {
+        return self.encoder()
+    }
+    
     /// 修改URLRequest
     private func _modifyURLRequest(_ req: inout URLRequest) throws {
         // timeoutInterval
-        if let timeoutInterval = self.timeoutInterval ?? Configuration.timeoutInterval {
+        if let timeoutInterval = self.timeoutInterval ?? Config.DataRequest.timeoutInterval {
             req.timeoutInterval = timeoutInterval
         }
     }
     
     /// 修改Request
-    private func _modifyRequest(_ req: Request) {
+    private func _modifyRequest(_ req: Alamofire.Request) {
         // redirect
         if let redirectHandler = self.redirectHandler {
             req.redirect(using: redirectHandler)
@@ -425,11 +453,11 @@ extension DataRequestable {
     }
     
     /// 修改DataRequest
-    private func _modifyDataRequest(_ req: DataRequest) {
+    private func _modifyDataRequest(_ req: Alamofire.DataRequest) {
         // validate
         req.validate()
     }
 }
 
 /// 内部使用的session
-fileprivate let _DataSession = Alamofire.Session(eventMonitors: Configuration.eventMonitors)
+fileprivate let _DataSession = Alamofire.Session(eventMonitors: Config.DataRequest.eventMonitors)
