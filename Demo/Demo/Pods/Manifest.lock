@@ -1,0 +1,23 @@
+PODS:
+  - Alamofire (5.2.1)
+  - FunctionalRequest (0.6.0):
+    - Alamofire (~> 5.2.0)
+
+DEPENDENCIES:
+  - FunctionalRequest (from `../../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+
+EXTERNAL SOURCES:
+  FunctionalRequest:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
+  FunctionalRequest: 554a72e298057d2b45757668bab0b70d5c53bc9e
+
+PODFILE CHECKSUM: 4cef49afbe89cf232426f98be26d719383a828f9
+
+COCOAPODS: 1.9.0

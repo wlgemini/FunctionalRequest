@@ -22,7 +22,7 @@ public extension Alamofire.AFDataResponse {
 public extension Alamofire.AFDataResponse where Success == JSON {
     
     /// 解码过的缓存数据
-    func cachedValue(options: JSONSerialization.ReadingOptions = Config.DataResponse.decodingOptions) -> Any? {
+    func cachedValue(options: JSONSerialization.ReadingOptions = .allowFragments) -> Any? {
         guard let data = self.cachedData else { return nil }
         return try? JSONSerialization.jsonObject(with: data, options: options)
     }
@@ -32,7 +32,7 @@ public extension Alamofire.AFDataResponse where Success == JSON {
 public extension Alamofire.AFDataResponse where Success: Decodable {
     
     /// 解码过的缓存数据
-    func cachedValue(decoder: Alamofire.DataDecoder = Config.DataResponse.decoder) -> Success? {
+    func cachedValue(decoder: Alamofire.DataDecoder = JSONDecoder()) -> Success? {
         guard let data = self.cachedData else { return nil }
         return try? decoder.decode(Success.self, from: data)
     }

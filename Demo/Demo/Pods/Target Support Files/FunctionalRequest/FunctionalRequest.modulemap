@@ -1,0 +1,6 @@
+framework module FunctionalRequest {
+  umbrella header "FunctionalRequest-umbrella.h"
+
+  export *
+  module * { export * }
+}

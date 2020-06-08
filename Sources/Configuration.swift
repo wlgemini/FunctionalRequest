@@ -90,13 +90,5 @@ public enum Config {
             public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
         }
     }
-    
-    /// 对DataResponse的设置
-    public enum DataResponse {
-        
-        public static var decodingOptions: JSONSerialization.ReadingOptions = .allowFragments
-        
-        public static var decoder: Alamofire.DataDecoder = JSONDecoder()
-    }
 }
 
