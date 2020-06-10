@@ -16,7 +16,7 @@ public protocol DataRequestable: Any {
     associatedtype Output
     
     /// add some additional headers for this request
-    var additionalHeaders: HTTPHeaders? { get set }
+    var additionalHeaders: Alamofire.HTTPHeaders? { get set }
     
     /// when an instance of load activity occurs
     /// (e.g. bytes are received from the network for a request), the idle
@@ -28,15 +28,15 @@ public protocol DataRequestable: Any {
     /// A type that handles how an HTTP redirect response from a remote server should be redirected to the new request.
     /// there is a builtin type `Redirector`yout can use.
     /// this property will override the `Configuration.redirectHandler`.
-    var redirectHandler: RedirectHandler? { get set }
+    var redirectHandler: Alamofire.RedirectHandler? { get set }
     
     /// A type that handles whether the data task should store the HTTP response in the cache.
     /// there is a builtin type `ResponseCacher`yout can use.
     /// this property will override the `Configuration.cachedResponseHandler`.
-    var cachedResponseHandler: CachedResponseHandler? { get set }
+    var cachedResponseHandler: Alamofire.CachedResponseHandler? { get set }
     
     /// the request method
-    var method: HTTPMethod { get }
+    var method: Alamofire.HTTPMethod { get }
     
     /// the base url
     /// will combined with `api`
@@ -56,10 +56,10 @@ public protocol DataRequestable: Any {
     var mock: String? { get set }
     
     /// for JSON encoding
-    var encoding: () -> ParameterEncoding { get set }
+    var encoding: Alamofire.ParameterEncoding? { get set }
             
     /// for Encodable encoder
-    var encoder: () -> ParameterEncoder { get set }
+    var encoder: Alamofire.ParameterEncoder? { get set }
     
     /// init a request
     init(_ api: String, base: @escaping @autoclosure () -> String?)
@@ -135,9 +135,10 @@ public extension DataRequestable where Input: Encodable, Output == None {
 // MARK: Input == None, Output == Data
 public extension DataRequestable where Input == None, Output == Data {
     
-    func request(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DataResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.DataResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DataResponseSerializer.defaultEmptyRequestMethods,
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -147,20 +148,22 @@ public extension DataRequestable where Input == None, Output == Data {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseData(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         completionHandler: completion)
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
     }
 }
 
 // MARK: Input == None, Output == JSON
 public extension DataRequestable where Input == None, Output == JSON {
     
-    func request(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.JSONResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods,
-                 options: JSONSerialization.ReadingOptions = .allowFragments,
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -170,21 +173,23 @@ public extension DataRequestable where Input == None, Output == JSON {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         options: options,
-                         completionHandler: completion)
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
     }
 }
 
 // MARK: Input == None, Output: Decodable
 public extension DataRequestable where Input == None, Output: Decodable {
     
-    func request(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DecodableResponseSerializer<Output>.defaultDataPreprocessor,
-                 decoder: Alamofire.DataDecoder = JSONDecoder(),
-                 emptyResponseCodes: Set<Int> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyRequestMethods,
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -194,11 +199,13 @@ public extension DataRequestable where Input == None, Output: Decodable {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(dataPreprocessor: dataPreprocessor,
-                              decoder: decoder,
-                              emptyResponseCodes: emptyResponseCodes,
-                              emptyRequestMethods: emptyRequestMethods,
-                              completionHandler: completion)
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
     }
 }
 
@@ -206,9 +213,10 @@ public extension DataRequestable where Input == None, Output: Decodable {
 public extension DataRequestable where Input == JSON, Output == Data {
     
     func request(_ params: [String: Any],
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DataResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.DataResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DataResponseSerializer.defaultEmptyRequestMethods,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -219,10 +227,11 @@ public extension DataRequestable where Input == JSON, Output == Data {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseData(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         completionHandler: completion)
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
     }
 }
 
@@ -230,10 +239,11 @@ public extension DataRequestable where Input == JSON, Output == Data {
 public extension DataRequestable where Input == JSON, Output == JSON {
     
     func request(_ params: [String: Any],
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.JSONResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods,
-                 options: JSONSerialization.ReadingOptions = .allowFragments,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -244,11 +254,12 @@ public extension DataRequestable where Input == JSON, Output == JSON {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         options: options,
-                         completionHandler: completion)
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
     }
 }
 
@@ -256,10 +267,11 @@ public extension DataRequestable where Input == JSON, Output == JSON {
 public extension DataRequestable where Input == JSON, Output: Decodable {
     
     func request(_ params: [String: Any],
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DecodableResponseSerializer<Output>.defaultDataPreprocessor,
-                 decoder: Alamofire.DataDecoder = JSONDecoder(),
-                 emptyResponseCodes: Set<Int> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyRequestMethods,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -270,11 +282,13 @@ public extension DataRequestable where Input == JSON, Output: Decodable {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(dataPreprocessor: dataPreprocessor,
-                              decoder: decoder,
-                              emptyResponseCodes: emptyResponseCodes,
-                              emptyRequestMethods: emptyRequestMethods,
-                              completionHandler: completion)
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
     }
 }
 
@@ -282,9 +296,10 @@ public extension DataRequestable where Input == JSON, Output: Decodable {
 public extension DataRequestable where Input: Encodable, Output == Data {
     
     func request(_ params: Input,
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DataResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.DataResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DataResponseSerializer.defaultEmptyRequestMethods,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -295,10 +310,11 @@ public extension DataRequestable where Input: Encodable, Output == Data {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseData(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         completionHandler: completion)
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
     }
 }
 
@@ -306,10 +322,11 @@ public extension DataRequestable where Input: Encodable, Output == Data {
 public extension DataRequestable where Input: Encodable, Output == JSON {
     
     func request(_ params: Input,
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.JSONResponseSerializer.defaultDataPreprocessor,
-                 emptyResponseCodes: Set<Int> = Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods,
-                 options: JSONSerialization.ReadingOptions = .allowFragments,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -320,11 +337,12 @@ public extension DataRequestable where Input: Encodable, Output == JSON {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseJSON(dataPreprocessor: dataPreprocessor,
-                         emptyResponseCodes: emptyResponseCodes,
-                         emptyRequestMethods: emptyRequestMethods,
-                         options: options,
-                         completionHandler: completion)
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
     }
 }
 
@@ -332,10 +350,11 @@ public extension DataRequestable where Input: Encodable, Output == JSON {
 public extension DataRequestable where Input: Encodable, Output: Decodable {
     
     func request(_ params: Input,
-                 dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DecodableResponseSerializer<Output>.defaultDataPreprocessor,
-                 decoder: Alamofire.DataDecoder = JSONDecoder(),
-                 emptyResponseCodes: Set<Int> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyResponseCodes,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DecodableResponseSerializer<Output>.defaultEmptyRequestMethods,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
                  completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) {
         guard let url = self._url else { return }
         let req = _DataSession.request(url,
@@ -346,11 +365,13 @@ public extension DataRequestable where Input: Encodable, Output: Decodable {
                                        requestModifier: self._modifyURLRequest)
         self._modifyRequest(req)
         self._modifyDataRequest(req)
-        req.responseDecodable(dataPreprocessor: dataPreprocessor,
-                              decoder: decoder,
-                              emptyResponseCodes: emptyResponseCodes,
-                              emptyRequestMethods: emptyRequestMethods,
-                              completionHandler: completion)
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
     }
 }
 
@@ -406,7 +427,7 @@ public extension DataRequestable where Input == JSON {
     /// 设置encoding方式
     func setEncoding(_ encoding: Alamofire.ParameterEncoding) -> Self {
         var new = self
-        new.encoding = { encoding }
+        new.encoding = encoding
         return new
     }
 }
@@ -416,7 +437,7 @@ public extension DataRequestable where Input: Encodable {
     /// 设置encoder
     func setEncoder(_ encoder: Alamofire.ParameterEncoder) -> Self {
         var new = self
-        new.encoder = { encoder }
+        new.encoder = encoder
         return new
     }
 }
@@ -477,12 +498,12 @@ extension DataRequestable {
     
     /// 获取encoding
     private var _encoding: Alamofire.ParameterEncoding {
-        return self.encoding()
+        return self.encoding ?? Config.DataRequest.JSON.encoding ?? Alamofire.URLEncoding.default
     }
     
     /// 获取encoder
     private var _encoder: Alamofire.ParameterEncoder {
-        return self.encoder()
+        return self.encoder ?? Config.DataRequest.Encodable.encoder ?? Alamofire.URLEncodedFormParameterEncoder.default
     }
     
     /// 修改URLRequest
@@ -510,6 +531,72 @@ extension DataRequestable {
     private func _modifyDataRequest(_ req: Alamofire.DataRequest) {
         // validate
         req.validate()
+    }
+}
+
+
+extension Alamofire.DataRequest {
+    
+    @discardableResult
+    fileprivate func _responseData(queue: DispatchQueue?,
+                                   dataPreprocessor: Alamofire.DataPreprocessor?,
+                                   emptyResponseCodes: Set<Int>?,
+                                   emptyRequestMethods: Set<Alamofire.HTTPMethod>?,
+                                   completionHandler: @escaping (Alamofire.AFDataResponse<Data>) -> Void) -> Self {
+        let _queue = queue ?? Config.DataResponse.queue ?? DispatchQueue.main
+        let _dataPreprocessor = dataPreprocessor ?? Config.DataResponse.Data.dataPreprocessor ?? Alamofire.DataResponseSerializer.defaultDataPreprocessor
+        let _emptyResponseCodes = emptyResponseCodes ?? Config.DataResponse.Data.emptyResponseCodes ?? Alamofire.DataResponseSerializer.defaultEmptyResponseCodes
+        let _emptyRequestMethods = emptyRequestMethods ?? Config.DataResponse.Data.emptyRequestMethods ?? Alamofire.DataResponseSerializer.defaultEmptyRequestMethods
+        
+        return self.responseData(queue: _queue,
+                                 dataPreprocessor: _dataPreprocessor,
+                                 emptyResponseCodes: _emptyResponseCodes,
+                                 emptyRequestMethods: _emptyRequestMethods,
+                                 completionHandler: completionHandler)
+    }
+    
+    @discardableResult
+    fileprivate func _responseJSON(queue: DispatchQueue?,
+                                   dataPreprocessor: Alamofire.DataPreprocessor?,
+                                   emptyResponseCodes: Set<Int>?,
+                                   emptyRequestMethods: Set<Alamofire.HTTPMethod>?,
+                                   options: JSONSerialization.ReadingOptions?,
+                                   completionHandler: @escaping (Alamofire.AFDataResponse<Any>) -> Void) -> Self {
+        let _queue = queue ?? Config.DataResponse.queue ?? DispatchQueue.main
+        let _dataPreprocessor = dataPreprocessor ?? Config.DataResponse.JSON.dataPreprocessor ?? Alamofire.JSONResponseSerializer.defaultDataPreprocessor
+        let _emptyResponseCodes = emptyResponseCodes ?? Config.DataResponse.JSON.emptyResponseCodes ?? Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes
+        let _emptyRequestMethods = emptyRequestMethods ?? Config.DataResponse.JSON.emptyRequestMethods ?? Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods
+        let _options = options ?? Config.DataResponse.JSON.options ?? JSONSerialization.ReadingOptions.allowFragments
+        
+        return self.responseJSON(queue: _queue,
+                                 dataPreprocessor: _dataPreprocessor,
+                                 emptyResponseCodes: _emptyResponseCodes,
+                                 emptyRequestMethods: _emptyRequestMethods,
+                                 options: _options,
+                                 completionHandler: completionHandler)
+    }
+    
+    @discardableResult
+    fileprivate func _responseDecodable<T: Decodable>(of type: T.Type,
+                                                      queue: DispatchQueue?,
+                                                      dataPreprocessor: Alamofire.DataPreprocessor?,
+                                                      decoder: Alamofire.DataDecoder?,
+                                                      emptyResponseCodes: Set<Int>?,
+                                                      emptyRequestMethods: Set<Alamofire.HTTPMethod>?,
+                                                      completionHandler: @escaping (Alamofire.AFDataResponse<T>) -> Void) -> Self {
+        let _queue = queue ?? Config.DataResponse.queue ?? DispatchQueue.main
+        let _dataPreprocessor = dataPreprocessor ?? Config.DataResponse.Decodable.dataPreprocessor ?? Alamofire.DecodableResponseSerializer<T>.defaultDataPreprocessor
+        let _decoder = decoder ?? Config.DataResponse.Decodable.decoder ?? JSONDecoder()
+        let _emptyResponseCodes = emptyResponseCodes ?? Config.DataResponse.Decodable.emptyResponseCodes ?? Alamofire.DecodableResponseSerializer<T>.defaultEmptyResponseCodes
+        let _emptyRequestMethods = emptyRequestMethods ?? Config.DataResponse.Decodable.emptyRequestMethods ?? Alamofire.DecodableResponseSerializer<T>.defaultEmptyRequestMethods
+        
+        return self.responseDecodable(of: type,
+                                      queue: _queue,
+                                      dataPreprocessor: _dataPreprocessor,
+                                      decoder: _decoder,
+                                      emptyResponseCodes: _emptyResponseCodes,
+                                      emptyRequestMethods: _emptyRequestMethods,
+                                      completionHandler: completionHandler)
     }
 }
 

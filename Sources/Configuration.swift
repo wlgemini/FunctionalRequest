@@ -49,45 +49,74 @@ public enum Config {
         /// 可以使用内置的监控类`ClosureEventMonitor`，也可以自定义对`EventMonitor`的实现
         public static var eventMonitors: [Alamofire.EventMonitor] = []
         
-        
-        /// 对GET的设置
-        public enum GET {
+        /// JSON
+        public enum JSON {
             
-            public static var encoding: Alamofire.ParameterEncoding = Alamofire.URLEncoding.default
-            
-            public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
+            /// default: Alamofire.URLEncoding.default
+            public static var encoding: Alamofire.ParameterEncoding?
         }
         
-        /// 对POST的设置
-        public enum POST {
+        /// Encodable
+        public enum Encodable {
             
-            public static var encoding: Alamofire.ParameterEncoding = Alamofire.URLEncoding.default
+            /// default: Alamofire.URLEncodedFormParameterEncoder.default
+            public static var encoder: Alamofire.ParameterEncoder?
+        }
+    }
+    
+    
+    /// DataResponse
+    public enum DataResponse {
+        
+        /// default: .main
+        public static var queue: DispatchQueue?
+        
+        
+        /// Data
+        public enum Data {
             
-            public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
+            /// default: Alamofire.DataResponseSerializer.defaultDataPreprocessor
+            public static var dataPreprocessor: Alamofire.DataPreprocessor?
+            
+            /// default: Alamofire.DataResponseSerializer.defaultEmptyResponseCodes
+            public static var emptyResponseCodes: Set<Int>?
+
+            /// default: Alamofire.DataResponseSerializer.defaultEmptyRequestMethods
+            public static var emptyRequestMethods: Set<Alamofire.HTTPMethod>?
         }
         
-        /// 对PUT的设置
-        public enum PUT {
+        
+        /// JSON
+        public enum JSON {
             
-            public static var encoding: Alamofire.ParameterEncoding = Alamofire.URLEncoding.default
+            /// default: Alamofire.JSONResponseSerializer.defaultDataPreprocessor
+            public static var dataPreprocessor: Alamofire.DataPreprocessor?
             
-            public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
+            /// default: Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes
+            public static var emptyResponseCodes: Set<Int>?
+
+            /// default: Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods
+            public static var emptyRequestMethods: Set<Alamofire.HTTPMethod>?
+    
+            /// default: .allowFragments
+            public static var options: JSONSerialization.ReadingOptions?
         }
         
-        /// 对PATCH的设置
-        public enum PATCH {
-            
-            public static var encoding: Alamofire.ParameterEncoding = Alamofire.URLEncoding.default
-            
-            public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
-        }
         
-        /// 对DELETE的设置
-        public enum DELETE {
+        /// Decodable
+        public enum Decodable {
             
-            public static var encoding: Alamofire.ParameterEncoding = Alamofire.URLEncoding.default
+            /// default: Alamofire.DecodableResponseSerializer<T>.defaultDataPreprocessor
+            public static var dataPreprocessor: Alamofire.DataPreprocessor?
             
-            public static var encoder: Alamofire.ParameterEncoder = Alamofire.URLEncodedFormParameterEncoder.default
+            /// default: Alamofire.DecodableResponseSerializer<T>.defaultEmptyResponseCodes
+            public static var emptyResponseCodes: Set<Int>?
+
+            /// default: Alamofire.DecodableResponseSerializer<T>.defaultEmptyRequestMethods
+            public static var emptyRequestMethods: Set<Alamofire.HTTPMethod>?
+            
+            /// default: JSONDecoder()
+            public static var decoder: Alamofire.DataDecoder?
         }
     }
 }

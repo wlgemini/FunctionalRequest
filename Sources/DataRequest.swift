@@ -9,15 +9,15 @@ import Alamofire
 /// GET (SELECT): 从服务器取出资源
 public struct GET<Input, Output>: DataRequestable {
 
-    public var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
     
-    public var redirectHandler: RedirectHandler?
+    public var redirectHandler: Alamofire.RedirectHandler?
     
-    public var cachedResponseHandler: CachedResponseHandler?
+    public var cachedResponseHandler: Alamofire.CachedResponseHandler?
     
-    public let method: HTTPMethod = .get
+    public let method: Alamofire.HTTPMethod = .get
     
     public let base: () -> String?
     
@@ -27,9 +27,9 @@ public struct GET<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public var encoding: () -> ParameterEncoding = { Config.DataRequest.GET.encoding }
+    public var encoding: Alamofire.ParameterEncoding?
             
-    public var encoder: () -> ParameterEncoder = { Config.DataRequest.GET.encoder }
+    public var encoder: Alamofire.ParameterEncoder?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
@@ -41,15 +41,15 @@ public struct GET<Input, Output>: DataRequestable {
 /// POST (CREATE): 在服务器新建一个资源
 public struct POST<Input, Output>: DataRequestable {
     
-    public var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
     
-    public var redirectHandler: RedirectHandler?
+    public var redirectHandler: Alamofire.RedirectHandler?
     
-    public var cachedResponseHandler: CachedResponseHandler?
+    public var cachedResponseHandler: Alamofire.CachedResponseHandler?
     
-    public let method: HTTPMethod = .post
+    public let method: Alamofire.HTTPMethod = .post
     
     public let base: () -> String?
     
@@ -59,9 +59,9 @@ public struct POST<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public var encoding: () -> ParameterEncoding = { Config.DataRequest.POST.encoding }
+    public var encoding: Alamofire.ParameterEncoding?
             
-    public var encoder: () -> ParameterEncoder = { Config.DataRequest.POST.encoder }
+    public var encoder: Alamofire.ParameterEncoder?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
@@ -73,15 +73,15 @@ public struct POST<Input, Output>: DataRequestable {
 /// PUT (UPDATE): 在服务器更新资源(客户端提供改变后的完整资源)
 public struct PUT<Input, Output>: DataRequestable {
     
-    public var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
     
-    public var redirectHandler: RedirectHandler?
+    public var redirectHandler: Alamofire.RedirectHandler?
     
-    public var cachedResponseHandler: CachedResponseHandler?
+    public var cachedResponseHandler: Alamofire.CachedResponseHandler?
     
-    public let method: HTTPMethod = .put
+    public let method: Alamofire.HTTPMethod = .put
     
     public let base: () -> String?
     
@@ -91,9 +91,9 @@ public struct PUT<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public var encoding: () -> ParameterEncoding = { Config.DataRequest.PUT.encoding }
+    public var encoding: Alamofire.ParameterEncoding?
             
-    public var encoder: () -> ParameterEncoder = { Config.DataRequest.PUT.encoder }
+    public var encoder: Alamofire.ParameterEncoder?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
@@ -105,15 +105,15 @@ public struct PUT<Input, Output>: DataRequestable {
 /// PATCH (UPDATE): 在服务器更新资源(客户端提供改变的属性)
 public struct PATCH<Input, Output>: DataRequestable {
     
-    public var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
     
-    public var redirectHandler: RedirectHandler?
+    public var redirectHandler: Alamofire.RedirectHandler?
     
-    public var cachedResponseHandler: CachedResponseHandler?
+    public var cachedResponseHandler: Alamofire.CachedResponseHandler?
     
-    public let method: HTTPMethod = .patch
+    public let method: Alamofire.HTTPMethod = .patch
     
     public let base: () -> String?
     
@@ -123,9 +123,9 @@ public struct PATCH<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public var encoding: () -> ParameterEncoding = { Config.DataRequest.PATCH.encoding }
+    public var encoding: Alamofire.ParameterEncoding?
             
-    public var encoder: () -> ParameterEncoder = { Config.DataRequest.PATCH.encoder }
+    public var encoder: Alamofire.ParameterEncoder?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
@@ -137,15 +137,15 @@ public struct PATCH<Input, Output>: DataRequestable {
 /// DELETE: 从服务器删除资源
 public struct DELETE<Input, Output>: DataRequestable {
     
-    public var additionalHeaders: HTTPHeaders?
+    public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
     
-    public var redirectHandler: RedirectHandler?
+    public var redirectHandler: Alamofire.RedirectHandler?
     
-    public var cachedResponseHandler: CachedResponseHandler?
+    public var cachedResponseHandler: Alamofire.CachedResponseHandler?
     
-    public let method: HTTPMethod = .delete
+    public let method: Alamofire.HTTPMethod = .delete
     
     public let base: () -> String?
     
@@ -155,9 +155,9 @@ public struct DELETE<Input, Output>: DataRequestable {
     
     public var mock: String?
     
-    public var encoding: () -> ParameterEncoding = { Config.DataRequest.DELETE.encoding }
+    public var encoding: Alamofire.ParameterEncoding?
             
-    public var encoder: () -> ParameterEncoder = { Config.DataRequest.DELETE.encoder }
+    public var encoder: Alamofire.ParameterEncoder?
     
     public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
         self.api = api
