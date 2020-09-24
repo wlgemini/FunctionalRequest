@@ -875,7 +875,7 @@
 			};
 			name = Debug;
 		};
-		EDF8D83A7940B09418EA8ECA78E065CF /* Debug */ = {
+		E090F268B22AB68382BBBF0CB446BE09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 885C2FDA64A7637D6916D368DAA1A2B5 /* FunctionalRequest.debug.xcconfig */;
 			buildSettings = {
@@ -907,13 +907,13 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.2;
+				SWIFT_VERSION = 5.3;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		FB24ED7214C7B034D4DA17815946734D /* Release */ = {
+		E67CCC2A7DDB4D181133B1A38798B540 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A338467AC7F0A303F8BA2FD44B6DB529 /* FunctionalRequest.release.xcconfig */;
 			buildSettings = {
@@ -945,7 +945,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.2;
+				SWIFT_VERSION = 5.3;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -984,8 +984,8 @@
 		C0EE421071B17D01D2490819D3D08AC9 /* Build configuration list for PBXNativeTarget "FunctionalRequest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EDF8D83A7940B09418EA8ECA78E065CF /* Debug */,
-				FB24ED7214C7B034D4DA17815946734D /* Release */,
+				E090F268B22AB68382BBBF0CB446BE09 /* Debug */,
+				E67CCC2A7DDB4D181133B1A38798B540 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
