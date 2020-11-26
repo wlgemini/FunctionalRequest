@@ -31,7 +31,7 @@ public struct GET<Input, Output>: DataRequestable {
             
     public var encoder: Alamofire.ParameterEncoder?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base()) {
         self.api = api
         self.base = base
     }
@@ -63,7 +63,7 @@ public struct POST<Input, Output>: DataRequestable {
             
     public var encoder: Alamofire.ParameterEncoder?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base()) {
         self.api = api
         self.base = base
     }
@@ -95,7 +95,7 @@ public struct PUT<Input, Output>: DataRequestable {
             
     public var encoder: Alamofire.ParameterEncoder?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base()) {
         self.api = api
         self.base = base
     }
@@ -127,7 +127,7 @@ public struct PATCH<Input, Output>: DataRequestable {
             
     public var encoder: Alamofire.ParameterEncoder?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base()) {
         self.api = api
         self.base = base
     }
@@ -159,7 +159,7 @@ public struct DELETE<Input, Output>: DataRequestable {
             
     public var encoder: Alamofire.ParameterEncoder?
     
-    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base) {
+    public init(_ api: String, base: @escaping @autoclosure () -> String? = Config.DataRequest.base()) {
         self.api = api
         self.base = base
     }

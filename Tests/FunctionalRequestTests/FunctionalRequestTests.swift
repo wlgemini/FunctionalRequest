@@ -154,7 +154,7 @@ final class FunctionalRequestTests: XCTestCase {
         let id0 = ID(id: "123")
         let p = Persion(name: "wlg", age: 18, gender: true)
         
-        Config.DataRequest.base = "http://www.mocky.io/v2/"
+        Config.DataRequest.base = { "http://www.mocky.io/v2/" }
         BaseAndAPICases
             .g0
             .request(id0) {

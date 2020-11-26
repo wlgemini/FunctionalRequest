@@ -7,6 +7,17 @@
 //
 
 import Foundation
+import FunctionalRequest
 
-print("Hello, World!")
+
+// Config
+Config.DataRequest.base = "https://www.mock.com/"
+
+
+// APIs
+let foo = GET<None, None>("login")
+
+// req
+foo.request()
+
 

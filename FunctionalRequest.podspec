@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'FunctionalRequest'
-  s.version = '0.8.0'
+  s.version = '0.9.0'
   s.license = 'MIT'
   s.summary = 'Make request like a function call'
   s.homepage = 'https://github.com/wlgemini/FunctionalRequest.git'
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '10.0'
   s.watchos.deployment_target = '3.0'
 
-  s.swift_versions = ['5.1', '5.2']
+  s.swift_versions = ['5.1', '5.2', '5.3']
 
   s.source_files = 'Sources/*.swift'
 
