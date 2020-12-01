@@ -225,7 +225,7 @@ final class FunctionalRequestTests: XCTestCase {
         monitor.taskDidFinishCollectingMetrics = { (session, task, metrics) in
             print("🔨:", metrics)
         }
-        Config.DataRequest.eventMonitors = [monitor]
+        Config.eventMonitors = [monitor]
         
         let id0 = ID(id: "123")
         

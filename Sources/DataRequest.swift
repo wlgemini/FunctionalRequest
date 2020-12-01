@@ -13,6 +13,8 @@ public struct GET<Input, Output>: DataRequestable {
     
     public var timeoutInterval: TimeInterval?
     
+    public var credential: URLCredential?
+    
     public var redirectHandler: Alamofire.RedirectHandler?
     
     public var cachedResponseHandler: Alamofire.CachedResponseHandler?
@@ -44,6 +46,8 @@ public struct POST<Input, Output>: DataRequestable {
     public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
+    
+    public var credential: URLCredential?
     
     public var redirectHandler: Alamofire.RedirectHandler?
     
@@ -77,6 +81,8 @@ public struct PUT<Input, Output>: DataRequestable {
     
     public var timeoutInterval: TimeInterval?
     
+    public var credential: URLCredential?
+    
     public var redirectHandler: Alamofire.RedirectHandler?
     
     public var cachedResponseHandler: Alamofire.CachedResponseHandler?
@@ -109,6 +115,8 @@ public struct PATCH<Input, Output>: DataRequestable {
     
     public var timeoutInterval: TimeInterval?
     
+    public var credential: URLCredential?
+    
     public var redirectHandler: Alamofire.RedirectHandler?
     
     public var cachedResponseHandler: Alamofire.CachedResponseHandler?
@@ -140,6 +148,8 @@ public struct DELETE<Input, Output>: DataRequestable {
     public var additionalHeaders: Alamofire.HTTPHeaders?
     
     public var timeoutInterval: TimeInterval?
+    
+    public var credential: URLCredential?
     
     public var redirectHandler: Alamofire.RedirectHandler?
     

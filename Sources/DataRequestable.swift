@@ -25,14 +25,18 @@ public protocol DataRequestable: Any {
     /// is considered to have timed out.
     var timeoutInterval: TimeInterval? { get set }
     
+    /// add a `URLCredential` for each `Alamofire.Request`
+    /// this property will override the `Config.DataRequest.credential`.
+    var credential: URLCredential? { get set }
+    
     /// A type that handles how an HTTP redirect response from a remote server should be redirected to the new request.
     /// there is a builtin type `Redirector`yout can use.
-    /// this property will override the `Configuration.redirectHandler`.
+    /// this property will override the `Config.DataRequest.redirectHandler`.
     var redirectHandler: Alamofire.RedirectHandler? { get set }
     
     /// A type that handles whether the data task should store the HTTP response in the cache.
     /// there is a builtin type `ResponseCacher`yout can use.
-    /// this property will override the `Configuration.cachedResponseHandler`.
+    /// this property will override the `Config.DataResponse.cachedResponseHandler`.
     var cachedResponseHandler: Alamofire.CachedResponseHandler? { get set }
     
     /// the request method
@@ -40,7 +44,7 @@ public protocol DataRequestable: Any {
     
     /// the base url
     /// will combined with `api`
-    /// this property will override the `Configuration.base`.
+    /// this property will override the `Config.DataRequest.base`.
     var base: () -> String? { get }
     
     /// the request api
@@ -66,296 +70,6 @@ public protocol DataRequestable: Any {
 }
 
 
-// MARK: - Request Function
-// MARK: Input/Output Argument
-/// 表示一个Requestable的Input和Output的范型参数
-///
-/// 可以表示请求没有参数，或者忽略返回值
-///
-public enum None {}
-
-
-/// 表示一个Requestable的Input和Output的范型参数
-///
-/// 可以表示请求参数为JSON(也就是一个Any)，或者返回值为JSON(也就是一个Any)
-///
-public enum JSON {}
-
-
-// MARK: Function
-public extension DataRequestable {
-    
-    // Input == None, Output == None
-    func request()
-    where Input == None, Output == None {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: nil,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req.response(completionHandler: { _ in })
-    }
-    
-    // Input == JSON, Output == None
-    func request(_ params: [String: Any])
-    where Input == JSON, Output == None {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoding: self._encoding,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req.response(completionHandler: { _ in })
-    }
-    
-    // Input: Encodable, Output == None
-    func request(_ params: Input)
-    where Input: Encodable, Output == None {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoder: self._encoder,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req.response(completionHandler: { _ in })
-    }
-    
-    // Input == None, Output == Data
-    func request(queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void)
-    where Input == None, Output == Data {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: nil,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseData(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          completionHandler: completion)
-    }
-    
-    // Input == None, Output == JSON
-    func request(queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 options: JSONSerialization.ReadingOptions? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void)
-    where Input == None, Output == JSON {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: nil,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseJSON(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          options: options,
-                          completionHandler: completion)
-    }
-   
-    // Input == None, Output: Decodable
-    func request(queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 decoder: Alamofire.DataDecoder? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void)
-    where Input == None, Output: Decodable {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: nil,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseDecodable(of: Output.self,
-                               queue: queue,
-                               dataPreprocessor: dataPreprocessor,
-                               decoder: decoder,
-                               emptyResponseCodes: emptyResponseCodes,
-                               emptyRequestMethods: emptyRequestMethods,
-                               completionHandler: completion)
-    }
-   
-    // Input == JSON, Output == Data
-    func request(_ params: [String: Any],
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void)
-    where Input == JSON, Output == Data {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoding: self._encoding,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseData(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          completionHandler: completion)
-    }
-   
-    // Input == JSON, Output == JSON
-    func request(_ params: [String: Any],
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 options: JSONSerialization.ReadingOptions? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void)
-    where Input == JSON, Output == JSON {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoding: self._encoding,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseJSON(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          options: options,
-                          completionHandler: completion)
-    }
-   
-    // Input == JSON, Output: Decodable
-    func request(_ params: [String: Any],
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 decoder: Alamofire.DataDecoder? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void)
-    where Input == JSON, Output: Decodable {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoding: self._encoding,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseDecodable(of: Output.self,
-                               queue: queue,
-                               dataPreprocessor: dataPreprocessor,
-                               decoder: decoder,
-                               emptyResponseCodes: emptyResponseCodes,
-                               emptyRequestMethods: emptyRequestMethods,
-                               completionHandler: completion)
-    }
-    
-    // Input: Encodable, Output == Data
-    func request(_ params: Input,
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void)
-    where Input: Encodable, Output == Data  {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoder: self._encoder,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseData(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          completionHandler: completion)
-    }
-   
-    // Input: Encodable, Output == JSON
-    func request(_ params: Input,
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 options: JSONSerialization.ReadingOptions? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void)
-    where Input: Encodable, Output == JSON {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoder: self._encoder,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseJSON(queue: queue,
-                          dataPreprocessor: dataPreprocessor,
-                          emptyResponseCodes: emptyResponseCodes,
-                          emptyRequestMethods: emptyRequestMethods,
-                          options: options,
-                          completionHandler: completion)
-    }
-
-    // Input: Encodable, Output: Decodable
-    func request(_ params: Input,
-                 queue: DispatchQueue? = nil,
-                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
-                 decoder: Alamofire.DataDecoder? = nil,
-                 emptyResponseCodes: Set<Int>? = nil,
-                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
-                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void)
-    where Input: Encodable, Output: Decodable {
-        guard let url = self._url else { return }
-        let req = _DataSession.request(url,
-                                       method: self.method,
-                                       parameters: params,
-                                       encoder: self._encoder,
-                                       headers: self._headers,
-                                       requestModifier: self._modifyURLRequest)
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        req._responseDecodable(of: Output.self,
-                               queue: queue,
-                               dataPreprocessor: dataPreprocessor,
-                               decoder: decoder,
-                               emptyResponseCodes: emptyResponseCodes,
-                               emptyRequestMethods: emptyRequestMethods,
-                               completionHandler: completion)
-    }
-}
-
-
 // MARK: - DataRequestable Modifier
 public extension DataRequestable {
     
@@ -370,6 +84,19 @@ public extension DataRequestable {
     func setTimeoutInterval(_ timeout: TimeInterval) -> Self {
         var new = self
         new.timeoutInterval = timeout
+        return new
+    }
+    
+    /// set credential
+    func setCredential(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> Self {
+        let credential = URLCredential(user: username, password: password, persistence: persistence)
+        return self.setCredential(credential)
+    }
+    
+    /// set credential
+    func setCredential(_ credential: URLCredential) -> Self {
+        var new = self
+        new.credential = credential
         return new
     }
     
@@ -419,6 +146,320 @@ public extension DataRequestable where Input: Encodable {
         var new = self
         new.encoder = encoder
         return new
+    }
+}
+
+
+// MARK: - Request Function
+// MARK: Input/Output Argument
+/// 表示一个Requestable的Input和Output的范型参数
+///
+/// 可以表示请求没有参数，或者忽略返回值
+///
+public enum None {}
+
+
+/// 表示一个Requestable的Input和Output的范型参数
+///
+/// 可以表示请求参数为JSON(也就是一个Any)，或者返回值为JSON(也就是一个Any)
+///
+public enum JSON {}
+
+
+// MARK: Function
+public extension DataRequestable {
+    
+    // Input == None, Output == None
+    func request() where Input == None, Output == None {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req.response(completionHandler: { _ in })
+    }
+    
+    // Input == JSON, Output == None
+    func request(_ params: [String: Any]) where Input == JSON, Output == None {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: self._encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req.response(completionHandler: { _ in })
+    }
+    
+    // Input: Encodable, Output == None
+    func request(_ params: Input) where Input: Encodable, Output == None {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: self._encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req.response(completionHandler: { _ in })
+    }
+    
+    // Input == None, Output == Data
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) where Input == None, Output == Data {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
+    }
+    
+    // Input == None, Output == JSON
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) where Input == None, Output == JSON {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
+    }
+   
+    // Input == None, Output: Decodable
+    func request(queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) where Input == None, Output: Decodable {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: nil,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
+    }
+   
+    // Input == JSON, Output == Data
+    func request(_ params: [String: Any],
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) where Input == JSON, Output == Data {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: self._encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
+    }
+   
+    // Input == JSON, Output == JSON
+    func request(_ params: [String: Any],
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) where Input == JSON, Output == JSON {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: self._encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
+    }
+   
+    // Input == JSON, Output: Decodable
+    func request(_ params: [String: Any],
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) where Input == JSON, Output: Decodable {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoding: self._encoding,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
+    }
+    
+    // Input: Encodable, Output == Data
+    func request(_ params: Input,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) where Input: Encodable, Output == Data  {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: self._encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseData(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          completionHandler: completion)
+    }
+   
+    // Input: Encodable, Output == JSON
+    func request(_ params: Input,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 options: JSONSerialization.ReadingOptions? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) where Input: Encodable, Output == JSON {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: self._encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseJSON(queue: queue,
+                          dataPreprocessor: dataPreprocessor,
+                          emptyResponseCodes: emptyResponseCodes,
+                          emptyRequestMethods: emptyRequestMethods,
+                          options: options,
+                          completionHandler: completion)
+    }
+
+    // Input: Encodable, Output: Decodable
+    func request(_ params: Input,
+                 queue: DispatchQueue? = nil,
+                 dataPreprocessor: Alamofire.DataPreprocessor? = nil,
+                 decoder: Alamofire.DataDecoder? = nil,
+                 emptyResponseCodes: Set<Int>? = nil,
+                 emptyRequestMethods: Set<Alamofire.HTTPMethod>? = nil,
+                 completion: @escaping (Alamofire.AFDataResponse<Output>) -> Void) where Input: Encodable, Output: Decodable {
+        guard let url = self._url else { return }
+        
+        let req = _DataSession.request(url,
+                                       method: self.method,
+                                       parameters: params,
+                                       encoder: self._encoder,
+                                       headers: self._headers,
+                                       requestModifier: self._modifyURLRequest)
+        
+        self._modifyRequest(req)
+        self._modifyDataRequest(req)
+        
+        req._responseDecodable(of: Output.self,
+                               queue: queue,
+                               dataPreprocessor: dataPreprocessor,
+                               decoder: decoder,
+                               emptyResponseCodes: emptyResponseCodes,
+                               emptyRequestMethods: emptyRequestMethods,
+                               completionHandler: completion)
     }
 }
 
@@ -485,16 +526,12 @@ extension DataRequestable {
             switch self.method {
             // URLEncoding
             case .get: return Config.DataRequest.JSON.Encoding.get() ?? Alamofire.URLEncoding.default
-            case .head: return Config.DataRequest.JSON.Encoding.head() ?? Alamofire.URLEncoding.default
             case .delete: return Config.DataRequest.JSON.Encoding.delete() ?? Alamofire.URLEncoding.default
             
             // JSONEncoding
-            case .connect: return Config.DataRequest.JSON.Encoding.connect() ?? Alamofire.JSONEncoding.default
-            case .options: return Config.DataRequest.JSON.Encoding.options() ?? Alamofire.JSONEncoding.default
             case .patch: return Config.DataRequest.JSON.Encoding.patch() ?? Alamofire.JSONEncoding.default
             case .post: return Config.DataRequest.JSON.Encoding.post() ?? Alamofire.JSONEncoding.default
             case .put: return Config.DataRequest.JSON.Encoding.put() ?? Alamofire.JSONEncoding.default
-            case .trace: return Config.DataRequest.JSON.Encoding.trace() ?? Alamofire.JSONEncoding.default
                 
             // default
             default: return Alamofire.URLEncoding.default
@@ -511,16 +548,12 @@ extension DataRequestable {
             switch self.method {
             // URLEncodedFormParameterEncoder
             case .get: return Config.DataRequest.Encodable.Encoder.get() ?? Alamofire.URLEncodedFormParameterEncoder.default
-            case .head: return Config.DataRequest.Encodable.Encoder.head() ?? Alamofire.URLEncodedFormParameterEncoder.default
             case .delete: return Config.DataRequest.Encodable.Encoder.delete() ?? Alamofire.URLEncodedFormParameterEncoder.default
             
             // JSONEncoding
-            case .connect: return Config.DataRequest.Encodable.Encoder.connect() ?? Alamofire.JSONParameterEncoder.default
-            case .options: return Config.DataRequest.Encodable.Encoder.options() ?? Alamofire.JSONParameterEncoder.default
             case .patch: return Config.DataRequest.Encodable.Encoder.patch() ?? Alamofire.JSONParameterEncoder.default
             case .post: return Config.DataRequest.Encodable.Encoder.post() ?? Alamofire.JSONParameterEncoder.default
             case .put: return Config.DataRequest.Encodable.Encoder.put() ?? Alamofire.JSONParameterEncoder.default
-            case .trace: return Config.DataRequest.Encodable.Encoder.trace() ?? Alamofire.JSONParameterEncoder.default
                 
             // default
             default: return Alamofire.URLEncodedFormParameterEncoder.default
@@ -538,13 +571,19 @@ extension DataRequestable {
     
     /// 修改Request
     private func _modifyRequest(_ req: Alamofire.Request) {
+        
+        // credential
+        if let credential = self.credential ?? Config.DataRequest.credential() {
+            req.authenticate(with: credential)
+        }
+        
         // redirect
         if let redirectHandler = self.redirectHandler {
             req.redirect(using: redirectHandler)
         }
         
         // cacheResponse
-        if let cachedResponseHandler = self.cachedResponseHandler ?? Config.DataRequest.cachedResponseHandler() {
+        if let cachedResponseHandler = self.cachedResponseHandler ?? Config.DataResponse.cachedResponseHandler() {
             req.cacheResponse(using: cachedResponseHandler)
         }
     }
@@ -627,4 +666,6 @@ extension Alamofire.DataRequest {
 
 
 /// 内部使用的session
-fileprivate let _DataSession = Alamofire.Session(eventMonitors: Config.DataRequest.eventMonitors)
+fileprivate let _DataSession = Alamofire.Session(interceptor: Config.DataRequest.interceptor,
+                                                 serverTrustManager: Config.DataRequest.serverTrustManager,
+                                                 eventMonitors: Config.eventMonitors)
