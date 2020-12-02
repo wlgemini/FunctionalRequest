@@ -2,249 +2,131 @@ import XCTest
 @testable import FunctionalRequest
 @testable import Alamofire
 
-enum Bases {
-}
-
-enum InputAndOutputCases {
-    // base
-    static var base0 = "https://www.mocky.io/v2/"
-    
-    // api
-    static let g0 = GET<None, None>("foo", base: Self.base0)
-    
-    static let g1 = GET<JSON, None>("foo", base: Self.base0)
-    static let g2 = GET<ID, None>("foo", base: Self.base0)
-    
-    static let g3 = GET<None, Data>("foo", base: Self.base0)
-    static let g4 = GET<None, JSON>("foo", base: Self.base0)
-    static let g5 = GET<None, Persion>("foo", base: Self.base0)
-    
-    static let g6 = GET<JSON, Data>("foo", base: Self.base0)
-    static let g7 = GET<JSON, JSON>("foo", base: Self.base0)
-    static let g8 = GET<JSON, Persion>("foo", base: Self.base0)
-    
-    static let g9 = GET<ID, Data>("foo", base: Self.base0)
-    static let g10 = GET<ID, JSON>("foo", base: Self.base0)
-    static let g11 = GET<ID, Persion>("foo", base: Self.base0)
-
-}
-
-enum BaseAndAPICases {
-    // base
-    static var base0 = "https://www.mocky.io/v2/"
-    static var base1 = "https://www.mocky.io/v2/"
-
-    // api
-    static let g0 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4") // use `Configuration.base` for base url
-    static let g1 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base0)
-    static let g2 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base1)
-}
-
-enum CacheCases {
-    // base
-    static var base0 = "https://www.mocky.io/v2/"
-    
-    // api
-    static let g0 = GET<ID, Persion>("5eb8edfc2d00007a6e357ea4", base: Self.base0)
-}
-
-enum RedirectCases {
-    // base
-    static var base0 = "https://www.mocky.io/v2/"
-    
-    // api
-    static let g0 = GET<ID, Persion>("5eb908ec2d00007a6e357f9f", base: Self.base0)
-}
-
-enum EventMonitorCases {
-    // base
-    static var base0 = "https://www.mocky.io/v2/"
-    
-    // api
-    static let g0 = GET<ID, Persion>("5eb908ec2d00007a6e357f9f", base: Self.base0)
-}
-
-
-struct ID: Encodable {
-    var id: String
-}
-
-struct Persion: Decodable, Equatable {
-    var name: String
-    var age: Int
-    var gender: Bool
-}
-
 
 final class FunctionalRequestTests: XCTestCase {
     
+    static var allTests = [
+        ("testAPI", testAPI),
+        ("testMock", testMock),
+        ("testTimeoutInterval", testTimeoutInterval),
+        ("testCredential", testCredential),
+        ("testRedirectHandler", testRedirectHandler),
+        ("testEncodeParams", testEncodeParams),
+        ("testCache", testCache)
+    ]
     
-    func testInputAndOutput() {
-
-        let id0 = ID(id: "123")
-        let id1 = ["id": "123"]
-
-        InputAndOutputCases.g0.request()
-
-        InputAndOutputCases.g1.request(id1)
-
-        InputAndOutputCases.g2.request(id0)
-
-        InputAndOutputCases.g3.request {
-            print($0.value)
-        }
-
-        InputAndOutputCases.g4.request {
-            print($0.value)
-        }
-
-        InputAndOutputCases.g5.request {
-            print($0.value)
-        }
-
-        InputAndOutputCases.g6.request(id1) {
-            print($0.value)
-        }
-
-        InputAndOutputCases.g7.request(id1) {
-            print($0.value)
-        }
-
-        InputAndOutputCases.g8.request(id1) {
-            print($0.value)
-        }
+    override class func setUp() {
+        // eventMonitors
+        let monitor = Alamofire.ClosureEventMonitor()
+        monitor.requestDidFinish = { print($0.metrics) }
+        FunctionalRequest.Configuration.eventMonitors = [monitor]
         
-        InputAndOutputCases.g9.request(id0) {
-            print($0.value)
-        }
+        // base
+        FunctionalRequest.Configuration.DataRequest.base = { "http://127.0.0.1:8080" }
         
-        InputAndOutputCases.g10.request(id0) {
-            print($0.value)
-        }
+        // header
+        FunctionalRequest.Configuration.DataRequest.headers = { Alamofire.HTTPHeaders(["foo": "bar"]) }
         
-        InputAndOutputCases.g11.request(id0) {
-            print($0.value)
-        }
+        // timeoutInterval
+        FunctionalRequest.Configuration.DataRequest.timeoutInterval = { 10.0 }
+        
+        // credential
+        FunctionalRequest.Configuration.DataRequest.credential = { nil }
+        
+        // redirectHandler
+        FunctionalRequest.Configuration.DataRequest.redirectHandler = { Alamofire.Redirector(behavior: .follow) }
+    }
+}
+
+
+enum APIs {
+    
+    struct Account: Encodable {
+        let email: String
+        let password: String
+    }
+    
+    struct User: Decodable {
+        let token: String
+        let name: String
+    }
+    
+    struct Friend {
+        let name: String
+    }
+    
+    static let login = POST<Account, User>("login")
+    static let friends = GET<None, [Friend]>("friend")
+}
+
+extension FunctionalRequestTests {
+    // GET: base & api & subApi & header
+    func testAPI() {
+        
     }
     
     func testMock() {
-        let exp = XCTestExpectation()
-        
-        let id0 = ID(id: "123")
-        
-        let mock = InputAndOutputCases.g11
-            .setMock("http://www.mocky.io/v2/5eb8edfc2d00007a6e357ea4")
-            .setTimeoutInterval(10)
-        
-        mock.request(id0) {
-            let p = Persion(name: "wlg", age: 18, gender: true)
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue())
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 10)
+//        let exp = XCTestExpectation()
+//
+//        let id0 = ID(id: "123")
+//
+//        let mock = InputAndOutputCases.g11
+//            .setMock("http://www.mocky.io/v2/5eb8edfc2d00007a6e357ea4")
+//            .setTimeoutInterval(10)
+//
+//        mock.request(id0) {
+//            let p = Persion(name: "wlg", age: 18, gender: true)
+//            XCTAssert(p == $0.result.success)
+//            XCTAssert(p == $0.cachedValue())
+//            exp.fulfill()
+//        }
+//
+//        wait(for: [exp], timeout: 10)
     }
     
-    func testBaseAndAPI() {
-        let exp0 = XCTestExpectation()
-        let exp1 = XCTestExpectation()
-        let exp2 = XCTestExpectation()
-
-        let id0 = ID(id: "123")
-        let p = Persion(name: "wlg", age: 18, gender: true)
+    func testTimeoutInterval() {
         
-        Config.DataRequest.base = { "http://www.mocky.io/v2/" }
-        BaseAndAPICases
-            .g0
-            .request(id0) {
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue())
-            exp0.fulfill()
-        }
+    }
+    
+    func testCredential() {
         
-        BaseAndAPICases
-            .g1
-            .request(id0) {
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue())
-            exp1.fulfill()
-        }
+    }
+    
+    func testRedirectHandler() {
+//        let exp = XCTestExpectation()
+//
+//        let id0 = ID(id: "123")
+//
+//        RedirectCases.g0.setRedirectHandler(Redirector.follow).request(id0) {
+//            let p = Persion(name: "wlg", age: 18, gender: true)
+//            XCTAssert(p == $0.result.success)
+//            XCTAssert(p != $0.cachedValue())
+//            exp.fulfill()
+//        }
+//
+//        wait(for: [exp], timeout: 10)
+    }
+    
+    func testEncodeParams() {
         
-        BaseAndAPICases
-            .g2
-            .request(id0) {
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p == $0.cachedValue())
-            exp2.fulfill()
-        }
-        
-        wait(for: [exp0, exp1, exp2], timeout: 10)
     }
     
     func testCache() {
-        
-        let exp = XCTestExpectation()
-        
-        let id0 = ID(id: "123")
-        
-        CacheCases
-            .g0
-            .setAdditionalHeaders(HTTPHeaders(["foo": "123", "bar": "456"]))
-            .setCachedResponseHandler(ResponseCacher.doNotCache)
-            .request(id0) {
-                let p = Persion(name: "wlg", age: 18, gender: true)
-                XCTAssert(p == $0.result.success)
-                XCTAssert(p == $0.cachedValue())
-                exp.fulfill()
-            }
-        
-        wait(for: [exp], timeout: 10)
+//        let exp = XCTestExpectation()
+//
+//        let id0 = ID(id: "123")
+//
+//        CacheCases
+//            .g0
+//            .setAdditionalHeaders(HTTPHeaders(["foo": "123", "bar": "456"]))
+//            .setCachedResponseHandler(ResponseCacher.doNotCache)
+//            .request(id0) {
+//                let p = Persion(name: "wlg", age: 18, gender: true)
+//                XCTAssert(p == $0.result.success)
+//                XCTAssert(p == $0.cachedValue())
+//                exp.fulfill()
+//            }
+//
+//        wait(for: [exp], timeout: 10)
     }
-    
-    func testRedirect() {
-        
-        let exp = XCTestExpectation()
-        
-        let id0 = ID(id: "123")
-        
-        RedirectCases.g0.setRedirectHandler(Redirector.follow).request(id0) {
-            let p = Persion(name: "wlg", age: 18, gender: true)
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p != $0.cachedValue())
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 10)
-    }
-    
-    func testEventMonitor() {
-        let exp = XCTestExpectation()
-
-        let monitor = ClosureEventMonitor()
-        monitor.taskDidFinishCollectingMetrics = { (session, task, metrics) in
-            print("🔨:", metrics)
-        }
-        Config.eventMonitors = [monitor]
-        
-        let id0 = ID(id: "123")
-        
-        EventMonitorCases.g0.request(id0) {
-            let p = Persion(name: "wlg", age: 18, gender: true)
-            XCTAssert(p == $0.result.success)
-            XCTAssert(p != $0.cachedValue())
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 10)
-    }
-
-    static var allTests = [
-        ("testInputAndOutput", testInputAndOutput),
-        ("testMock", testMock),
-        ("testBaseAndAPI", testBaseAndAPI),
-        ("testCache", testCache),
-        ("testRedirect", testRedirect),
-        ("testEventMonitor", testEventMonitor),
-    ]
 }

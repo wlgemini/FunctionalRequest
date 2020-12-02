@@ -7,11 +7,7 @@ import Alamofire
 
 
 /// 网络请求的相关设置
-public enum Config {
-    
-    /// a closure for compute value
-    public typealias Compute<Value> = () -> Value
-    
+public enum Configuration {
     
     /// 网络事件监控
     ///
@@ -118,6 +114,10 @@ public enum Config {
         
         /// DataResponse on queue, default: .main
         public static var queue: Compute<DispatchQueue?> = { nil }
+        
+        /// DataResponse validation, default: validates that status codes are within the 200..<300 range,
+        /// and that the Content-Type header of the response matches the Accept header of the request, if one is provided.
+        public static var validation: Compute<Alamofire.DataRequest.Validation?> = { nil }
         
         /// 缓存策略，可以使用内置的缓存策略`Alamofire.ResponseCacher`，也可以自定义对`Alamofire.CachedResponseHandler`的实现
         /// `DataRequest.swift`中的`cachedResponseHandler`优先级更高，会覆盖掉冲突的`cachedResponseHandler`
