@@ -34,7 +34,7 @@ internal extension DataRequestable {
         // make sure `base` is available
         guard let base = self.configuration.base() ?? Configuration.DataRequest.base() else {
             #if DEBUG
-            print("🚫 FunctionalRequest Error: base url not set for api `\(self.configuration.api)`, request won't start.")
+            print("[ Error 🚫]: FunctionalRequest's base url not set for api `\(self.configuration.api)`, request won't start.")
             #endif
             return nil
         }
@@ -50,7 +50,7 @@ internal extension DataRequestable {
         // mock only in debug mode
         #if DEBUG
         if let mock = self.configuration.mock {
-            print("⚠️ FunctionalRequest Warning: using mock `\(mock)` for `\(url).`")
+            print("[ Warning ⚠️]: FunctionalRequest using mock `\(mock)` for `\(url).`")
             url = mock
         }
         #endif

@@ -7,11 +7,13 @@ final class FunctionalRequestTests: XCTestCase {
     
     static var allTests = [
         ("testAPI", testAPI),
+        ("testParamsModelEncode", testParamsModelEncode),
+        ("testParamsJSONEncode", testParamsJSONEncode),
         ("testMock", testMock),
         ("testTimeoutInterval", testTimeoutInterval),
         ("testCredential", testCredential),
         ("testRedirectHandler", testRedirectHandler),
-        ("testEncodeParams", testEncodeParams),
+        ("testValidation", testValidation),
         ("testCache", testCache)
     ]
     
@@ -22,7 +24,7 @@ final class FunctionalRequestTests: XCTestCase {
         FunctionalRequest.Configuration.eventMonitors = [monitor]
         
         // base
-        FunctionalRequest.Configuration.DataRequest.base = { "http://127.0.0.1:8080" }
+        FunctionalRequest.Configuration.DataRequest.base = { "http://127.0.0.1:8080/" }
         
         // header
         FunctionalRequest.Configuration.DataRequest.headers = { Alamofire.HTTPHeaders(["foo": "bar"]) }
@@ -41,51 +43,164 @@ final class FunctionalRequestTests: XCTestCase {
 
 enum APIs {
     
-    struct Account: Encodable {
-        let email: String
-        let password: String
+    struct Echo: Codable, Equatable {
+        let foo: String
+        let bar: String
+        let baz: String
     }
+
+    static let echoGet = GET<Echo, Echo>("echo")
+    static let echoDelete = DELETE<Echo, Echo>("echo")
+    static let echoPatch = PATCH<Echo, Echo>("echo")
+    static let echoPost = POST<Echo, Echo>("echo")
+    static let echoPut = PUT<Echo, Echo>("echo")
     
-    struct User: Decodable {
-        let token: String
-        let name: String
-    }
+    static let echoJSONGet = GET<JSON, JSON>("echo")
+    static let echoJSONDelete = DELETE<JSON, JSON>("echo")
+    static let echoJSONPatch = PATCH<JSON, JSON>("echo")
+    static let echoJSONPost = POST<JSON, JSON>("echo")
+    static let echoJSONPut = PUT<JSON, JSON>("echo")
+
+    static let timeInterval = POST<Echo, Echo>("timeInterval")
     
-    struct Friend {
-        let name: String
-    }
-    
-    static let login = POST<Account, User>("login")
-    static let friends = GET<None, [Friend]>("friend")
+    static let redirectFrom = POST<Echo, Echo>("redirectFrom")
+    static let redirectTo = POST<Echo, Echo>("redirectTo")
 }
 
 extension FunctionalRequestTests {
     // GET: base & api & subApi & header
     func testAPI() {
+
+        let expPost = XCTestExpectation()
         
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        APIs.echoPost
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expPost.fulfill()
+            }
+        
+        wait(for: [expPost], timeout: 10)
+    }
+    
+    func testParamsModelEncode() {
+        let expGet = XCTestExpectation()
+        let expDelete = XCTestExpectation()
+        let expPatch = XCTestExpectation()
+        let expPost = XCTestExpectation()
+        let expPut = XCTestExpectation()
+        
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        
+        APIs.echoGet
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expGet.fulfill()
+            }
+        
+        APIs.echoDelete
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expDelete.fulfill()
+            }
+        
+        APIs.echoPatch
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expPatch.fulfill()
+            }
+        
+        APIs.echoPost
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expPost.fulfill()
+            }
+        
+        APIs.echoPut
+            .setSubApi("/v1")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                expPut.fulfill()
+            }
+        
+        wait(for: [expGet, expDelete, expPatch, expPost, expPut], timeout: 10)
+    }
+    
+    func testParamsJSONEncode() {
+        
+        let expGet = XCTestExpectation()
+        let expDelete = XCTestExpectation()
+        let expPatch = XCTestExpectation()
+        let expPost = XCTestExpectation()
+        let expPut = XCTestExpectation()
+        
+        let model = [
+            "foo": "x",
+            "bar": "y",
+            "baz": "z"
+        ]
+        
+        APIs.echoJSONGet
+            .setSubApi("/v1")
+            .request(model) {
+                print($0.result.success)
+                expGet.fulfill()
+            }
+        
+        APIs.echoJSONDelete
+            .setSubApi("/v1")
+            .request(model) {
+                print($0.result.success)
+                expDelete.fulfill()
+            }
+        
+        APIs.echoJSONPatch
+            .setSubApi("/v1")
+            .request(model) {
+                print($0.result.success)
+                expPatch.fulfill()
+            }
+        
+        APIs.echoJSONPost
+            .setSubApi("/v1")
+            .request(model) {
+                print($0.result.success)
+                expPost.fulfill()
+            }
+        
+        APIs.echoJSONPut
+            .setSubApi("/v1")
+            .request(model) {
+                print($0.result.success)
+                expPut.fulfill()
+            }
+        
+        
+        wait(for: [expGet, expDelete, expPatch, expPost, expPut], timeout: 10)
     }
     
     func testMock() {
-//        let exp = XCTestExpectation()
-//
-//        let id0 = ID(id: "123")
-//
-//        let mock = InputAndOutputCases.g11
-//            .setMock("http://www.mocky.io/v2/5eb8edfc2d00007a6e357ea4")
-//            .setTimeoutInterval(10)
-//
-//        mock.request(id0) {
-//            let p = Persion(name: "wlg", age: 18, gender: true)
-//            XCTAssert(p == $0.result.success)
-//            XCTAssert(p == $0.cachedValue())
-//            exp.fulfill()
-//        }
-//
-//        wait(for: [exp], timeout: 10)
+        let exp = XCTestExpectation()
+        
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        
+        APIs.echoPost
+            .setSubApi("/v1")
+            .setMock("http://127.0.0.1:8080/mock")
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                exp.fulfill()
+            }
+        
+        wait(for: [exp], timeout: 10)
     }
     
     func testTimeoutInterval() {
-        
     }
     
     func testCredential() {
@@ -93,40 +208,49 @@ extension FunctionalRequestTests {
     }
     
     func testRedirectHandler() {
-//        let exp = XCTestExpectation()
-//
-//        let id0 = ID(id: "123")
-//
-//        RedirectCases.g0.setRedirectHandler(Redirector.follow).request(id0) {
-//            let p = Persion(name: "wlg", age: 18, gender: true)
-//            XCTAssert(p == $0.result.success)
-//            XCTAssert(p != $0.cachedValue())
-//            exp.fulfill()
-//        }
-//
-//        wait(for: [exp], timeout: 10)
+        let exp = XCTestExpectation()
+        
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        
+        APIs.redirectFrom
+            .setRedirectHandler(Alamofire.Redirector.follow)
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                exp.fulfill()
+            }
+        
+        wait(for: [exp], timeout: 10)
     }
     
-    func testEncodeParams() {
+    func testValidation() {
         
+        let exp = XCTestExpectation()
+        
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        
+        APIs.echoPost
+            .request(model) {
+                XCTAssert($0.result.success == model)
+                exp.fulfill()
+            }
+        
+        wait(for: [exp], timeout: 10)
     }
     
     func testCache() {
-//        let exp = XCTestExpectation()
-//
-//        let id0 = ID(id: "123")
-//
-//        CacheCases
-//            .g0
-//            .setAdditionalHeaders(HTTPHeaders(["foo": "123", "bar": "456"]))
-//            .setCachedResponseHandler(ResponseCacher.doNotCache)
-//            .request(id0) {
-//                let p = Persion(name: "wlg", age: 18, gender: true)
-//                XCTAssert(p == $0.result.success)
-//                XCTAssert(p == $0.cachedValue())
-//                exp.fulfill()
-//            }
-//
-//        wait(for: [exp], timeout: 10)
+        let exp = XCTestExpectation()
+        
+        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
+        
+        APIs.echoPost
+            .setSubApi("/v1")
+            .setCachedResponseHandler(ResponseCacher.doNotCache)
+            .request(model) {
+                XCTAssert(model == $0.result.success)
+                XCTAssert(model != $0.cachedValue())
+                exp.fulfill()
+            }
+        
+        wait(for: [exp], timeout: 10)
     }
 }
