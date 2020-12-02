@@ -229,6 +229,7 @@ extension FunctionalRequestTests {
         let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
         
         APIs.echoPost
+            .setSubApi("/v1")
             .request(model) {
                 XCTAssert($0.result.success == model)
                 exp.fulfill()
