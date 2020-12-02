@@ -241,6 +241,6 @@ internal extension Alamofire.DataRequest {
 
 
 /// 内部使用的session
-internal let _DataSession = Alamofire.Session(interceptor: Configuration.DataRequest.interceptor,
-                                              serverTrustManager: Configuration.DataRequest.serverTrustManager,
-                                              eventMonitors: Configuration.eventMonitors)
+internal let _FR = Alamofire.Session(interceptor: Configuration.DataRequest.interceptor,
+                                     serverTrustManager: Configuration.DataRequest.serverTrustManager,
+                                     eventMonitors: Configuration.eventMonitors)
