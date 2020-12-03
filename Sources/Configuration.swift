@@ -16,10 +16,8 @@ public enum Configuration {
     public static var eventMonitors: [Alamofire.EventMonitor] = []
     
     
-    /// 每个请求都会即时的应用DataRequest的设置
-    /// 但DataRequest的配置优先级低于具体接口的单独配置
-    ///
-    /// 比如`login`接口设置了单独的timeoutInterval，那么就会优先使用`login`的timeoutInterval
+    /// 每个请求都会即时的应用`Configuration`的设置
+    /// 但`Configuration`的配置优先级低于`DataRequestableConfiguration`的配置
     public enum DataRequest {
         
         /// 基地址，适用于所有请求都使用同一个的基地址的情况
@@ -27,26 +25,27 @@ public enum Configuration {
         ///     let login = GET<Account, UserInfo>("v1/login")
         ///
         ///     // 等价于
-        ///     let login = GET<Account, UserInfo>("v1/login", base: Config.DataRequest.base())
+        ///     let login = GET<Account, UserInfo>("v1/login", base: Configuration.DataRequest.base())
         ///
         ///     // 其中url为:
         ///     let url = base + api
         ///
         public static var base: Compute<String?> = { nil }
         
-        /// 要添加的头信息，会和`DataRequest.swift`中的`additionalHeaders`进行merge
-        /// 但`DataRequest.swift`中的`additionalHeaders`优先级更高，会覆盖掉冲突的key-value
+        /// 要添加的头信息，会和`DataRequestableConfiguration`中的`additionalHeaders`进行merge
+        /// 但`DataRequestableConfiguration`中的`additionalHeaders`优先级更高，会覆盖掉冲突的key-value
         public static var headers: Compute<Alamofire.HTTPHeaders?> = { nil }
         
         /// 超时时长, 用于修改`URLRequest.timeoutInterval`
-        /// `DataRequest.swift`中的`timeoutInterval`优先级更高，会覆盖掉冲突的`timeoutInterval`
+        /// `DataRequestableConfiguration`中的`timeoutInterval`优先级更高，会覆盖掉冲突的`timeoutInterval`
         public static var timeoutInterval: Compute<TimeInterval?> = { nil }
         
         /// add a `URLCredential` for each `Alamofire.Request`
+        /// `DataRequestableConfiguration`中的`credential`优先级更高，会覆盖掉冲突的`credential`
         public static var credential: Compute<URLCredential?> = { nil }
         
         /// 重定向策略，可以使用内置的重定向策略`Alamofire.Redirector`，也可以自定义对`Alamofire.RedirectHandler`的实现
-        /// `DataRequest.swift`中的`redirectHandler`优先级更高，会覆盖掉冲突的`redirectHandler`
+        /// `DataRequestableConfiguration`中的`redirectHandler`优先级更高，会覆盖掉冲突的`redirectHandler`
         public static var redirectHandler: Compute<Alamofire.RedirectHandler?> = { nil }
         
         /// `Alamofire.RequestInterceptor` to be used for all `Alamofire.Request`s created by this instance. `nil` by default.
@@ -66,19 +65,19 @@ public enum Configuration {
             /// Default encoding
             enum Encoding {
                 
-                /// for `get` encoding, default: Alamofire.URLEncoding.default
+                /// for `get` encoding. default: Alamofire.URLEncoding.default
                 static var get: Compute<Alamofire.ParameterEncoding?> = { nil }
                 
-                /// for `delete` encoding, default: Alamofire.URLEncoding.default
+                /// for `delete` encoding. default: Alamofire.URLEncoding.default
                 static var delete: Compute<Alamofire.ParameterEncoding?> = { nil }
                 
-                /// for `patch` encoding, default: Alamofire.JSONEncoding.default
+                /// for `patch` encoding. default: Alamofire.JSONEncoding.default
                 static var patch: Compute<Alamofire.ParameterEncoding?> = { nil }
                 
-                /// for `post` encoding, default: Alamofire.JSONEncoding.default
+                /// for `post` encoding. default: Alamofire.JSONEncoding.default
                 static var post: Compute<Alamofire.ParameterEncoding?> = { nil }
                 
-                /// for `put` encoding, default: Alamofire.JSONEncoding.default
+                /// for `put` encoding. default: Alamofire.JSONEncoding.default
                 static var put: Compute<Alamofire.ParameterEncoding?> = { nil }
             }
         }
@@ -90,19 +89,19 @@ public enum Configuration {
             /// Default encoder
             enum Encoder {
                 
-                /// for `get` encoder, default: Alamofire.URLEncodedFormParameterEncoder.default
+                /// for `get` encoder. default: Alamofire.URLEncodedFormParameterEncoder.default
                 static var get: Compute<Alamofire.ParameterEncoder?> = { nil }
                 
-                /// for `delete` encoder, default: Alamofire.URLEncodedFormParameterEncoder.default
+                /// for `delete` encoder. default: Alamofire.URLEncodedFormParameterEncoder.default
                 static var delete: Compute<Alamofire.ParameterEncoder?> = { nil }
                 
-                /// for `patch` encoder, default: Alamofire.JSONParameterEncoder.default
+                /// for `patch` encoder. default: Alamofire.JSONParameterEncoder.default
                 static var patch: Compute<Alamofire.ParameterEncoder?> = { nil }
                 
-                /// for `post` encoder, default: Alamofire.JSONParameterEncoder.default
+                /// for `post` encoder. default: Alamofire.JSONParameterEncoder.default
                 static var post: Compute<Alamofire.ParameterEncoder?> = { nil }
                 
-                /// for `put` encoder, default: Alamofire.JSONParameterEncoder.default
+                /// for `put` encoder. default: Alamofire.JSONParameterEncoder.default
                 static var put: Compute<Alamofire.ParameterEncoder?> = { nil }
             }
         }
@@ -115,12 +114,13 @@ public enum Configuration {
         /// DataResponse on queue, default: .main
         public static var queue: Compute<DispatchQueue?> = { nil }
         
-        /// DataResponse validation, default: validates that status codes are within the 200..<300 range,
+        /// DataResponse validation.
+        /// default: validates that status codes are within the 200..<300 range,
         /// and that the Content-Type header of the response matches the Accept header of the request, if one is provided.
         public static var validation: Compute<Alamofire.DataRequest.Validation?> = { nil }
         
         /// 缓存策略，可以使用内置的缓存策略`Alamofire.ResponseCacher`，也可以自定义对`Alamofire.CachedResponseHandler`的实现
-        /// `DataRequest.swift`中的`cachedResponseHandler`优先级更高，会覆盖掉冲突的`cachedResponseHandler`
+        /// `DataRequestableConfiguration`中的`cachedResponseHandler`优先级更高，会覆盖掉冲突的`cachedResponseHandler`
         public static var cachedResponseHandler: Compute<Alamofire.CachedResponseHandler?> = { nil }
         
         

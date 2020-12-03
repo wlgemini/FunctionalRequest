@@ -10,7 +10,7 @@ import Alamofire
 public struct DataRequestableConfiguration {
     
     /// init a DataRequestConfiguration
-    public init(method: Alamofire.HTTPMethod, base: @escaping Compute<String?>, api: String) {
+    public init(method: Alamofire.HTTPMethod, base: @escaping Compute<String?> = Configuration.DataRequest.base, api: String) {
         self.method = method
         self.base = base
         self.api = api
@@ -21,11 +21,12 @@ public struct DataRequestableConfiguration {
     
     /// the base url
     /// will combined with `api`
-    /// this property will override the `Configuration.DataRequest.base`.
     public let base: Compute<String?>
     
     /// the request api
-    /// will combined with `base`: url = `base() + api`
+    /// will combined with `base`.
+    ///
+    ///     let url = base() + api
     public let api: String
     
     /// the request sub path
@@ -39,11 +40,19 @@ public struct DataRequestableConfiguration {
     /// add some additional headers for this request
     public internal(set) var additionalHeaders: Alamofire.HTTPHeaders?
     
-    /// when an instance of load activity occurs
+    /// The timeout interval of the request.
+    ///
+    /// The timeout interval specifies the limit on the idle
+    /// interval allotted to a request in the process of loading. The "idle
+    /// interval" is defined as the period of time that has passed since the
+    /// last instance of load activity occurred for a request that is in the
+    /// process of loading. Hence, when an instance of load activity occurs
     /// (e.g. bytes are received from the network for a request), the idle
     /// interval for a request is reset to 0. If the idle interval ever
     /// becomes greater than or equal to the timeout interval, the request
-    /// is considered to have timed out.
+    /// is considered to have timed out. This timeout interval is measured
+    /// in seconds.
+    /// The default timeout interval is 60 seconds.
     public internal(set) var timeoutInterval: TimeInterval?
     
     /// add a `URLCredential` for each `Alamofire.Request`
