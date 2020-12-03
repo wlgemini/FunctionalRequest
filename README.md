@@ -2,7 +2,7 @@
 
 将网络请求表示成函数调用的形式
 
-### 思路
+## 思路
 
 理论上来说，任何一个确定的API（在返回结果正常的情况下）都应该是有：
 - 确定结构的参数
@@ -45,10 +45,14 @@ let page = Page(index: 0, total: 10)
 let friends = await friends(page)
 ```
 
-> 以上使用是在Swift 6.0支持`async`/`await`特性后才能用的
-> 目前还写不出这种形式，不过这应该是以后的发展方向。
+以上方式需要借助两个语法糖：
 
-## 在Swift 5.2版本的尝试
+1. 一个实例作为函数被调用
+2. `async`/`await`
+
+其中第一个语法已经在Swift 5.2中支持了，而第二个则需要等到之后的Swift版本才能够支持(猜测是在Swift 6.0中)
+
+### 在Swift 5.2版本的尝试
 
 在Swift 5.2中新增了`callAsFunction()`函数，可以让一个实例作为函数被调用。比如：
 ```swift
@@ -93,6 +97,8 @@ login.request(account) { /* ... */ }
 
 ## 设计方案
 
+###请求函数的种类
+
 通过类型名直接区分出不同的网络请求：
 
 ```swift
@@ -116,9 +122,11 @@ struct DELETE<Input, Output>
 但也会存在更为一般的情况：
 
 - `<Input, Output>`中可能为空，也就是网络请求不需要参数，或者不关心返回值。
-- `<Input, Output>`中可能是`JSON`类型，也就是一个`Any`类型。
+- `<Input, Output>`中可能是`JSON`类型，也就是一个`[String : Any]`类型。
 
-对于这些情况，请求方法的也应该区分成不同的形式，使得在调用时不会调用到错误的请求方法。
+对于这些可能性，请求函数(`request`)应该区分对待他们，需要提供多种类型的请求函数以对应这些可能性。同时，利用Swift的`Conditional Conformance`特性使得编译器能够静态的区分他们，最终在调用函数(`request`)时能够提供正确的函数，且有函数自动补全。
+
+### 利用Swift的`Conditional Conformance`
 
 为了区分出这些不同的情况，这里定义了:
 
@@ -131,41 +139,27 @@ enum JSON // 用于表示：Input/Output可能是JSON类型，也就是一个Any
 针对不同的`Input/Output`类型，使用Swift的`Conditional Conformance`特性来划分不同的请求方法。这使得不同的`Input/Output`类型组合都有属于自己唯一的请求方法：
 
 ```swift
-extension Requestable where Input == None, Output == None {
-    func request()
-}
+func request() where Input == None, Output == None
 
-extension Requestable where Input == JSON, Output == None {
-    func request(_ params: [String: Any])
-}
+func request(_ params: [String: Any]) where Input == JSON, Output == None
 
-extension Requestable where Input: Encodable, Output == None {
-    func request(_ params: Input)
-}
+func request(_ params: Input) where Input: Encodable, Output == None
 
-extension Requestable where Input == None, Output == JSON {
-    func request(completion: @escaping (AFDataResponse<Any>) -> Void)
-}
+func request(completion: @escaping (AFDataResponse<Any>) -> Void) where Input == None, Output == JSON
 
-extension Requestable where Input == None, Output: Decodable {
-    func request(completion: @escaping (AFDataResponse<Output>) -> Void)
-}
+func request(completion: @escaping (AFDataResponse<Output>) -> Void) where Input == None, Output: Decodable
 
-extension Requestable where Input == JSON, Output == JSON {
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Any>) -> Void)
-}
+func request(_ params: [String: Any], 
+             completion: @escaping (AFDataResponse<Any>) -> Void) where Input == JSON, Output == JSON
 
-extension Requestable where Input == JSON, Output: Decodable {
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Output>) -> Void)
-}
+func request(_ params: [String: Any], 
+             completion: @escaping (AFDataResponse<Output>) -> Void) where Input == JSON, Output: Decodable
 
-extension Requestable where Input: Encodable, Output == JSON {
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Any>) -> Void)
-}
+func request(_ params: Input, 
+             completion: @escaping (AFDataResponse<Any>) -> Void) where Input: Encodable, Output == JSON
 
-extension Requestable where Input: Encodable, Output: Decodable {
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Output>) -> Void)
-}
+func request(_ params: Input, 
+             completion: @escaping (AFDataResponse<Output>) -> Void) where Input: Encodable, Output: Decodable
 ```
 
 以上请求方法，就是`Input/Output`类型的大部分情况了
@@ -173,83 +167,87 @@ extension Requestable where Input: Encodable, Output: Decodable {
 当然还有`Output == Data`这种特殊情况，对于希望返回`Data`数据的情况会很有用：
 
 ```swift
-extension Requestable where Input == None, Output == Data {
-    func request(completion: @escaping (AFDataResponse<Data>) -> Void)
-}
+func request(completion: @escaping (AFDataResponse<Data>) -> Void) where Input == None, Output == Data
 
-extension Requestable where Input == JSON, Output == Data {
-    func request(_ params: [String: Any], completion: @escaping (AFDataResponse<Data>) -> Void)
-}
+func request(_ params: [String: Any], 
+             completion: @escaping (AFDataResponse<Data>) -> Void) where Input == JSON, Output == Data
 
-extension Requestable where Input: Encodable, Output == Data {
-    func request(_ params: Input, completion: @escaping (AFDataResponse<Data>) -> Void)
-}
+func request(_ params: Input, 
+             completion: @escaping (AFDataResponse<Data>) -> Void) where Input: Encodable, Output == Data
 ```
 
-#### 请求的可配置性
+### 请求的可配置性
 
 一个网络请求应该有更多的可配置项。比如：修改基地址、设置请求超时时间、缓存请求、设置headers、做mock等。
 这些配置项都应该允许进行全局配置，可以使用一个全局的对象来存储这些配置。
-这里使用`Config.DataRequest`来存储这些全局配置：
+这里使用`Configuration`来存储这些全局配置：
+
 ```swift
-Config.DataRequest.timeoutInterval = 60
-// Config.DataRequest.headers
-// Config.DataRequest.base
-// ...
+Configuration.eventMonitors = ... // 网络事件监控
+Configuration.DataRequest.timeoutInterval = ... // 请求超时时间 
+Configuration.DataRequest.headers = ... // 请求头
+Configuration.DataRequest.base = ... // 基地址 
+...
 ```
 
 对于不同的请求也可能需要设置独立的配置项，应该允许不同的请求有不同的配置项。
-这里允许一个独立的请求有自己配置项：
+这里允许一个请求有自己独立的配置项：
+
 ```swift
 login
-     .setTimeoutInterval(2)
-     .setMock("http://www.mocking.com/login")
+     .setTimeoutInterval(2) // 会覆盖Configuration的配置
+     .setMock("http://www.mocking.com/login") // 做mock
      .request()
 ```
 
-### 推荐用法
+## 推荐用法
 
-在使用网络请求之前，首先要配置`Config.DataRequest`，至少配置一个`base`(基地址)
+### 单个base url的情况
 
-定义网络请求（推荐定义在一个`enum`类型内，这样方便归类）:
-```swift
-Configuration.base = "https://www.xxx.com/"
+1. 在使用网络请求之前，首先要配置`Configuration.DataRequest`，至少配置一个`base`(基地址)
 
-enum APIs {
-	
-    // 登录
-    static let login = POST<Account, UserInfo>("api/v1/login")
+2. 定义网络请求（推荐定义在一个`enum`类型内，这样方便归类）:
 
-    // 获取好友
-    static let friends = GET<Page, [Friend]>("api/v1/friends")
-}
-```
+   ```swift
+   Configuration.DataRequest.base = // base url
+   
+   enum APIs {
+   	
+       // 登录
+       static let login = POST<Account, UserInfo>("api/v1/login")
+   
+       // 获取好友
+       static let friends = GET<Page, [Friend]>("api/v1/friends")
+   }
+   ```
 
-使用:
-```swift
-// 登录
-let account = Account(email: "mine@xy.com", password: "123456")
-APIs.login.request(account) {
-  	print($0.value) // UserInfo
-}
+3. 使用：
 
-/// 获取好友
-let page = Page(index: 0, total: 10)
-APIs.friends.request(page) {
-  	print($0.value) // [Friend]
-}
+   ```swift
+   // 登录
+   let account = Account(email: "mine@xy.com", password: "123456")
+   APIs.login.request(account) {
+     	print($0.value) // UserInfo
+   }
+   
+   /// 获取好友
+   let page = Page(index: 0, total: 10)
+   APIs.friends.request(page) {
+     	print($0.value) // [Friend]
+   }
+   
+   /// mock获取好友
+   APIs
+   		.friends
+   		.setMock("http://www.mocking.com/friends")
+   		.request(page) {
+       		print($0.value) // [Friend]
+     	}
+   ```
 
-/// mock获取好友
-APIs
-		.friends
-		.setMock("http://www.mocking.com/friends")
-		.request(page) {
-    		print($0.value) // [Friend]
-  	}
-```
+### 多个base url的情况
 
-#### 多个base url的情况
-对于多个base url情况，使用方式如下：
+对于有多个base url情况，使用方式如下：
 ```swift
 enum Bases {
     
@@ -270,59 +268,59 @@ enum APIs {
 }
 ```
 
-#### 需要修改base url的情况
+### 需要修改base url的情况
+
 程序运行过程中，有可能需要切换base url的情况。
 
-对于设置`Config.DataRequest.base`的情况:
+对于设置`Configuration.DataRequest.base`的情况:
 其实直接修改就可以了，之后的请求就会应用最新的base url。
+
 ```swift
 // before
-Config.DataRequest.base = "https://www.xxx.com/"
+Configuration.DataRequest.base = // old base url
 
 // after
-Config.DataRequest.base = "https://www.yyy.com/"
+Configuration.DataRequest.base = // new base url
 ```
 
 对于多个base url的情况，也是一样的：
 直接修改定义的base就可以了，之后的请求就会应用最新的base url。
+
 ```swift
 enum Bases {
     
-    // base 0
-    let base0 = "https://www.xxx.com/"
-    
-    // base 1
-    let base1 = "https://www.yyy.com/"
-}
-
-enum APIs {
-    
-    // 登录
-    static let login = POST<Account, UserInfo>("api/v1/login", base: Bases.base0)
-
-    // 获取好友
-    static let friends = GET<Page, [Friend]>("api/v1/friends", base: Bases.base1)
+    // before
+    let base0 = // old base url
 }
 
 // after
-Bases.base0 = Config.DataRequest.base = "https://www.zzz.com/"
+Bases.base0 = // new base url
+
+enum APIs {
+    
+  	// 由于base参数使用的是@autoclosure，base参数其实是直接捕获了`Bases.base0`这个表达式
+  	// 所以对Bases.base0的修改能够立即被应用上。
+    static let login = POST<Account, UserInfo>("api/v1/login", base: Bases.base0)
+}
 ```
 
-#### 网络请求监控
+### 网络请求监控
+
 对于需要监控网络请求的情况，可以使用：
 ```swift
 let monitor0: ClosureEventMonitor = /* init ClosureEventMonitor */
 let monitor1: ClosureEventMonitor = /* init ClosureEventMonitor */
 let monitor2: ClosureEventMonitor = /* init ClosureEventMonitor */
 
-Config.DataRequest.eventMonitors = [monitor0, monitor1, monitor2]
+Configuration.eventMonitors = [monitor0, monitor1, monitor2]
 
 // 登录
 APIs.login.request(account) { /* data */ }
 ```
 > ⚠️注意：必须在调用网络请求之前设置`Config.DataRequest.eventMonitors`，并且调用网络请求开始后不能修改
 
-### 接入
+## 接入
+
 使用`Cocoapods`:
 ```
 target 'MyApp' do

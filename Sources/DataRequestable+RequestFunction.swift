@@ -8,16 +8,16 @@ import Alamofire
 
 // MARK: - Request Function
 // MARK: Input/Output Argument
-/// 表示一个DataRequestable的Input和Output的范型参数
+/// 表示一个`DataRequestable`的`Input`和`Output`的范型参数
 ///
 /// 可以表示请求没有参数，或者忽略返回值
 ///
 public enum None {}
 
 
-/// 表示一个DataRequestable的Input和Output的范型参数
+/// 表示一个`DataRequestable`的`Input`和`Output`的范型参数
 ///
-/// 可以表示请求参数为JSON(也就是一个Any)，或者返回值为JSON(也就是一个Any)
+/// 可以表示请求参数为`JSON`(也就是一个`[String: Any]`)，或者返回值为`JSON`(也就是一个`[String: Any]`)
 ///
 public enum JSON {}
 
