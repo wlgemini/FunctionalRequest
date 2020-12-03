@@ -321,9 +321,19 @@ APIs.login.request(account) { /* data */ }
 
 ## 接入
 
-使用`Cocoapods`:
+### Cocoapods
+
 ```
 target 'MyApp' do
   pod 'FunctionalRequest'
 end
 ```
+
+### Swift Package Manager
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/wlgemini/FunctionalRequest.git", .upToNextMajor(from: "5.2.0"))
+]
+```
+
