@@ -141,6 +141,9 @@ public enum Configuration {
         /// JSON
         public enum JSON {
             
+            /// default: .allowFragments
+            public static var options: Compute<JSONSerialization.ReadingOptions?> = { nil }
+            
             /// default: Alamofire.JSONResponseSerializer.defaultDataPreprocessor
             public static var dataPreprocessor: Compute<Alamofire.DataPreprocessor?> = { nil }
             
@@ -149,14 +152,14 @@ public enum Configuration {
 
             /// default: Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods
             public static var emptyRequestMethods: Compute<Set<Alamofire.HTTPMethod>?> = { nil }
-    
-            /// default: .allowFragments
-            public static var options: Compute<JSONSerialization.ReadingOptions?> = { nil }
         }
         
         
         /// Decodable
         public enum Decodable {
+            
+            /// default: JSONDecoder()
+            public static var decoder: Compute<Alamofire.DataDecoder?> = { nil }
             
             /// default: Alamofire.DecodableResponseSerializer<T>.defaultDataPreprocessor
             public static var dataPreprocessor: Compute<Alamofire.DataPreprocessor?> = { nil }
@@ -166,9 +169,6 @@ public enum Configuration {
 
             /// default: Alamofire.DecodableResponseSerializer<T>.defaultEmptyRequestMethods
             public static var emptyRequestMethods: Compute<Set<Alamofire.HTTPMethod>?> = { nil }
-            
-            /// default: JSONDecoder()
-            public static var decoder: Compute<Alamofire.DataDecoder?> = { nil }
         }
     }
 }

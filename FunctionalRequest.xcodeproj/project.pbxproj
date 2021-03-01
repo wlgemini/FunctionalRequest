@@ -21,11 +21,17 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		213F0BC325E0BB86008422F5 /* DataRequestable+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BBB25E0BB86008422F5 /* DataRequestable+Modifier.swift */; };
+		213F0BC425E0BB86008422F5 /* DataRequestable+RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BBC25E0BB86008422F5 /* DataRequestable+RequestFunction.swift */; };
+		213F0BC625E0BB86008422F5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BBE25E0BB86008422F5 /* Configuration.swift */; };
+		213F0BC725E0BB86008422F5 /* DataRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BBF25E0BB86008422F5 /* DataRequestable.swift */; };
+		213F0BC825E0BB86008422F5 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BC025E0BB86008422F5 /* Helper.swift */; };
+		213F0BC925E0BB86008422F5 /* DataResponse+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BC125E0BB86008422F5 /* DataResponse+Cache.swift */; };
+		213F0BCA25E0BB86008422F5 /* DataRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F0BC225E0BB86008422F5 /* DataRequests.swift */; };
+		2171658B25ECF77A00F08864 /* InternalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2171658A25ECF77A00F08864 /* InternalConfiguration.swift */; };
+		217165A525ED255100F08864 /* _DataRequestable+CombineConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217165A425ED255100F08864 /* _DataRequestable+CombineConfiguration.swift */; };
+		217165B325ED25C500F08864 /* _DataRequestable+ModifyDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217165B225ED25C500F08864 /* _DataRequestable+ModifyDataRequest.swift */; };
 		OBJ_103 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* Package.swift */; };
-		OBJ_109 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* Configuration.swift */; };
-		OBJ_110 /* DataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* DataRequest.swift */; };
-		OBJ_111 /* DataRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* DataRequestable.swift */; };
-		OBJ_112 /* DataResponse+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* DataResponse+Cache.swift */; };
 		OBJ_114 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Alamofire::Alamofire::Product" /* Alamofire.framework */; };
 		OBJ_121 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_132 /* FunctionalRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* FunctionalRequestTests.swift */; };
@@ -68,6 +74,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		213F0BB825E0BB61008422F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "FunctionalRequest::FunctionalRequestTests";
+			remoteInfo = FunctionalRequestTests;
+		};
 		2147EB07247BDA7F0044EB37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
@@ -92,11 +105,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		213F0BBB25E0BB86008422F5 /* DataRequestable+Modifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataRequestable+Modifier.swift"; sourceTree = "<group>"; };
+		213F0BBC25E0BB86008422F5 /* DataRequestable+RequestFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataRequestable+RequestFunction.swift"; sourceTree = "<group>"; };
+		213F0BBE25E0BB86008422F5 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		213F0BBF25E0BB86008422F5 /* DataRequestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRequestable.swift; sourceTree = "<group>"; };
+		213F0BC025E0BB86008422F5 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		213F0BC125E0BB86008422F5 /* DataResponse+Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataResponse+Cache.swift"; sourceTree = "<group>"; };
+		213F0BC225E0BB86008422F5 /* DataRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRequests.swift; sourceTree = "<group>"; };
+		2171658A25ECF77A00F08864 /* InternalConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalConfiguration.swift; sourceTree = "<group>"; };
+		217165A425ED255100F08864 /* _DataRequestable+CombineConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "_DataRequestable+CombineConfiguration.swift"; sourceTree = "<group>"; };
+		217165B225ED25C500F08864 /* _DataRequestable+ModifyDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "_DataRequestable+ModifyDataRequest.swift"; sourceTree = "<group>"; };
 		"Alamofire::Alamofire::Product" /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FunctionalRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"FunctionalRequest::FunctionalRequestTests::Product" /* FunctionalRequestTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = FunctionalRequestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_10 /* DataRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRequestable.swift; sourceTree = "<group>"; };
-		OBJ_11 /* DataResponse+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataResponse+Cache.swift"; sourceTree = "<group>"; };
+		"FunctionalRequest::FunctionalRequest::Product" /* FunctionalRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FunctionalRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"FunctionalRequest::FunctionalRequestTests::Product" /* FunctionalRequestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = FunctionalRequestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* FunctionalRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalRequestTests.swift; sourceTree = "<group>"; };
 		OBJ_15 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_18 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/wangluguang/Documents/repo/FunctionalRequest/.build/checkouts/Alamofire/Package.swift; sourceTree = "<group>"; };
@@ -137,8 +158,6 @@
 		OBJ_57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_58 /* FunctionalRequest.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FunctionalRequest.podspec; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_8 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		OBJ_9 /* DataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,10 +283,16 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_8 /* Configuration.swift */,
-				OBJ_9 /* DataRequest.swift */,
-				OBJ_10 /* DataRequestable.swift */,
-				OBJ_11 /* DataResponse+Cache.swift */,
+				213F0BC225E0BB86008422F5 /* DataRequests.swift */,
+				213F0BBF25E0BB86008422F5 /* DataRequestable.swift */,
+				2171658A25ECF77A00F08864 /* InternalConfiguration.swift */,
+				213F0BC125E0BB86008422F5 /* DataResponse+Cache.swift */,
+				213F0BBC25E0BB86008422F5 /* DataRequestable+RequestFunction.swift */,
+				213F0BBB25E0BB86008422F5 /* DataRequestable+Modifier.swift */,
+				213F0BBE25E0BB86008422F5 /* Configuration.swift */,
+				217165A425ED255100F08864 /* _DataRequestable+CombineConfiguration.swift */,
+				217165B225ED25C500F08864 /* _DataRequestable+ModifyDataRequest.swift */,
+				213F0BC025E0BB86008422F5 /* Helper.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -362,6 +387,11 @@
 			attributes = {
 				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					"FunctionalRequest::FunctionalRequest" = {
+						LastSwiftMigration = 1240;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "FunctionalRequest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -398,10 +428,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_109 /* Configuration.swift in Sources */,
-				OBJ_110 /* DataRequest.swift in Sources */,
-				OBJ_111 /* DataRequestable.swift in Sources */,
-				OBJ_112 /* DataResponse+Cache.swift in Sources */,
+				213F0BC925E0BB86008422F5 /* DataResponse+Cache.swift in Sources */,
+				213F0BC325E0BB86008422F5 /* DataRequestable+Modifier.swift in Sources */,
+				213F0BC725E0BB86008422F5 /* DataRequestable.swift in Sources */,
+				213F0BCA25E0BB86008422F5 /* DataRequests.swift in Sources */,
+				217165B325ED25C500F08864 /* _DataRequestable+ModifyDataRequest.swift in Sources */,
+				217165A525ED255100F08864 /* _DataRequestable+CombineConfiguration.swift in Sources */,
+				213F0BC625E0BB86008422F5 /* Configuration.swift in Sources */,
+				213F0BC425E0BB86008422F5 /* DataRequestable+RequestFunction.swift in Sources */,
+				2171658B25ECF77A00F08864 /* InternalConfiguration.swift in Sources */,
+				213F0BC825E0BB86008422F5 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,7 +509,7 @@
 		OBJ_126 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "FunctionalRequest::FunctionalRequestTests" /* FunctionalRequestTests */;
-			targetProxy = "FunctionalRequest::FunctionalRequestTests" /* FunctionalRequestTests */;
+			targetProxy = 213F0BB825E0BB61008422F5 /* PBXContainerItemProxy */;
 		};
 		OBJ_137 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -509,6 +545,8 @@
 		OBJ_106 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -527,6 +565,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGET_NAME = FunctionalRequest;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
@@ -537,6 +576,8 @@
 		OBJ_107 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -595,6 +636,7 @@
 		OBJ_129 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -620,6 +662,7 @@
 		OBJ_130 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
