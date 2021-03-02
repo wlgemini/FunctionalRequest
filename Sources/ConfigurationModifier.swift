@@ -1,18 +1,15 @@
 //
-//  InternalConfiguration.swift
-//  FunctionalRequest
-//
-//  Created by wangluguang on 2021/3/1.
+//  ConfigurationModifier.swift
 //
 
 import Foundation
 import Alamofire
 
 
-public struct InternalConfiguration {
+public struct ConfigurationModifier {
     
     /// init
-    public init(method: Alamofire.HTTPMethod, base: @escaping Compute<String?> = Configuration.DataRequest.base, api: String) {
+    public init(method: Alamofire.HTTPMethod, base: @escaping Compute<String?>, api: String) {
         self.method = method
         self.base = base
         self.api = api
@@ -26,7 +23,7 @@ public struct InternalConfiguration {
     public let base: Compute<String?>
     
     /// the request api
-    /// will combined with `base`.
+    /// will combined with `base`
     ///
     ///     let url = base() + api
     public let api: String
@@ -39,8 +36,17 @@ public struct InternalConfiguration {
     /// eg: the original url is "http://www.wlgemini.com/foo", the mock url is "http://www.mock.com/foo"
     public internal(set) var mock: String?
     
+    /// dataRequest
     public internal(set) var dataRequest: DataRequest = DataRequest()
     
+    /// dataResponse
+    public internal(set) var dataResponse: DataResponse = DataResponse()
+}
+
+
+extension ConfigurationModifier {
+    
+    /// DataRequest
     public struct DataRequest {
         
         public internal(set) var additionalHeaders: Alamofire.HTTPHeaders?
@@ -51,24 +57,10 @@ public struct InternalConfiguration {
         
         public internal(set) var redirectHandler: Alamofire.RedirectHandler?
         
-        public internal(set) var json: JSON = JSON()
+        public internal(set) var encoding: Alamofire.ParameterEncoding?
         
-        /// JSON
-        public struct JSON {
-            
-            public internal(set) var encoding: Alamofire.ParameterEncoding?
-        }
-        
-        public internal(set) var encodable: Encodable = Encodable()
-        
-        /// Encodable
-        public struct Encodable {
-            
-            public internal(set) var encoder: Alamofire.ParameterEncoder?
-        }
+        public internal(set) var encoder: Alamofire.ParameterEncoder?
     }
-    
-    public internal(set) var dataResponse: DataResponse = DataResponse()
     
     /// DataResponse
     public struct DataResponse {

@@ -30,7 +30,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
 
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: nil,
                               headers: self._headers(),
                               requestModifier: self._modifyURLRequest())
@@ -46,7 +46,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoding: self._encoding(),
                               headers: self._headers(),
@@ -63,7 +63,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoder: self._encoder(),
                               headers: self._headers(),
@@ -80,7 +80,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: nil,
                               headers: self._headers(),
                               requestModifier: self._modifyURLRequest())
@@ -100,7 +100,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: nil,
                               headers: self._headers(),
                               requestModifier: self._modifyURLRequest())
@@ -121,7 +121,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: nil,
                               headers: self._headers(),
                               requestModifier: self._modifyURLRequest())
@@ -143,7 +143,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoding: self._encoding(),
                               headers: self._headers(),
@@ -164,7 +164,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoding: self._encoding(),
                               headers: self._headers(),
@@ -186,7 +186,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoding: self._encoding(),
                               headers: self._headers(),
@@ -209,7 +209,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoder: self._encoder(),
                               headers: self._headers(),
@@ -230,7 +230,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoder: self._encoder(),
                               headers: self._headers(),
@@ -252,7 +252,7 @@ public extension DataRequestable {
         guard let url = self._url() else { return }
         
         let req = _FR.request(url,
-                              method: self.internalConfiguration.method,
+                              method: self.modifier.method,
                               parameters: params,
                               encoder: self._encoder(),
                               headers: self._headers(),
@@ -270,9 +270,3 @@ public extension DataRequestable {
                               completionHandler: completion)
     }
 }
-
-
-/// 内部使用的session
-internal let _FR = Alamofire.Session(interceptor: Configuration.DataRequest.interceptor,
-                                     serverTrustManager: Configuration.DataRequest.serverTrustManager,
-                                     eventMonitors: Configuration.eventMonitors)

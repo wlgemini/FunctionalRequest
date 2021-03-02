@@ -18,16 +18,17 @@ final class FunctionalRequestTests: XCTestCase {
     ]
     
     override class func setUp() {
+        
         // eventMonitors
         let monitor = Alamofire.ClosureEventMonitor()
         monitor.requestDidFinish = { print($0.metrics) }
         FunctionalRequest.Configuration.eventMonitors = [monitor]
         
         // base
-        FunctionalRequest.Configuration.DataRequest.base = { APIs.base }
+        FunctionalRequest.Configuration.DataRequest.base = { Domain.base }
         
         // header
-        FunctionalRequest.Configuration.DataRequest.headers = { Alamofire.HTTPHeaders(["foo": "x"]) }
+        FunctionalRequest.Configuration.DataRequest.headers = { Headers.defaultHeaders }
         
         // timeoutInterval
         FunctionalRequest.Configuration.DataRequest.timeoutInterval = { 10.0 }
@@ -41,36 +42,7 @@ final class FunctionalRequestTests: XCTestCase {
 }
 
 
-enum APIs {
-    
-    struct Echo: Codable, Equatable {
-        let foo: String
-        let bar: String
-        let baz: String
-    }
-    
-    static let base = "http://127.0.0.1:8080/"
 
-    
-    static let api = POST<Echo, Echo>("api")
-    
-    static let echoGet = GET<Echo, Echo>("echo")
-    static let echoDelete = DELETE<Echo, Echo>("echo")
-    static let echoPatch = PATCH<Echo, Echo>("echo")
-    static let echoPost = POST<Echo, Echo>("echo")
-    static let echoPut = PUT<Echo, Echo>("echo")
-    
-    static let echoJSONGet = GET<JSON, JSON>("echo")
-    static let echoJSONDelete = DELETE<JSON, JSON>("echo")
-    static let echoJSONPatch = PATCH<JSON, JSON>("echo")
-    static let echoJSONPost = POST<JSON, JSON>("echo")
-    static let echoJSONPut = PUT<JSON, JSON>("echo")
-
-    static let timeInterval = POST<Echo, Echo>("timeInterval")
-    
-    static let redirectFrom = POST<Echo, Echo>("redirectFrom")
-    static let redirectTo = POST<Echo, Echo>("redirectTo")
-}
 
 extension FunctionalRequestTests {
     
@@ -79,23 +51,23 @@ extension FunctionalRequestTests {
 
         let expPost = XCTestExpectation()
         
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
-        let headers = HTTPHeaders(["bar": "y", "foo": "xx"])
-        
-        APIs.api
+        APIs.echoPost
             .setSubApi("/v1")
-            .setAdditionalHeaders(headers)
-            .request(model) {
+            .setAdditionalHeaders(Headers.moreHeaders)
+            .request(Models.echo) {
                 // url
-                XCTAssert($0.request?.url == URL(string: APIs.base + APIs.api.configuration.api + "/v1"))
+                XCTAssert($0.request?.url == URL(string: Domain.base + APIs.echoPost.modifier.api + "/v1"))
                 
-                // headers
-                for h in headers {
+                // defaultHeaders
+                for h in Headers.defaultHeaders {
                     XCTAssert($0.request?.headers[h.name] == h.value)
                 }
                 
-                // model
-                XCTAssert($0.result.success == model)
+                // moreHeaders
+                for h in Headers.moreHeaders {
+                    XCTAssert($0.request?.headers[h.name] == h.value)
+                }
+                
                 expPost.fulfill()
             }
         
@@ -109,35 +81,38 @@ extension FunctionalRequestTests {
         let expPost = XCTestExpectation()
         let expPut = XCTestExpectation()
         
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
-        
         APIs.echoGet
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.result.isSuccess)
+                XCTAssert($0.result.success == Models.echo)
                 expGet.fulfill()
             }
         
         APIs.echoDelete
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.result.isSuccess)
+                XCTAssert($0.result.success == Models.echo)
                 expDelete.fulfill()
             }
         
         APIs.echoPatch
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.result.isSuccess)
+                XCTAssert($0.result.success == Models.echo)
                 expPatch.fulfill()
             }
         
         APIs.echoPost
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.result.isSuccess)
+                XCTAssert($0.result.success == Models.echo)
                 expPost.fulfill()
             }
         
         APIs.echoPut
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.result.isSuccess)
+                XCTAssert($0.result.success == Models.echo)
                 expPut.fulfill()
             }
         
@@ -152,43 +127,32 @@ extension FunctionalRequestTests {
         let expPost = XCTestExpectation()
         let expPut = XCTestExpectation()
         
-        let model = [
-            "foo": "x",
-            "bar": "y",
-            "baz": "z"
-        ]
-        
         APIs.echoJSONGet
-            .setSubApi("/v1")
-            .request(model) {
+            .request(Models.echoJSON) {
                 XCTAssert($0.result.isSuccess)
                 expGet.fulfill()
             }
         
         APIs.echoJSONDelete
-            .setSubApi("/v1")
-            .request(model) {
+            .request(Models.echoJSON) {
                 XCTAssert($0.result.isSuccess)
                 expDelete.fulfill()
             }
         
         APIs.echoJSONPatch
-            .setSubApi("/v1")
-            .request(model) {
+            .request(Models.echoJSON) {
                 XCTAssert($0.result.isSuccess)
                 expPatch.fulfill()
             }
         
         APIs.echoJSONPost
-            .setSubApi("/v1")
-            .request(model) {
+            .request(Models.echoJSON) {
                 XCTAssert($0.result.isSuccess)
                 expPost.fulfill()
             }
         
         APIs.echoJSONPut
-            .setSubApi("/v1")
-            .request(model) {
+            .request(Models.echoJSON) {
                 XCTAssert($0.result.isSuccess)
                 expPut.fulfill()
             }
@@ -200,18 +164,16 @@ extension FunctionalRequestTests {
     func testMock() {
         let exp = XCTestExpectation()
         
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
         let mock = "http://127.0.0.1:8080/mock"
         
-        APIs.api
-            .setSubApi("/v1")
+        APIs.echoPost
             .setMock(mock)
-            .request(model) {
+            .request(Models.echo) {
                 // url
                 XCTAssert($0.request?.url == URL(string: mock))
                 
                 // model
-                XCTAssert($0.result.success == model)
+                XCTAssert($0.result.success == Models.echo)
                 exp.fulfill()
             }
         
@@ -222,11 +184,10 @@ extension FunctionalRequestTests {
         let expPost = XCTestExpectation()
         
         let timeoutInterval: TimeInterval = 2.0
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
         
-        APIs.timeInterval
+        APIs.echoGet
             .setTimeoutInterval(timeoutInterval)
-            .request(model) {
+            .request(Models.echo) {
                 XCTAssert($0.request?.timeoutInterval == timeoutInterval)
                 expPost.fulfill()
             }
@@ -241,12 +202,10 @@ extension FunctionalRequestTests {
     func testRedirectHandler() {
         let exp = XCTestExpectation()
         
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
-        
-        APIs.redirectFrom
+        APIs.echoPost
             .setRedirectHandler(Alamofire.Redirector.follow)
-            .request(model) {
-                XCTAssert($0.result.success == model)
+            .request(Models.echo) {
+                XCTAssert($0.result.success == Models.echo)
                 exp.fulfill()
             }
         
@@ -260,14 +219,11 @@ extension FunctionalRequestTests {
     func testCache() {
         let exp = XCTestExpectation()
         
-        let model = APIs.Echo(foo: "x", bar: "y", baz: "z")
-        
-        APIs.api
-            .setSubApi("/v1")
+        APIs.echoPost
             .setCachedResponseHandler(ResponseCacher.doNotCache)
-            .request(model) {
-                XCTAssert(model == $0.result.success)
-                XCTAssert(model != $0.cachedValue())
+            .request(Models.echo) {
+                XCTAssert(Models.echo == $0.result.success)
+                XCTAssert(Models.echo != $0.cachedValue())
                 exp.fulfill()
             }
         

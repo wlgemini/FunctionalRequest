@@ -15,14 +15,28 @@ public protocol DataRequestable: Any {
     /// Output type (aka response data)
     associatedtype Output
     
-    /// a data request config, some of which propertys will override `Configuration`
-    var internalConfiguration: InternalConfiguration { get set }
+    /// a data request modifier, some of which propertys will override `Configuration`
+    var modifier: ConfigurationModifier { get set }
     
     /// init a request
     /// - Parameters:
     ///   - api: request path
     ///   - base: base url
     init(_ api: String, base: @escaping @autoclosure Compute<String?>)
+}
+
+
+public extension DataRequestable {
+    
+    /// init a request
+    ///
+    /// base url is `Configuration.DataRequest.base()`
+    ///
+    /// - Parameters:
+    ///   - api: request path
+    init(_ api: String) {
+        self.init(api, base: Configuration.DataRequest.base())
+    }
 }
 
 
