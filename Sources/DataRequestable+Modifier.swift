@@ -29,16 +29,16 @@ public extension DataRequestable {
 public extension DataRequestable {
     
     /// 添加额外的headers
-    func setAdditionalHeaders(_ headers: Alamofire.HTTPHeaders) -> Self {
+    func setAdditionalHeaders(_ additionalHeaders: Alamofire.HTTPHeaders) -> Self {
         var copy = self
-        copy.modifier.dataRequest.additionalHeaders = headers
+        copy.modifier.dataRequest.additionalHeaders = additionalHeaders
         return copy
     }
     
     /// 设置单独超时时间
-    func setTimeoutInterval(_ timeout: TimeInterval) -> Self {
+    func setTimeoutInterval(_ timeoutInterval: TimeInterval) -> Self {
         var copy = self
-        copy.modifier.dataRequest.timeoutInterval = timeout
+        copy.modifier.dataRequest.timeoutInterval = timeoutInterval
         return copy
     }
     

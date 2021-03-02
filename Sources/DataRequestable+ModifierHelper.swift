@@ -199,12 +199,12 @@ internal extension DataRequestable {
     
     /// 修改URLRequest
     func _modifyURLRequest() -> (_ req: inout URLRequest) throws -> Void {
-        let timeoutInterval = self._timeoutInterval
+        let timeoutInterval = self._timeoutInterval()
         
         // NOTE: Make sure not access `self` in block
         return { (req) in
             // timeoutInterval
-            if let timeoutInterval = timeoutInterval() {
+            if let timeoutInterval = timeoutInterval {
                 req.timeoutInterval = timeoutInterval
             }
         }
