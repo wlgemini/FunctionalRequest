@@ -2,18 +2,8 @@
 //  Modifier.swift
 //
 
-
 public protocol Modifier {
 
+    /// apply to context
     func apply<A: API>(to context: ModifierContext<A>)
-}
-
-
-// MARK: - Internal
-public struct _EmptyModifier: Modifier {
-    
-    public func apply<A: API>(to context: ModifierContext<A>) { }
-    
-    // MARK: Internal
-    internal init() { }
 }

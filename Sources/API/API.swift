@@ -2,13 +2,17 @@
 //  API.swift
 //
 
-
 public protocol API {
-    associatedtype Parameter
+    
+    /// Parameters
+    associatedtype Parameters
+    
+    /// Result
     associatedtype Result
     
+    /// method
     var method: String { get }
+    
+    /// path
     var path: String { get }
 }
-
-

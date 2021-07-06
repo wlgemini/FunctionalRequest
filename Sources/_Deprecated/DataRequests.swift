@@ -2,6 +2,7 @@
 //  DataRequests.swift
 //
 
+/*
 import Foundation
 import Alamofire
 
@@ -59,4 +60,4 @@ public struct DELETE<Input, Output>: DataRequestable {
         self.modifier = ConfigurationModifier(method: .delete, base: base, api: api)
     }
 }
-
+*/

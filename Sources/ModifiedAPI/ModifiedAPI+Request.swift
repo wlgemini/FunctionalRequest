@@ -9,7 +9,6 @@ extension ModifiedAPI {
         let ctx = ModifierContext(api: self.api)
         self.modifier.apply(to: ctx)
         print(self.api.path)
-        print(self.api.method)
         print(ctx.setting)
     }
 }
