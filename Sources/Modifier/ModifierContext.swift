@@ -2,17 +2,21 @@
 //  ModifierContext.swift
 //
 
-public final class ModifierContext<A: API> {
+public final class ModifierContext {
     
-    /// api
-    public let api: A
+    /// method
+    public let method: String
+    
+    /// path
+    public let path: String
     
     /// setting
     public var setting: [String] = []
     
     // MARK: Internal
     /// init
-    internal init(api: A) {
-        self.api = api
+    internal init<A: API>(api: A) {
+        self.method = api.method
+        self.path = api.path
     }
 }

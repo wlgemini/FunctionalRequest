@@ -1,5 +1,5 @@
 //
-//  Modifiers.swift
+//  URLModifier.swift
 //
 
 // MARK: - URL Modifier
@@ -15,7 +15,7 @@ public struct SchemeModifier: Modifier {
 
     let scheme: String
 
-    public func apply<A: API>(to context: ModifierContext<A>) {
+    public func apply(to context: ModifierContext) {
         
     }
 }
@@ -26,17 +26,17 @@ public struct AuthorityModifier: Modifier {
     let domain: String
     let port: Int?
 
-    public func apply<A: API>(to context: ModifierContext<A>) {
+    public func apply(to context: ModifierContext) {
         
     }
 }
 
 /// path
-public struct _PathModifier: Modifier {
+public struct PathModifier: Modifier {
 
     let path: String
 
-    public func apply<A: API>(to context: ModifierContext<A>) {
+    public func apply(to context: ModifierContext) {
         
     }
 }
@@ -46,7 +46,7 @@ public struct ParametersModifier: Modifier {
 
     let parameters: [String: Any]
 
-    public func apply<A: API>(to context: ModifierContext<A>) {
+    public func apply(to context: ModifierContext) {
         
     }
 }
@@ -56,21 +56,12 @@ public struct AnchorModifier: Modifier {
 
     let anchor: String
 
-    public func apply<A: API>(to context: ModifierContext<A>) {
+    public func apply(to context: ModifierContext) {
         
     }
 }
 
-// MARK: - HTTP Modifier
-/// method
-public struct MethodModifier: Modifier {
 
-    let method: String
-
-    public func apply<A: API>(to context: ModifierContext<A>) {
-        
-    }
-}
 
 
 

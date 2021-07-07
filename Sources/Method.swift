@@ -1,8 +1,8 @@
 //
-//  API+Method.swift
+//  Method.swift
 //
 
-public struct GET<Parameters, Result>: API, ModifiedAPI {
+public struct GET<Parameters, Result>: API {
     
     /// method
     public let method: String = "GET"
@@ -17,7 +17,7 @@ public struct GET<Parameters, Result>: API, ModifiedAPI {
 }
 
 
-public struct POST<Parameters, Result>: API, ModifiedAPI {
+public struct POST<Parameters, Result>: API {
     
     /// method
     public let method: String = "POST"
@@ -32,7 +32,7 @@ public struct POST<Parameters, Result>: API, ModifiedAPI {
 }
 
 
-public struct PUT<Parameters, Result>: API, ModifiedAPI {
+public struct PUT<Parameters, Result>: API {
     
     /// method
     public let method: String = "PUT"
@@ -47,7 +47,7 @@ public struct PUT<Parameters, Result>: API, ModifiedAPI {
 }
 
 
-public struct PATCH<Parameters, Result>: API, ModifiedAPI {
+public struct PATCH<Parameters, Result>: API {
     
     /// method
     public let method: String = "PATCH"
@@ -62,7 +62,7 @@ public struct PATCH<Parameters, Result>: API, ModifiedAPI {
 }
 
 
-public struct DELETE<Parameters, Result>: API, ModifiedAPI {
+public struct DELETE<Parameters, Result>: API {
     
     /// method
     public let method: String = "DELETE"
@@ -73,5 +73,16 @@ public struct DELETE<Parameters, Result>: API, ModifiedAPI {
     /// init
     public init(_ path: String) {
         self.path = path
+    }
+}
+
+
+// MARK: - Method modifiers impl
+extension API {
+    
+    /// modifiers
+    public var modifiers: some Modifier {
+        return ModifierPair(first: MethodModifier(method: self.method),
+                            second: PathModifier(path: self.path))
     }
 }

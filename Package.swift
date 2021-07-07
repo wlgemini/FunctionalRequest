@@ -20,6 +20,6 @@ let package = Package(
     
     targets: [
         .target(name: "FunctionalRequest", dependencies: ["Alamofire"], path: "Sources"),
-        .testTarget(name: "FunctionalRequestTests", dependencies: ["FunctionalRequest"])
+        //.testTarget(name: "FunctionalRequestTests", dependencies: ["FunctionalRequest"])
     ]
 )
