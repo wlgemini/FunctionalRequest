@@ -42,11 +42,54 @@
             - URLSessionTasks
         - Response
  
-    1. DataRequest
+    1. DataRequest: Request
+        - Additional State
+            - data: Data
+            - convertible:
+                - URLRequestConvertible
+        - Validation:
+            - validate()
  
-    2. UploadRequest
+    2. DataStreamRequest: Request
+        - Additional State
+            - none
+        - Validation:
+            - validate()
+        
+    3. UploadRequest: DataRequest
+        - Additional State:
+            - fileManager
+            - upload
+                - URLRequestConvertible
+                - Uploadable
  
-    3. DownloadRequest
+    4. DownloadRequest: Request
+        - Additional State:
+            - resumeData
+            - fileURL
+        - Cancellation
+            - cancel(producingResumeData shouldProduceResumeData: Bool)
+            - cancel(byProducingResumeData completionHandler: @escaping (_ data: Data?) -> Void)
+            - cancel()
+        - Validation
+            - typealias Validation = (_ request: URLRequest?, _ response: HTTPURLResponse, _ fileURL: URL?)
  
+    5. Response Handling
+        - Handling Responses Without Serialization
+        - Response Serializer:
+            - DataResponseSerializerProtocol
+            - DownloadResponseSerializerProtocol
+            * responseData
+            * responseString
+            * responseJSON
+            * responseDecodable
+    
+            - DataStreamRequest
+ 
+    6. Combine
+ 
+    7. Network Reachability
+    
  */
+
 
