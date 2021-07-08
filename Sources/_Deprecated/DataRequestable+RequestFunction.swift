@@ -12,14 +12,14 @@ import Alamofire
 ///
 /// 可以表示请求没有参数，或者忽略返回值
 ///
-public typealias None = Void
+// public typealias None = Void
 
 
 /// 表示一个`DataRequestable`的`Input`和`Output`的范型参数
 ///
 /// 可以表示请求参数为`JSON`(也就是一个`[String: Any]`)，或者返回值为`JSON`(也就是一个`[String: Any]`)
 ///
-public typealias JSON = [String: Any]
+// public typealias JSON = [String: Any]
 
 
 // MARK: Function

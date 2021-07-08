@@ -2,66 +2,52 @@
 //  URLModifier.swift
 //
 
-// MARK: - URL Modifier
-/*
- * http     :// www.example.com:80  /   path/to/file.html   ?   key1=value1&key2=value2 #   SomewhereInTheDocument
- *
- * scheme   :// authority           /   path                ?   parameters              #   anchor
- */
-
-
-/// scheme
-public struct SchemeModifier: Modifier {
-
-    let scheme: String
-
-    public func apply(to context: ModifierContext) {
-        
+/// URLModifier
+public struct URLModifier {
+    
+    public init(path: @escaping Compute<String>) {
+        self.type = .path(path)
     }
+    
+    public init(base: @escaping Compute<String>) {
+        self.type = .base(base)
+    }
+    
+    public init(url: @escaping Compute<String>) {
+        self.type = .url(url)
+    }
+    
+    public init(mock: @escaping Compute<String>) {
+        self.type = .mock(mock)
+    }
+    
+    // MARK: Internal    
+    var type: URLType
 }
 
-/// authority
-public struct AuthorityModifier: Modifier {
 
-    let domain: String
-    let port: Int?
-
+// MARK: Modifier
+extension URLModifier: Modifier {
+    
     public func apply(to context: ModifierContext) {
-        
-    }
-}
-
-/// path
-public struct PathModifier: Modifier {
-
-    let path: String
-
-    public func apply(to context: ModifierContext) {
-        
-    }
-}
-
-/// parameters
-public struct ParametersModifier: Modifier {
-
-    let parameters: [String: Any]
-
-    public func apply(to context: ModifierContext) {
-        
-    }
-}
-
-/// anchor
-public struct AnchorModifier: Modifier {
-
-    let anchor: String
-
-    public func apply(to context: ModifierContext) {
-        
+        // make url from URLType cases
+        context.urls.append(self.type)
     }
 }
 
 
+// MARK: - Modify URL
+public extension API {
+    
+    func path(_ path: @escaping @autoclosure () -> String) -> some API {
+        self.modifier(URLModifier(path: path))
+    }
 
-
-
+    func base(_ base: @escaping @autoclosure () -> String) -> some API {
+        self.modifier(URLModifier(base: base))
+    }
+    
+    func url(_ url: @escaping @autoclosure () -> String) -> some API {
+        self.modifier(URLModifier(url: url))
+    }
+}

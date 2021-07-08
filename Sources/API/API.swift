@@ -10,42 +10,42 @@ public protocol API {
     /// Result
     associatedtype Result
     
-    /// Modifiers
-    associatedtype Modifiers: Modifier
+    /// Body
+    associatedtype Body: Modifier
     
-    /// method
-    var method: String { get }
-    
-    /// path
-    var path: String { get }
-    
-    /// Modifiers
-    var modifiers: Self.Modifiers { get }
+    /// body
+    var body: Self.Body { get }
 }
 
 
-extension API {
+public extension API {
     
-    /// modify API
-    public func modifier<M: Modifier>(_ m: M) -> some API {
-        let modifiers = ModifierPair(first: self.modifiers, second: m)
-        return _AnyAPI<Parameters, Result, ModifierPair<Modifiers, M>>(self.method, self.path, modifiers)
+    /// modifier
+    func modifier<M>(_ m: M) -> some API
+    where M: Modifier {
+        let tuple2 = TupleModifier2(m0: self.body, m1: m)
+        return _API<Parameters, Result, TupleModifier2>(body: tuple2)
+    }
+    
+    /// modifier
+    func modifier<M0, M1>(_ m0: M0, _ m1: M1) -> some API
+    where M0: Modifier, M1: Modifier {
+        let tuple3 = TupleModifier3(m0: self.body, m1: m0, m2: m1)
+        return _API<Parameters, Result, TupleModifier3>(body: tuple3)
+    }
+    
+    /// modifier
+    func modifier<M0, M1, M2>(_ m0: M0, _ m1: M1, _ m2: M2) -> some API
+    where M0: Modifier, M1: Modifier, M2: Modifier {
+        let tuple4 = TupleModifier4(m0: self.body, m1: m0, m2: m1, m3: m2)
+        return _API<Parameters, Result, TupleModifier4>(body: tuple4)
     }
 }
 
 
 // MARK: - Internal
-internal struct _AnyAPI<Parameters, Result, Modifiers>: API {
+struct _API<Parameters, Result, Body: Modifier>: API {
     
-    var method: String
-    
-    var path: String
-    
-    var modifiers: Modifiers
-    
-    init(_ method: String, _ path: String, _ modifiers: Modifiers) {
-        self.method = method
-        self.path = path
-        self.modifiers = modifiers
-    }
+    /// body
+    let body: Body
 }
