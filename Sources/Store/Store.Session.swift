@@ -25,6 +25,6 @@ extension Store {
         var eventMonitors: [EventMonitor] = []
         
         // session instance init from above propertys
-        var session: Alamofire.Session?
+        static var session: Alamofire.Session?
     }
 }

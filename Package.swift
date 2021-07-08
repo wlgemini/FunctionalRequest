@@ -19,7 +19,8 @@ let package = Package(
     ],
     
     targets: [
-        .target(name: "FunctionalRequest", dependencies: ["Alamofire"], path: "Sources"),
-        .testTarget(name: "FunctionalRequestTests", dependencies: ["FunctionalRequest"])
+        .target(name: "FunctionalRequest", dependencies: ["Alamofire"], path: "Sources")
+        //#warning("testTarget")
+        //.testTarget(name: "FunctionalRequestTests", dependencies: ["FunctionalRequest"])
     ]
 )

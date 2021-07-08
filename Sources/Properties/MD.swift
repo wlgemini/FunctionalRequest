@@ -30,7 +30,7 @@
         - suspend()
         - cancel()
         - etc
-     - modify default DataRequest's property:
+     - modify default Request's property:
         - Progress:
             - uploadProgress
             - downloadProgress
