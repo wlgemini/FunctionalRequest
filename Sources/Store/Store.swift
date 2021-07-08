@@ -1,10 +1,7 @@
 //
-//  _Store.swift
-//  
-//
-//  Created by wangluguang on 2021/7/7.
+//  Store.swift
 //
 
 
 /// `Store` namespace
-enum Store { }
+public enum Store { }

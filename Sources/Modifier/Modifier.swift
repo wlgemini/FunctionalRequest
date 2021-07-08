@@ -5,7 +5,7 @@
 /// For user defined custom modifier
 public protocol Modifier {
 
-    func apply(to context: ModifierContext)
+    func apply(to context: Context)
 }
 
 
@@ -26,3 +26,7 @@ extension Modifier {
         TupleModifier4(m0: self, m1: m0, m2: m1, m3: m2)
     }
 }
+
+
+/// Context
+public typealias Context = Store.Modifiers

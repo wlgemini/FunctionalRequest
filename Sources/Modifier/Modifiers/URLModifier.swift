@@ -29,7 +29,7 @@ public struct URLModifier {
 // MARK: Modifier
 extension URLModifier: Modifier {
     
-    public func apply(to context: ModifierContext) {
+    public func apply(to context: Context) {
         // make url from URLType cases
         context.urls.append(self.type)
     }

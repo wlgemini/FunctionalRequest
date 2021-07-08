@@ -6,7 +6,6 @@
 // MARK: - Parameters/Result Type
 public typealias None = Void
 
-
 public typealias JSON = [String : Any]
 
 

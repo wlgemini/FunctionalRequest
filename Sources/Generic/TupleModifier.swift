@@ -8,7 +8,7 @@ where M0: Modifier, M1: Modifier {
     public let m0: M0
     public let m1: M1
     
-    public func apply(to context: ModifierContext) {
+    public func apply(to context: Context) {
         self.m0.apply(to: context)
         self.m1.apply(to: context)
     }
@@ -22,7 +22,7 @@ where M0: Modifier, M1: Modifier, M2: Modifier {
     public let m1: M1
     public let m2: M2
     
-    public func apply(to context: ModifierContext) {
+    public func apply(to context: Context) {
         self.m0.apply(to: context)
         self.m1.apply(to: context)
         self.m2.apply(to: context)
@@ -38,7 +38,7 @@ where M0: Modifier, M1: Modifier, M2: Modifier, M3: Modifier {
     public let m2: M2
     public let m3: M3
     
-    public func apply(to context: ModifierContext) {
+    public func apply(to context: Context) {
         self.m0.apply(to: context)
         self.m1.apply(to: context)
         self.m2.apply(to: context)
