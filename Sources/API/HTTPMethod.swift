@@ -2,6 +2,8 @@
 //  HTTPMethod.swift
 //
 
+import Alamofire
+
 
 // MARK: - Parameters/Returns Type
 public typealias None = Void
@@ -15,7 +17,7 @@ public struct GET<Parameters, Returns>: API {
     public let urlModifier: URLModifier
     
     public var body: some Modifier {
-        TupleModifier2(m0: MethodModifier(method: "GET"), m1: self.urlModifier)
+        TupleModifier2(m0: MethodModifier(method: .get), m1: self.urlModifier)
     }
     
     init(_ path: String) {
@@ -33,7 +35,7 @@ public struct POST<Parameters, Returns>: API {
     public let urlModifier: URLModifier
     
     public var body: some Modifier {
-        TupleModifier2(m0: MethodModifier(method: "POST"), m1: self.urlModifier)
+        TupleModifier2(m0: MethodModifier(method: .post), m1: self.urlModifier)
     }
     
     init(_ path: String) {
@@ -51,7 +53,7 @@ public struct PUT<Parameters, Returns>: API {
     public let urlModifier: URLModifier
     
     public var body: some Modifier {
-        TupleModifier2(m0: MethodModifier(method: "PUT"), m1: self.urlModifier)
+        TupleModifier2(m0: MethodModifier(method: .put), m1: self.urlModifier)
     }
     
     init(_ path: String) {
@@ -69,7 +71,7 @@ public struct PATCH<Parameters, Returns>: API {
     public let urlModifier: URLModifier
     
     public var body: some Modifier {
-        TupleModifier2(m0: MethodModifier(method: "PATCH"), m1: self.urlModifier)
+        TupleModifier2(m0: MethodModifier(method: .patch), m1: self.urlModifier)
     }
     
     init(_ path: String) {
@@ -87,7 +89,7 @@ public struct DELETE<Parameters, Returns>: API {
     public let urlModifier: URLModifier
     
     public var body: some Modifier {
-        TupleModifier2(m0: MethodModifier(method: "DELETE"), m1: self.urlModifier)
+        TupleModifier2(m0: MethodModifier(method: .delete), m1: self.urlModifier)
     }
     
     init(_ path: String) {

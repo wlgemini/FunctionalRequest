@@ -6,63 +6,136 @@ import Alamofire
 import Foundation
 
 
-
-struct UploadProgressModifier: Modifier {
+/// UploadProgressModifier
+public struct UploadProgressModifier {
     
-    let queue: DispatchQueue = .main
+    let queue: DispatchQueue
     let closure: Alamofire.Request.ProgressHandler
     
-    func apply(to context: Context) {
-        //AF.request("").uploadProgress(queue: <#T##DispatchQueue#>, closure: <#T##Request.ProgressHandler##Request.ProgressHandler##(Progress) -> Void#>)
+    init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
+        self.queue = queue
+        self.closure = closure
     }
 }
 
 
-struct DownloadProgressModifier: Modifier {
+/// DownloadProgressModifier
+public struct DownloadProgressModifier {
     
-    let queue: DispatchQueue = .main
+    let queue: DispatchQueue
     let closure: Alamofire.Request.ProgressHandler
     
-    func apply(to context: Context) {
-        //AF.request("").downloadProgress(queue: <#T##DispatchQueue#>, closure: <#T##Request.ProgressHandler##Request.ProgressHandler##(Progress) -> Void#>)
+    init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
+        self.queue = queue
+        self.closure = closure
     }
 }
 
 
-struct RedirectModifier: Modifier {
+/// RedirectModifier
+public struct RedirectModifier {
     
     let redirectHandler: Alamofire.RedirectHandler
     
-    func apply(to context: Context) {
-        //AF.request("").redirect(using: <#T##RedirectHandler#>)
-    }
-}
-
-struct CacheResponseModifier {
-    
-    let handler: Alamofire.CachedResponseHandler
-    
-    func apply(to context: Context) {
-        //AF.request("").cacheResponse(using: CachedResponseHandler)
-    }
-}
-
-struct AuthenticateModifier: Modifier {
-    
-    let credential: URLCredential
-    
-    func apply(to context: Context) {
-        //AF.request("").authenticate(with: <#T##URLCredential#>)
-        //AF.request("").authenticate(username: <#T##String#>, password: <#T##String#>))
-        //AF.request("").authenticate(username: <#T##String#>, password: <#T##String#>, persistence: <#T##URLCredential.Persistence#>)
+    init(using handler: Alamofire.RedirectHandler) {
+        self.redirectHandler = handler
     }
 }
 
 
-//- modify default Request's property:
-//   - Progress:
-//       - uploadProgress
-//       - downloadProgress
-//   - Handling Redirects
-//   - Customizing Caching
-//   - Credentials
+/// CacheResponseModifier
+public struct CacheResponseModifier {
+    
+    let cachedResponseHandler: Alamofire.CachedResponseHandler
+    
+    init(using handler: Alamofire.CachedResponseHandler) {
+        self.cachedResponseHandler = handler
+    }
+}
+
+
+/// AuthenticateModifier
+public struct AuthenticateModifier {
+    
+    let authenticate: AuthenticateType
+    
+    init(with credential: URLCredential) {
+        self.authenticate = .authenticate(with: credential)
+    }
+    
+    init(username: String, password: String, persistence: URLCredential.Persistence) {
+        self.authenticate = .authenticate(username: username, password: password, persistence: persistence)
+    }
+}
+
+
+// MARK: - Modifier
+extension UploadProgressModifier: Modifier {
+    
+    public func apply(to context: Context) {
+        context.forRequest.uploadProgressQueue = self.queue
+        context.forRequest.uploadProgressClosure = self.closure
+    }
+}
+
+
+extension DownloadProgressModifier: Modifier {
+    
+    public func apply(to context: Context) {
+        context.forRequest.downloadProgressQueue = self.queue
+        context.forRequest.downloadProgressClosure = self.closure
+    }
+}
+
+
+extension RedirectModifier: Modifier {
+    
+    public func apply(to context: Context) {
+        context.forRequest.redirectUsing = self.redirectHandler
+    }
+}
+
+
+extension CacheResponseModifier: Modifier {
+    
+    public func apply(to context: Context) {
+        context.forRequest.cacheResponseUsing = self.cachedResponseHandler
+    }
+}
+
+
+extension AuthenticateModifier: Modifier {
+    
+    public func apply(to context: Context) {
+        context.forRequest.authenticate = self.authenticate
+    }
+}
+
+
+// MARK: - API
+public extension API {
+    
+    func uploadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some API {
+        self.modifier(UploadProgressModifier(queue: queue, closure: closure))
+    }
+    
+    func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some API {
+        self.modifier(DownloadProgressModifier(queue: queue, closure: closure))
+    }
+    
+    func redirect(using handler: Alamofire.RedirectHandler) -> some API {
+        self.modifier(RedirectModifier(using: handler))
+    }
+    
+    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> some API {
+        self.modifier(CacheResponseModifier(using: handler))
+    }
+    
+    func authenticate(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> some API {
+        self.modifier(AuthenticateModifier(username: username, password: password, persistence: persistence))
+    }
+    
+    func authenticate(with credential: URLCredential) -> some API {
+        self.modifier(AuthenticateModifier(with: credential))
+    }
+}

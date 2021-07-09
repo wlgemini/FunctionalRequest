@@ -29,4 +29,4 @@ extension Modifier {
 
 
 /// Context
-public typealias Context = Store.Modifiers
+public typealias Context = Store.ModifierContext

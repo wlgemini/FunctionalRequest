@@ -38,14 +38,14 @@ where S: Sequence, S.Iterator.Element == String {
 
 public struct ValidationModifier: Modifier {
     
-    let validation: Alamofire.Validation
+    let validation: Alamofire.DataRequest.Validation
     
     public func apply(to context: Context) {
-        AF.request("").validate(<#T##validation: DataRequest.Validation##DataRequest.Validation##(URLRequest?, HTTPURLResponse, Data?) -> DataRequest.ValidationResult#>)
+        //AF.request("").validate(<#T##validation: DataRequest.Validation##DataRequest.Validation##(URLRequest?, HTTPURLResponse, Data?) -> DataRequest.ValidationResult#>)
         
     }
     
-    init(_ validation: @escaping Alamofire.Validation) {
+    init(_ validation: @escaping Alamofire.DataRequest.Validation) {
         self.validation = validation
     }
 }

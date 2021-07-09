@@ -22,25 +22,44 @@ public struct URLModifier {
     }
     
     // MARK: Internal    
-    var type: URLType
+    let type: URLType
 }
 
 
-// MARK: Modifier
+// MARK: - Modifier
 extension URLModifier: Modifier {
     
     public func apply(to context: Context) {
-        context.urls.append(self.type)
+        switch self.type {
+        case .path(let path):
+            if context.forAPI.path == nil {
+                context.forAPI.path = path
+            } else {
+                fatalError("Can not modify `API.path`")
+            }
+            
+            if let base = context.forAPI.base {
+                context.forAPI.url = base() + path()
+            }
+            
+        case .base(let base):
+            context.forAPI.base = base
+            if let path = context.forAPI.path {
+                context.forAPI.url = base() + path()
+            }
+            
+        case .url(let url):
+            context.forAPI.url = url()
+            
+        case .mock(let mock):
+            context.forAPI.mock = mock()
+        }
     }
 }
 
 
-// MARK: - Modify URL
+// MARK: - API
 public extension API {
-    
-    func path(_ path: @escaping @autoclosure () -> String) -> some API {
-        self.modifier(URLModifier(path: path))
-    }
 
     func base(_ base: @escaping @autoclosure () -> String) -> some API {
         self.modifier(URLModifier(base: base))
@@ -48,5 +67,9 @@ public extension API {
     
     func url(_ url: @escaping @autoclosure () -> String) -> some API {
         self.modifier(URLModifier(url: url))
+    }
+    
+    func mock(_ mock: @escaping @autoclosure () -> String) -> some API {
+        self.modifier(URLModifier(mock: mock))
     }
 }
