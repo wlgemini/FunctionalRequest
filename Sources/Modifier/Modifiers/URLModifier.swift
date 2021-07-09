@@ -30,7 +30,6 @@ public struct URLModifier {
 extension URLModifier: Modifier {
     
     public func apply(to context: Context) {
-        // make url from URLType cases
         context.urls.append(self.type)
     }
 }

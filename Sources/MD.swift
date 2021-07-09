@@ -1,19 +1,5 @@
 
 
-
-//@propertyWrapper
-//@dynamicMemberLookup
-//struct KeyPathProperty<O, V> {
-//
-//    let value: O
-//
-//    public subscript<V>(dynamicMember keyPath: ReferenceWritableKeyPath<O, V>) -> Binding<V> {
-//        return value[keyPath]
-//    }
-//}
-
-
-
 /*
  Store:
  1. Session
