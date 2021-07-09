@@ -21,11 +21,7 @@ public struct GET<Parameters, Returns>: API {
     }
     
     init(_ path: String) {
-        self.urlModifier = URLModifier(path: { path })
-    }
-    
-    init(url: String) {
-        self.urlModifier = URLModifier(url: { url })
+        self.urlModifier = URLModifier(appendPath: path)
     }
 }
 
@@ -39,11 +35,7 @@ public struct POST<Parameters, Returns>: API {
     }
     
     init(_ path: String) {
-        self.urlModifier = URLModifier(path: { path })
-    }
-    
-    init(url: String) {
-        self.urlModifier = URLModifier(url: { url })
+        self.urlModifier = URLModifier(appendPath: path)
     }
 }
 
@@ -57,11 +49,7 @@ public struct PUT<Parameters, Returns>: API {
     }
     
     init(_ path: String) {
-        self.urlModifier = URLModifier(path: { path })
-    }
-    
-    init(url: String) {
-        self.urlModifier = URLModifier(url: { url })
+        self.urlModifier = URLModifier(appendPath: path)
     }
 }
 
@@ -75,11 +63,7 @@ public struct PATCH<Parameters, Returns>: API {
     }
     
     init(_ path: String) {
-        self.urlModifier = URLModifier(path: { path })
-    }
-    
-    init(url: String) {
-        self.urlModifier = URLModifier(url: { url })
+        self.urlModifier = URLModifier(appendPath: path)
     }
 }
 
@@ -93,10 +77,6 @@ public struct DELETE<Parameters, Returns>: API {
     }
     
     init(_ path: String) {
-        self.urlModifier = URLModifier(path: { path })
-    }
-    
-    init(url: String) {
-        self.urlModifier = URLModifier(url: { url })
+        self.urlModifier = URLModifier(appendPath: path)
     }
 }

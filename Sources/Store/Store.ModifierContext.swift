@@ -31,7 +31,7 @@ extension Store.ModifierContext {
     
     // MARK: _ForAPI
     final class _ForAPI {
-        var path: Compute<String>?
+        var paths: [String] = []
         var base: Compute<String>?
         
         var url: String?

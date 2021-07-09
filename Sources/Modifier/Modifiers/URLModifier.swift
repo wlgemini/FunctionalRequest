@@ -5,16 +5,12 @@
 /// URLModifier
 public struct URLModifier {
     
-    public init(path: @escaping Compute<String>) {
-        self.type = .path(path)
+    public init(appendPath: String) {
+        self.type = .appendPath(appendPath)
     }
     
     public init(base: @escaping Compute<String>) {
         self.type = .base(base)
-    }
-    
-    public init(url: @escaping Compute<String>) {
-        self.type = .url(url)
     }
     
     public init(mock: @escaping Compute<String>) {
@@ -31,25 +27,18 @@ extension URLModifier: Modifier {
     
     public func apply(to context: Context) {
         switch self.type {
-        case .path(let path):
-            if context.forAPI.path == nil {
-                context.forAPI.path = path
-            } else {
-                fatalError("Can not modify `API.path`")
-            }
+        case .appendPath(let path):
+            context.forAPI.paths.append(path)
             
             if let base = context.forAPI.base {
-                context.forAPI.url = base() + path()
+                context.forAPI.url = base() + context.forAPI.paths.joined()
             }
             
         case .base(let base):
             context.forAPI.base = base
-            if let path = context.forAPI.path {
-                context.forAPI.url = base() + path()
+            if context.forAPI.paths.isEmpty == false {
+                context.forAPI.url = base() + context.forAPI.paths.joined()
             }
-            
-        case .url(let url):
-            context.forAPI.url = url()
             
         case .mock(let mock):
             context.forAPI.mock = mock()
@@ -60,13 +49,13 @@ extension URLModifier: Modifier {
 
 // MARK: - API
 public extension API {
+    
+    func appendPath(_ path: String) -> some API {
+        self.modifier(URLModifier(appendPath: path))
+    }
 
     func base(_ base: @escaping @autoclosure () -> String) -> some API {
         self.modifier(URLModifier(base: base))
-    }
-    
-    func url(_ url: @escaping @autoclosure () -> String) -> some API {
-        self.modifier(URLModifier(url: url))
     }
     
     func mock(_ mock: @escaping @autoclosure () -> String) -> some API {

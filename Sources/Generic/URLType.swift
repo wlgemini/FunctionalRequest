@@ -4,14 +4,11 @@
 
 enum URLType {
     
-    /// a url path
-    case path(Compute<String>)
+    /// append path url
+    case appendPath(String)
     
     /// base url
     case base(Compute<String>)
-    
-    /// full url
-    case url(Compute<String>)
     
     /// mock url
     case mock(Compute<String>)
