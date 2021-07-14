@@ -55,12 +55,10 @@ extension Store.ModifierContext {
     final class _ForRequest {
         
         // uploadProgress
-        var uploadProgressQueue: DispatchQueue?
-        var uploadProgressClosure: Alamofire.Request.ProgressHandler?
+        var uploadProgress: (DispatchQueue, Alamofire.Request.ProgressHandler)?
         
         // downloadProgress
-        var downloadProgressQueue: DispatchQueue?
-        var downloadProgressClosure: Alamofire.Request.ProgressHandler?
+        var downloadProgress: (DispatchQueue, Alamofire.Request.ProgressHandler)?
         
         // redirect
         var redirectUsing: Alamofire.RedirectHandler?

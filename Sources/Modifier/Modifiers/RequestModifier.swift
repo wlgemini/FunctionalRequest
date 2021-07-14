@@ -9,26 +9,28 @@ import Foundation
 /// UploadProgressModifier
 public struct UploadProgressModifier {
     
-    let queue: DispatchQueue
-    let closure: Alamofire.Request.ProgressHandler
-    
-    init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
-        self.queue = queue
-        self.closure = closure
+    public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
+        self._queue = queue
+        self._closure = closure
     }
+    
+    // MARK: Internal
+    let _queue: DispatchQueue
+    let _closure: Alamofire.Request.ProgressHandler
 }
 
 
 /// DownloadProgressModifier
 public struct DownloadProgressModifier {
     
-    let queue: DispatchQueue
-    let closure: Alamofire.Request.ProgressHandler
-    
-    init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
-        self.queue = queue
-        self.closure = closure
+    public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
+        self._queue = queue
+        self._closure = closure
     }
+    
+    // MARK: Internal
+    let _queue: DispatchQueue
+    let _closure: Alamofire.Request.ProgressHandler
 }
 
 
@@ -37,7 +39,7 @@ public struct RedirectModifier {
     
     let redirectHandler: Alamofire.RedirectHandler
     
-    init(using handler: Alamofire.RedirectHandler) {
+    public init(using handler: Alamofire.RedirectHandler) {
         self.redirectHandler = handler
     }
 }
@@ -48,7 +50,7 @@ public struct CacheResponseModifier {
     
     let cachedResponseHandler: Alamofire.CachedResponseHandler
     
-    init(using handler: Alamofire.CachedResponseHandler) {
+    public init(using handler: Alamofire.CachedResponseHandler) {
         self.cachedResponseHandler = handler
     }
 }
@@ -59,11 +61,11 @@ public struct AuthenticateModifier {
     
     let authenticate: AuthenticateType
     
-    init(with credential: URLCredential) {
+    public init(with credential: URLCredential) {
         self.authenticate = .authenticate(with: credential)
     }
     
-    init(username: String, password: String, persistence: URLCredential.Persistence) {
+    public init(username: String, password: String, persistence: URLCredential.Persistence) {
         self.authenticate = .authenticate(username: username, password: password, persistence: persistence)
     }
 }
@@ -73,8 +75,7 @@ public struct AuthenticateModifier {
 extension UploadProgressModifier: Modifier {
     
     public func apply(to context: Context) {
-        context.forRequest.uploadProgressQueue = self.queue
-        context.forRequest.uploadProgressClosure = self.closure
+        context.forRequest.uploadProgress = (self._queue, self._closure)
     }
 }
 
@@ -82,8 +83,7 @@ extension UploadProgressModifier: Modifier {
 extension DownloadProgressModifier: Modifier {
     
     public func apply(to context: Context) {
-        context.forRequest.downloadProgressQueue = self.queue
-        context.forRequest.downloadProgressClosure = self.closure
+        context.forRequest.downloadProgress = (self._queue, self._closure)
     }
 }
 

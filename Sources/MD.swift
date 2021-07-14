@@ -11,11 +11,11 @@
     - modify default Session's property before session initiate
  
  2. Request:
-     - make function call:
-        - resume()
-        - suspend()
-        - cancel()
-        - etc
+     * make function call:
+        * resume()
+        * suspend()
+        * cancel()
+        * etc
      - modify default Request's property:
         - Progress:
             - uploadProgress
@@ -23,52 +23,52 @@
         - Handling Redirects
         - Customizing Caching
         - Credentials
-        - Lifetime Values
-            - URLRequests
-            - URLSessionTasks
+        * Lifetime Values
+            * URLRequests
+            * URLSessionTasks
         - Response
  
     1. DataRequest: Request
-        - Additional State
-            - data: Data
-            - convertible:
+        * Additional State
+            * data: Data
+            * convertible:
                 - URLRequestConvertible
         - Validation:
             - validate()
  
     2. DataStreamRequest: Request
-        - Additional State
+        * Additional State
             - none
         - Validation:
             - validate()
         
     3. UploadRequest: DataRequest
-        - Additional State:
-            - fileManager
-            - upload
-                - URLRequestConvertible
-                - Uploadable
+        * Additional State:
+            * fileManager
+            * upload
+                * URLRequestConvertible
+                * Uploadable
  
     4. DownloadRequest: Request
-        - Additional State:
-            - resumeData
-            - fileURL
-        - Cancellation
-            - cancel(producingResumeData shouldProduceResumeData: Bool)
-            - cancel(byProducingResumeData completionHandler: @escaping (_ data: Data?) -> Void)
-            - cancel()
+        * Additional State:
+            * resumeData
+            * fileURL
+        * Cancellation
+            * cancel(producingResumeData shouldProduceResumeData: Bool)
+            * cancel(byProducingResumeData completionHandler: @escaping (_ data: Data?) -> Void)
+            * cancel()
         - Validation
             - typealias Validation = (_ request: URLRequest?, _ response: HTTPURLResponse, _ fileURL: URL?)
  
-    5. Response Handling
-        - Handling Responses Without Serialization
-        - Response Serializer:
-            - DataResponseSerializerProtocol
-            - DownloadResponseSerializerProtocol
-            * responseData
-            * responseString
-            * responseJSON
-            * responseDecodable
+3. Response Handling
+    - Handling Responses Without Serialization
+    - Response Serializer:
+        - DataResponseSerializerProtocol
+        - DownloadResponseSerializerProtocol
+        * responseData
+        * responseString
+        * responseJSON
+        * responseDecodable
     
             - DataStreamRequest
  

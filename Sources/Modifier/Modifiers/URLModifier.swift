@@ -20,15 +20,15 @@
 public struct InitialURL {
     
     public init(url: @escaping Compute<String>) {
-        self.type = .full(url)
+        self._type = .full(url)
     }
     
     public init(path: @escaping Compute<String>) {
-        self.type = .path(path)
+        self._type = .path(path)
     }
     
     // MARK: Internal
-    let type: _Type
+    let _type: _Type
     
     enum _Type {
         
@@ -58,19 +58,19 @@ public struct InitialURL {
 public struct URLModifier {
     
     public init(base: @escaping Compute<String>) {
-        self.type = .base(base)
+        self._type = .base(base)
     }
     
     public init(appendPath: @escaping Compute<String>) {
-        self.type = .appendPath(appendPath)
+        self._type = .appendPath(appendPath)
     }
     
     public init(mock: @escaping Compute<String>) {
-        self.type = .mock(mock)
+        self._type = .mock(mock)
     }
     
     // MARK: Internal    
-    let type: _Type
+    let _type: _Type
     
     enum _Type {
         
@@ -88,7 +88,7 @@ extension InitialURL: Modifier {
     
     public func apply(to context: Context) {
         if context.forAPI.initialURL == nil {
-            context.forAPI.initialURL = self.type
+            context.forAPI.initialURL = self._type
         } else {
             _Log.warning("Modifier `InitialURL` should set only once", location: context.requestLocation)
         }
@@ -104,7 +104,7 @@ extension URLModifier: Modifier {
             return
         }
         
-        switch self.type {
+        switch self._type {
         case .base(let base):
             context.forAPI.base = base
             
