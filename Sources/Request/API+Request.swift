@@ -5,8 +5,8 @@
 
 extension API {
     
-    func request() {
-        let ctx = Context()
+    func request(file: String, line: UInt = #line) {
+        let ctx = Context(requestLocation: _Location(file, line))
         self.body.apply(to: ctx)
     }
 }

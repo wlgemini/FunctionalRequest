@@ -9,6 +9,8 @@ import Alamofire
 extension Store {
     
     public final class ModifierContext {
+        /// request location
+        let requestLocation: _Location
         
         let forAPI = _ForAPI()
         
@@ -23,7 +25,9 @@ extension Store {
         let forDownloadRequest = _ForDownloadRequest()
         
         /// init
-        init() { }
+        init(requestLocation: _Location) {
+            self.requestLocation = requestLocation
+        }
     }
 }
 
@@ -31,11 +35,18 @@ extension Store.ModifierContext {
     
     // MARK: _ForAPI
     final class _ForAPI {
-        var paths: [String] = []
-        var base: Compute<String>?
+        // Initial URL
+        var initialURL: InitialURL._Type?
         
-        var url: String?
-        var mock: String?
+        // Modify URL
+        var base: Compute<String>?
+        var appendPaths: [Compute<String>] = []
+        var mock: Compute<String>?
+        
+        // Final URL
+        var finalURL: String?
+        
+        // Method
         var method: Alamofire.HTTPMethod?
     }
     
