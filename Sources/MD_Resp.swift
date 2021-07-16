@@ -42,12 +42,12 @@ func validate<S: Sequence>(contentType acceptableContentTypes: @escaping @autocl
 func validate() -> Self
 
 response
-func response(queue: DispatchQueue = .main, completionHandler: @escaping (AFDataResponse<Data?>) -> Void) -> Self
-func response<Serializer: DataResponseSerializerProtocol>(queue: DispatchQueue = .main, responseSerializer: Serializer, completionHandler: @escaping (AFDataResponse<Serializer.SerializedObject>) -> Void) -> Self
-func responseData(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = DataResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = DataResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = DataResponseSerializer.defaultEmptyRequestMethods, completionHandler: @escaping (AFDataResponse<Data>) -> Void) -> Self
-func responseString(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = StringResponseSerializer.defaultDataPreprocessor, encoding: String.Encoding? = nil, emptyResponseCodes: Set<Int> = StringResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = StringResponseSerializer.defaultEmptyRequestMethods, completionHandler: @escaping (AFDataResponse<String>) -> Void) -> Self
-func responseJSON(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = JSONResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = JSONResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = JSONResponseSerializer.defaultEmptyRequestMethods, options: JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (AFDataResponse<Any>) -> Void) -> Self
-func responseDecodable<T: Decodable>(of type: T.Type = T.self, queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = DecodableResponseSerializer<T>.defaultDataPreprocessor, decoder: DataDecoder = JSONDecoder(), emptyResponseCodes: Set<Int> = DecodableResponseSerializer<T>.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = DecodableResponseSerializer<T>.defaultEmptyRequestMethods, completionHandler: @escaping (AFDataResponse<T>) -> Void) -> Self
+func response(queue: DispatchQueue, completionHandler: @escaping (AFDataResponse<Data?>) -> Void) -> Self
+func response<Serializer: DataResponseSerializerProtocol>(queue: DispatchQueue, responseSerializer: Serializer, completionHandler: @escaping (AFDataResponse<Serializer.SerializedObject>) -> Void) -> Self
+func responseData(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDataResponse<Data>) -> Void) -> Self
+func responseString(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, encoding: String.Encoding?, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDataResponse<String>) -> Void) -> Self
+func responseJSON(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, options: JSONSerialization.ReadingOptions, completionHandler: @escaping (AFDataResponse<Any>) -> Void) -> Self
+func responseDecodable<T: Decodable>(of type: T.Type, queue: DispatchQueue, dataPreprocessor: DataPreprocessor, decoder: DataDecoder, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDataResponse<T>) -> Void) -> Self
 
 
 
@@ -69,10 +69,10 @@ func validate<S: Sequence>(contentType acceptableContentTypes: @escaping @autocl
 func validate() -> Self
 
 responseStream
-func responseStream(on queue: DispatchQueue = .main, stream: @escaping Handler<Data, Never>) -> Self
-func responseStream<Serializer: DataStreamSerializer>(using serializer: Serializer, on queue: DispatchQueue = .main, stream: @escaping Handler<Serializer.SerializedObject, AFError>) -> Self
-func responseStreamString(on queue: DispatchQueue = .main, stream: @escaping Handler<String, Never>) -> Self
-func responseStreamDecodable<T: Decodable>(of type: T.Type = T.self, on queue: DispatchQueue = .main, using decoder: DataDecoder = JSONDecoder(), preprocessor: DataPreprocessor = PassthroughPreprocessor(), stream: @escaping Handler<T, AFError>) -> Self
+func responseStream(on queue: DispatchQueue, stream: @escaping Handler<Data, Never>) -> Self
+func responseStream<Serializer: DataStreamSerializer>(using serializer: Serializer, on queue: DispatchQueue, stream: @escaping Handler<Serializer.SerializedObject, AFError>) -> Self
+func responseStreamString(on queue: DispatchQueue, stream: @escaping Handler<String, Never>) -> Self
+func responseStreamDecodable<T: Decodable>(of type: T.Type, on queue: DispatchQueue, using decoder: DataDecoder, preprocessor: DataPreprocessor, stream: @escaping Handler<T, AFError>) -> Self
 
 
 
@@ -97,13 +97,13 @@ func validate<S: Sequence>(contentType acceptableContentTypes: @escaping @autocl
 func validate() -> Self
 
 response
-func response(queue: DispatchQueue = .main, completionHandler: @escaping (AFDownloadResponse<URL?>) -> Void) -> Self
-func response<Serializer: DownloadResponseSerializerProtocol>(queue: DispatchQueue = .main, responseSerializer: Serializer, completionHandler: @escaping (AFDownloadResponse<Serializer.SerializedObject>) -> Void) -> Self
-func responseURL(queue: DispatchQueue = .main, completionHandler: @escaping (AFDownloadResponse<URL>) -> Void) -> Self
-func responseData(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = DataResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = DataResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = DataResponseSerializer.defaultEmptyRequestMethods, completionHandler: @escaping (AFDownloadResponse<Data>) -> Void) -> Self
-func responseString(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = StringResponseSerializer.defaultDataPreprocessor, encoding: String.Encoding? = nil, emptyResponseCodes: Set<Int> = StringResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = StringResponseSerializer.defaultEmptyRequestMethods, completionHandler: @escaping (AFDownloadResponse<String>) -> Void) -> Self
-func responseJSON(queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = JSONResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = JSONResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = JSONResponseSerializer.defaultEmptyRequestMethods, options: JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (AFDownloadResponse<Any>) -> Void) -> Self
-func responseDecodable<T: Decodable>(of type: T.Type = T.self, queue: DispatchQueue = .main, dataPreprocessor: DataPreprocessor = DecodableResponseSerializer<T>.defaultDataPreprocessor, decoder: DataDecoder = JSONDecoder(), emptyResponseCodes: Set<Int> = DecodableResponseSerializer<T>.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = DecodableResponseSerializer<T>.defaultEmptyRequestMethods, completionHandler: @escaping (AFDownloadResponse<T>) -> Void) -> Self
+func response(queue: DispatchQueue, completionHandler: @escaping (AFDownloadResponse<URL?>) -> Void) -> Self
+func response<Serializer: DownloadResponseSerializerProtocol>(queue: DispatchQueue, responseSerializer: Serializer, completionHandler: @escaping (AFDownloadResponse<Serializer.SerializedObject>) -> Void) -> Self
+func responseURL(queue: DispatchQueue, completionHandler: @escaping (AFDownloadResponse<URL>) -> Void) -> Self
+func responseData(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDownloadResponse<Data>) -> Void) -> Self
+func responseString(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, encoding: String.Encoding?, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDownloadResponse<String>) -> Void) -> Self
+func responseJSON(queue: DispatchQueue, dataPreprocessor: DataPreprocessor, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, options: JSONSerialization.ReadingOptions, completionHandler: @escaping (AFDownloadResponse<Any>) -> Void) -> Self
+func responseDecodable<T: Decodable>(of type: T.Type, queue: DispatchQueue, dataPreprocessor: DataPreprocessor, decoder: DataDecoder, emptyResponseCodes: Set<Int>, emptyRequestMethods: Set<HTTPMethod>, completionHandler: @escaping (AFDownloadResponse<T>) -> Void) -> Self
 
 
 
