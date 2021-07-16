@@ -17,28 +17,41 @@ DataRequest:
             let headers: HTTPHeaders?
             let requestModifier: RequestModifier?
 
-
-func request(_ convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil) -> DataRequest
+func request(_ convertible: URLRequestConvertible, interceptor: RequestInterceptor?) -> DataRequest
     RequestConvertible:
     RequestEncodableConvertible:
 
 
 
+ 
+ 
+ 
+ 
+ 
 DataStreamRequest:
-func streamRequest(_ convertible: URLRequestConvertible, automaticallyCancelOnStreamError: Bool = false, interceptor: RequestInterceptor? = nil) -> DataStreamRequest
+func streamRequest(_ convertible: URLRequestConvertible, automaticallyCancelOnStreamError: Bool, interceptor: RequestInterceptor?) -> DataStreamRequest
     RequestEncodableConvertible:
 
 
 
 
+ 
+ 
+ 
+ 
+ 
 DownloadRequest:
-func download(_ convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil, to destination: DownloadRequest.Destination? = nil) -> DownloadRequest
+func download(_ convertible: URLRequestConvertible, interceptor: RequestInterceptor?, to destination: DownloadRequest.Destination?) -> DownloadRequest
     RequestConvertible:
     RequestEncodableConvertible:
 
-func download(resumingWith data: Data, interceptor: RequestInterceptor? = nil, to destination: DownloadRequest.Destination? = nil) -> DownloadRequest
+func download(resumingWith data: Data, interceptor: RequestInterceptor?, to destination: DownloadRequest.Destination?) -> DownloadRequest
 
 
+ 
+ 
+ 
+ 
 
 
 UploadRequest:
@@ -49,21 +62,20 @@ ParameterlessRequestConvertible
     let requestModifier: RequestModifier?
 
 Data:
-    func upload(_ data: Data, with convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil, fileManager: FileManager = .default) -> UploadRequest
+    func upload(_ data: Data, with convertible: URLRequestConvertible, interceptor: RequestInterceptor?, fileManager: FileManager) -> UploadRequest
         ParameterlessRequestConvertible
 
 File:
-    func upload(_ fileURL: URL, with convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil, fileManager: FileManager = .default) -> UploadRequest
+    func upload(_ fileURL: URL, with convertible: URLRequestConvertible, interceptor: RequestInterceptor?, fileManager: FileManager) -> UploadRequest
         ParameterlessRequestConvertible
 
 InputStream:
-    func upload(_ stream: InputStream, with convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil, fileManager: FileManager = .default) -> UploadRequest
+    func upload(_ stream: InputStream, with convertible: URLRequestConvertible, interceptor: RequestInterceptor?, fileManager: FileManager) -> UploadRequest
         ParameterlessRequestConvertible
 
 MultipartFormData:
-    func upload(multipartFormData: MultipartFormData, with request: URLRequestConvertible, usingThreshold encodingMemoryThreshold: UInt64 = MultipartFormData.encodingMemoryThreshold, interceptor: RequestInterceptor? = nil, fileManager: FileManager = .default) -> UploadRequest
+    func upload(multipartFormData: MultipartFormData, with request: URLRequestConvertible, usingThreshold encodingMemoryThreshold: UInt64, interceptor: RequestInterceptor?, fileManager: FileManager) -> UploadRequest
         ParameterlessRequestConvertible
-    
 */
 
 
@@ -71,20 +83,17 @@ MultipartFormData:
 
 
 /*
-DataRequest/DataStreamRequest/DownloadRequest
-RequestConvertible:
-        let url: URLConvertible => mody: base + path \ full \ mock
-        let method: HTTPMethod  => mody
-        let headers: HTTPHeaders? => mody
-        let requestModifier: RequestModifier? => mody
+RequestConvertible: DataRequest/DataStreamRequest/DownloadRequest
+    let url: URLConvertible => mody: base + path \ full \ mock
+    let method: HTTPMethod  => mody
+    let headers: HTTPHeaders? => mody
+    let requestModifier: RequestModifier? => mody
  
-        let parameters: Parameters? => _
-        let encoding: ParameterEncoding => cond mody
-        let encoder: ParameterEncoder => cond mody
-
+    let parameters: Parameters? => _
+    let encoding: ParameterEncoding => cond mody
+    let encoder: ParameterEncoder => cond mody
         
-UploadRequest
-RequestConvertible:
+RequestConvertible: UploadRequest
     let url: URLConvertible => mody: base + path \ full \ mock
     let method: HTTPMethod  => mody
     let headers: HTTPHeaders? => mody
@@ -96,9 +105,9 @@ Modify: RequestConvertible/RequestEncodableConvertible/ParameterlessRequestConve
 url: base + path / full / mock
 method: x
 headers: header / headers
-requestModifier: ?
 encoding: Parameters cond
 encoder: Parameters cond
+requestModifier: ?
  
 Call:
 parameters: Request cond
@@ -138,21 +147,17 @@ to destination: DownloadRequest.Destination?
 
 
 UploadRequest:
-
 Data:
     data: Data
     with convertible: URLRequestConvertible => ParameterlessRequestConvertible
     interceptor: RequestInterceptor?
     fileManager: FileManager
-        
 
 File:
     fileURL: URL
     with convertible: URLRequestConvertible => ParameterlessRequestConvertible
     interceptor: RequestInterceptor?
     fileManager: FileManager
-    
-        
 
 InputStream:
     stream: InputStream
@@ -160,13 +165,13 @@ InputStream:
     interceptor: RequestInterceptor?
     fileManager: FileManager
         
-
 MultipartFormData:
     multipartFormData: MultipartFormData
     with convertible: URLRequestConvertible => ParameterlessRequestConvertible
     usingThreshold encodingMemoryThreshold: UInt64
     interceptor: RequestInterceptor?
     fileManager: FileManager
+ 
  
  
 
@@ -194,23 +199,19 @@ Call:
          Data:
              data: Data
              fileManager: FileManager
-                 
 
          File:
              fileURL: URL
              fileManager: FileManager
-             
                  
 
          InputStream:
              stream: InputStream
              fileManager: FileManager
-                 
 
          MultipartFormData:
              multipartFormData: MultipartFormData
              usingThreshold encodingMemoryThreshold: UInt64
              fileManager: FileManager
     
-
 */
