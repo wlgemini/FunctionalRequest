@@ -70,8 +70,8 @@ extension ValidationModifier: Modifier {
 }
 
 
-// MARK: - API
-public extension API {
+// MARK: - DataRequestModifier
+public extension DataRequestModifier {
     
     func validate<S: Sequence>(statusCode acceptableStatusCodes: S) -> some API
     where S.Iterator.Element == Int {

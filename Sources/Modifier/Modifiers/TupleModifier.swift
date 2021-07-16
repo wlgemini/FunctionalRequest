@@ -2,7 +2,8 @@
 //  TupleModifier.swift
 //
 
-public struct TupleModifier2<M0, M1>: Modifier
+
+public struct ModifyTuple2<M0, M1>: Modifier
 where M0: Modifier, M1: Modifier {
     
     public let m0: M0
@@ -15,7 +16,7 @@ where M0: Modifier, M1: Modifier {
 }
 
 
-public struct TupleModifier3<M0, M1, M2>: Modifier
+public struct ModifyTuple3<M0, M1, M2>: Modifier
 where M0: Modifier, M1: Modifier, M2: Modifier {
     
     public let m0: M0
@@ -30,7 +31,7 @@ where M0: Modifier, M1: Modifier, M2: Modifier {
 }
 
 
-public struct TupleModifier4<M0, M1, M2, M3>: Modifier
+public struct ModifyTuple4<M0, M1, M2, M3>: Modifier
 where M0: Modifier, M1: Modifier, M2: Modifier, M3: Modifier {
     
     public let m0: M0

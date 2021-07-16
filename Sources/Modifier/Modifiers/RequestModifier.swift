@@ -6,12 +6,17 @@ import Alamofire
 import Foundation
 
 
-/// UploadProgressModifier
-public struct UploadProgressModifier {
+/// ModifyUploadProgress
+public struct ModifyUploadProgress: RequestModifier {
     
     public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
         self._queue = queue
         self._closure = closure
+    }
+    
+    // MARK: RequestModifier
+    public func apply(to context: Context) {
+        context.forRequest.uploadProgress = (self._queue, self._closure)
     }
     
     // MARK: Internal
@@ -20,12 +25,17 @@ public struct UploadProgressModifier {
 }
 
 
-/// DownloadProgressModifier
-public struct DownloadProgressModifier {
+/// ModifyDownloadProgress
+public struct ModifyDownloadProgress: RequestModifier {
     
     public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
         self._queue = queue
         self._closure = closure
+    }
+    
+    // MARK: RequestModifier
+    public func apply(to context: Context) {
+        context.forRequest.downloadProgress = (self._queue, self._closure)
     }
     
     // MARK: Internal
@@ -34,32 +44,42 @@ public struct DownloadProgressModifier {
 }
 
 
-/// RedirectModifier
-public struct RedirectModifier {
-    
-    let redirectHandler: Alamofire.RedirectHandler
+/// ModifyRedirect
+public struct ModifyRedirect: RequestModifier {
     
     public init(using handler: Alamofire.RedirectHandler) {
         self.redirectHandler = handler
     }
+    
+    // MARK: RequestModifier
+    public func apply(to context: Context) {
+        context.forRequest.redirectUsing = self.redirectHandler
+    }
+    
+    // MARK: Internal
+    let redirectHandler: Alamofire.RedirectHandler
 }
 
 
-/// CacheResponseModifier
-public struct CacheResponseModifier {
-    
-    let cachedResponseHandler: Alamofire.CachedResponseHandler
+/// ModifyCacheResponse
+public struct ModifyCacheResponse: RequestModifier {
     
     public init(using handler: Alamofire.CachedResponseHandler) {
         self.cachedResponseHandler = handler
     }
+    
+    // MARK: RequestModifier
+    public func apply(to context: Context) {
+        context.forRequest.cacheResponseUsing = self.cachedResponseHandler
+    }
+    
+    // MARK: Internal
+    let cachedResponseHandler: Alamofire.CachedResponseHandler
 }
 
 
-/// AuthenticateModifier
-public struct AuthenticateModifier {
-    
-    let authenticate: AuthenticateType
+/// ModifyAuthenticate
+public struct ModifyAuthenticate: RequestModifier {
     
     public init(with credential: URLCredential) {
         self.authenticate = .authenticate(with: credential)
@@ -68,74 +88,41 @@ public struct AuthenticateModifier {
     public init(username: String, password: String, persistence: URLCredential.Persistence) {
         self.authenticate = .authenticate(username: username, password: password, persistence: persistence)
     }
-}
-
-
-// MARK: - Modifier
-extension UploadProgressModifier: Modifier {
     
-    public func apply(to context: Context) {
-        context.forRequest.uploadProgress = (self._queue, self._closure)
-    }
-}
-
-
-extension DownloadProgressModifier: Modifier {
-    
-    public func apply(to context: Context) {
-        context.forRequest.downloadProgress = (self._queue, self._closure)
-    }
-}
-
-
-extension RedirectModifier: Modifier {
-    
-    public func apply(to context: Context) {
-        context.forRequest.redirectUsing = self.redirectHandler
-    }
-}
-
-
-extension CacheResponseModifier: Modifier {
-    
-    public func apply(to context: Context) {
-        context.forRequest.cacheResponseUsing = self.cachedResponseHandler
-    }
-}
-
-
-extension AuthenticateModifier: Modifier {
-    
+    // MARK: RequestModifier
     public func apply(to context: Context) {
         context.forRequest.authenticate = self.authenticate
     }
+    
+    // MARK: Internal
+    let authenticate: AuthenticateType
 }
 
 
-// MARK: - API
-public extension API {
+// MARK: - Request
+public extension Request {
     
-    func uploadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some API {
+    func uploadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some Request {
         self.modifier(UploadProgressModifier(queue: queue, closure: closure))
     }
     
-    func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some API {
+    func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some Request {
         self.modifier(DownloadProgressModifier(queue: queue, closure: closure))
     }
     
-    func redirect(using handler: Alamofire.RedirectHandler) -> some API {
+    func redirect(using handler: Alamofire.RedirectHandler) -> some Request {
         self.modifier(RedirectModifier(using: handler))
     }
     
-    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> some API {
+    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> some Request {
         self.modifier(CacheResponseModifier(using: handler))
     }
     
-    func authenticate(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> some API {
+    func authenticate(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> some Request {
         self.modifier(AuthenticateModifier(username: username, password: password, persistence: persistence))
     }
     
-    func authenticate(with credential: URLCredential) -> some API {
+    func authenticate(with credential: URLCredential) -> some Request {
         self.modifier(AuthenticateModifier(with: credential))
     }
 }

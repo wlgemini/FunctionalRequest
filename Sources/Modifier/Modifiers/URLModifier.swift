@@ -1,45 +1,11 @@
 //
-//  URLModifier.swift
+//  ModifyURL.swift
 //
 //  Ref: https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL
 //
 
 
-/// InitialURL
-///
-/// some type examples:
-///
-///     http://www.example.com/some/path/to/file
-///     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-///                                         full
-///
-///     http://www.example.com/some/path/to/file
-///                           ~~~~~~~~~~~~~~~~~^
-///                                         path
-///
-public struct InitialURL {
-    
-    public init(url: @escaping Compute<String>) {
-        self._type = .full(url)
-    }
-    
-    public init(path: @escaping Compute<String>) {
-        self._type = .path(path)
-    }
-    
-    // MARK: Internal
-    let _type: _Type
-    
-    enum _Type {
-        
-        case full(Compute<String>)
-        
-        case path(Compute<String>)
-    }
-}
-
-
-/// URLModifier
+/// ModifyURL
 ///
 /// some type examples:
 ///
@@ -55,7 +21,7 @@ public struct InitialURL {
 ///     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
 ///                                                 mock
 ///
-public struct URLModifier {
+public struct ModifyURL: URLModifier {
     
     public init(base: @escaping Compute<String>) {
         self._type = .base(base)
@@ -69,35 +35,7 @@ public struct URLModifier {
         self._type = .mock(mock)
     }
     
-    // MARK: Internal    
-    let _type: _Type
-    
-    enum _Type {
-        
-        case base(Compute<String>)
-        
-        case appendPath(Compute<String>)
-        
-        case mock(Compute<String>)
-    }
-}
-
-
-// MARK: - Modifier
-extension InitialURL: Modifier {
-    
-    public func apply(to context: Context) {
-        if context.forAPI.initialURL == nil {
-            context.forAPI.initialURL = self._type
-        } else {
-            _Log.warning("Modifier `InitialURL` should set only once", location: context.requestLocation)
-        }
-    }
-}
-
-
-extension URLModifier: Modifier {
-    
+    // MARK: URLModifier
     public func apply(to context: Context) {
         guard context.forAPI.initialURL != nil else {
             _Log.error("Modifier `InitialURL` not set", location: context.requestLocation)
@@ -115,24 +53,36 @@ extension URLModifier: Modifier {
             context.forAPI.mock = mock
         }
     }
+    
+    // MARK: Internal    
+    let _type: _Type
+    
+    enum _Type {
+        
+        case base(Compute<String>)
+        
+        case appendPath(Compute<String>)
+        
+        case mock(Compute<String>)
+    }
 }
 
 
-// MARK: - API
-public extension API {
+// MARK: - Method
+public extension Method {
     
     /// base url
-    func base(_ base: @escaping @autoclosure Compute<String>) -> some API {
-        self.modifier(URLModifier(base: base))
+    func base(_ base: @escaping @autoclosure Compute<String>) -> some Method {
+        self.modifier(ModifyURL(base: base))
     }
     
     /// append path
-    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>) -> some API {
-        self.modifier(URLModifier(appendPath: appendPath))
+    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>) -> some Method {
+        self.modifier(ModifyURL(appendPath: appendPath))
     }
     
     /// mocking with full url
-    func mock(_ mock: @escaping @autoclosure Compute<String>) -> some API {
-        self.modifier(URLModifier(mock: mock))
+    func mock(_ mock: @escaping @autoclosure Compute<String>) -> some Method {
+        self.modifier(ModifyURL(mock: mock))
     }
 }
