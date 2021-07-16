@@ -6,8 +6,8 @@ import Alamofire
 import Foundation
 
 
-/// ModifyUploadProgress
-public struct ModifyUploadProgress: RequestModifier {
+/// UploadProgress
+public struct UploadProgress: RequestModifier {
     
     public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
         self._queue = queue
@@ -25,8 +25,8 @@ public struct ModifyUploadProgress: RequestModifier {
 }
 
 
-/// ModifyDownloadProgress
-public struct ModifyDownloadProgress: RequestModifier {
+/// DownloadProgress
+public struct DownloadProgress: RequestModifier {
     
     public init(queue: DispatchQueue, closure: @escaping Alamofire.Request.ProgressHandler) {
         self._queue = queue
@@ -44,8 +44,8 @@ public struct ModifyDownloadProgress: RequestModifier {
 }
 
 
-/// ModifyRedirect
-public struct ModifyRedirect: RequestModifier {
+/// Redirect
+public struct Redirect: RequestModifier {
     
     public init(using handler: Alamofire.RedirectHandler) {
         self.redirectHandler = handler
@@ -61,8 +61,8 @@ public struct ModifyRedirect: RequestModifier {
 }
 
 
-/// ModifyCacheResponse
-public struct ModifyCacheResponse: RequestModifier {
+/// CacheResponse
+public struct CacheResponse: RequestModifier {
     
     public init(using handler: Alamofire.CachedResponseHandler) {
         self.cachedResponseHandler = handler
@@ -78,8 +78,8 @@ public struct ModifyCacheResponse: RequestModifier {
 }
 
 
-/// ModifyAuthenticate
-public struct ModifyAuthenticate: RequestModifier {
+/// Authenticate
+public struct Authenticate: RequestModifier {
     
     public init(with credential: URLCredential) {
         self.authenticate = .authenticate(with: credential)
@@ -102,27 +102,27 @@ public struct ModifyAuthenticate: RequestModifier {
 // MARK: - Request
 public extension Request {
     
-    func uploadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some Request {
-        self.modifier(UploadProgressModifier(queue: queue, closure: closure))
+    func uploadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, UploadProgress>> {
+        self.modifier(UploadProgress(queue: queue, closure: closure))
     }
     
-    func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> some Request {
-        self.modifier(DownloadProgressModifier(queue: queue, closure: closure))
+    func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Alamofire.Request.ProgressHandler) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, DownloadProgress>> {
+        self.modifier(DownloadProgress(queue: queue, closure: closure))
     }
     
-    func redirect(using handler: Alamofire.RedirectHandler) -> some Request {
-        self.modifier(RedirectModifier(using: handler))
+    func redirect(using handler: Alamofire.RedirectHandler) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, Redirect>> {
+        self.modifier(Redirect(using: handler))
     }
     
-    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> some Request {
-        self.modifier(CacheResponseModifier(using: handler))
+    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, CacheResponse>> {
+        self.modifier(CacheResponse(using: handler))
     }
     
-    func authenticate(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> some Request {
-        self.modifier(AuthenticateModifier(username: username, password: password, persistence: persistence))
+    func authenticate(username: String, password: String, persistence: URLCredential.Persistence = .forSession) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, Authenticate>> {
+        self.modifier(Authenticate(username: username, password: password, persistence: persistence))
     }
     
-    func authenticate(with credential: URLCredential) -> some Request {
-        self.modifier(AuthenticateModifier(with: credential))
+    func authenticate(with credential: URLCredential) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, Authenticate>> {
+        self.modifier(Authenticate(with: credential))
     }
 }

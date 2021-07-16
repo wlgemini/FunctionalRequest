@@ -1,11 +1,11 @@
 //
-//  ModifyURL.swift
+//  URL.swift
 //
 //  Ref: https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL
 //
 
 
-/// ModifyURL
+/// URL
 ///
 /// some type examples:
 ///
@@ -21,7 +21,7 @@
 ///     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
 ///                                                 mock
 ///
-public struct ModifyURL: URLModifier {
+public struct URL: Modifier {
     
     public init(base: @escaping Compute<String>) {
         self._type = .base(base)
@@ -35,7 +35,7 @@ public struct ModifyURL: URLModifier {
         self._type = .mock(mock)
     }
     
-    // MARK: URLModifier
+    // MARK: Modifier
     public func apply(to context: Context) {
         guard context.forAPI.initialURL != nil else {
             _Log.error("Modifier `InitialURL` not set", location: context.requestLocation)
@@ -68,21 +68,21 @@ public struct ModifyURL: URLModifier {
 }
 
 
-// MARK: - Method
-public extension Method {
+// MARK: - API
+public extension API {
     
     /// base url
-    func base(_ base: @escaping @autoclosure Compute<String>) -> some Method {
-        self.modifier(ModifyURL(base: base))
+    func base(_ base: @escaping @autoclosure Compute<String>) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, URL>> {
+        self.modifier(URL(base: base))
     }
     
     /// append path
-    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>) -> some Method {
-        self.modifier(ModifyURL(appendPath: appendPath))
+    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, URL>> {
+        self.modifier(URL(appendPath: appendPath))
     }
     
     /// mocking with full url
-    func mock(_ mock: @escaping @autoclosure Compute<String>) -> some Method {
-        self.modifier(ModifyURL(mock: mock))
+    func mock(_ mock: @escaping @autoclosure Compute<String>) -> ModifiedAPI<Parameters, Returns, Tuple2<M0, URL>> {
+        self.modifier(URL(mock: mock))
     }
 }

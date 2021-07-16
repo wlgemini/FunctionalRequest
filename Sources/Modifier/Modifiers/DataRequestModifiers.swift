@@ -6,8 +6,8 @@ import Foundation
 import Alamofire
 
 
-/// StatusCodeValidationModifier
-public struct StatusCodeValidationModifier<S>
+/// StatusCodeValidation
+public struct StatusCodeValidation<S>
 where S: Sequence, S.Iterator.Element == Int {
 
     public init(_ acceptableStatusCodes: S) {
@@ -19,8 +19,8 @@ where S: Sequence, S.Iterator.Element == Int {
 }
 
 
-/// ContentTypeValidationModifier
-public struct ContentTypeValidationModifier<S>
+/// ContentTypeValidation
+public struct ContentTypeValidation<S>
 where S: Sequence, S.Iterator.Element == String {
     
     public init(_ acceptableContentTypes: @escaping () -> S) {
@@ -32,15 +32,15 @@ where S: Sequence, S.Iterator.Element == String {
 }
 
 
-/// ValidationModifier
+/// Validation
 public struct ValidationModifier {
     
-    public init(_ validation: @escaping Alamofire.DataRequest.Validation) {
-        self._validation = validation
-    }
-    
-    // MARK: Internal
-    let _validation: Alamofire.DataRequest.Validation
+//    public init(_ validation: @escaping Alamofire.DataRequest.Validation) {
+//        self._validation = validation
+//    }
+//    
+//    // MARK: Internal
+//    let _validation: Alamofire.DataRequest.Validation
 }
 
 

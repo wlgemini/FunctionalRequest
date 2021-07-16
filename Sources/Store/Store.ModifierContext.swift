@@ -36,7 +36,7 @@ extension Store.ModifierContext {
     // MARK: _ForAPI
     final class _ForAPI {
         // Initial URL
-        var initialURL: ModifyInitialURL._Type?
+        var initialURL: InitialURL._Type?
         
         // Modify URL
         var base: Compute<String>?

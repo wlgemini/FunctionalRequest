@@ -5,7 +5,7 @@
 import Alamofire
 
 
-/// ModifyInitialURL
+/// InitialURL
 ///
 /// some type examples:
 ///
@@ -17,7 +17,7 @@ import Alamofire
 ///                           ~~~~~~~~~~~~~~~~~^
 ///                                         path
 ///
-public struct ModifyInitialURL: Modifier {
+public struct InitialURL: Modifier {
     
     public init(url: @escaping Compute<String>) {
         self._type = .full(url)
@@ -32,7 +32,7 @@ public struct ModifyInitialURL: Modifier {
         if context.forAPI.initialURL == nil {
             context.forAPI.initialURL = self._type
         } else {
-            _Log.warning("`ModifyInitialURL` should set only once", location: context.requestLocation)
+            _Log.warning("`InitialURL` should set only once", location: context.requestLocation)
         }
     }
     
@@ -48,8 +48,8 @@ public struct ModifyInitialURL: Modifier {
 }
 
 
-/// ModifyMethod
-public struct ModifyMethod: Modifier {
+/// Method
+public struct Method: Modifier {
     
     public init(method: Alamofire.HTTPMethod) {
         self.method = method

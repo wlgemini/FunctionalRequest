@@ -3,92 +3,92 @@
 //
 
 
-public struct GET<Parameters, Returns>: Method {
+public struct GET<Parameters, Returns>: API {
 
-    public let initialURL: ModifyInitialURL
+    public let initialURL: InitialURL
     
-    public var body: some Modifier {
-        ModifyTuple2(m0: ModifyMethod(method: .get), m1: self.initialURL)
+    public var m0: some Modifier {
+        Tuple2(Method(method: .get), self.initialURL)
     }
     
     public init(_ path: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(path: path)
+        self.initialURL = InitialURL(path: path)
     }
     
     public init(url: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(url: url)
+        self.initialURL = InitialURL(url: url)
     }
 }
 
 
-public struct POST<Parameters, Returns>: Method {
+public struct POST<Parameters, Returns>: API {
     
-    public let initialURL: ModifyInitialURL
+    public let initialURL: InitialURL
     
-    public var body: some Modifier {
-        ModifyTuple2(m0: ModifyMethod(method: .post), m1: self.initialURL)
+    public var m0: some Modifier {
+        Tuple2(Method(method: .post), self.initialURL)
     }
     
     public init(_ path: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(path: path)
+        self.initialURL = InitialURL(path: path)
     }
     
     public init(url: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(url: url)
+        self.initialURL = InitialURL(url: url)
     }
 }
 
 
-public struct PUT<Parameters, Returns>: Method {
+public struct PUT<Parameters, Returns>: API {
     
-    public let initialURL: ModifyInitialURL
+    public let initialURL: InitialURL
     
-    public var body: some Modifier {
-        ModifyTuple2(m0: ModifyMethod(method: .put), m1: self.initialURL)
+    public var m0: some Modifier {
+        Tuple2(Method(method: .put), self.initialURL)
     }
     
     public init(_ path: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(path: path)
+        self.initialURL = InitialURL(path: path)
     }
     
     public init(url: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(url: url)
+        self.initialURL = InitialURL(url: url)
     }
 }
 
 
-public struct PATCH<Parameters, Returns>: Method {
+public struct PATCH<Parameters, Returns>: API {
     
-    public let initialURL: ModifyInitialURL
+    public let initialURL: InitialURL
     
-    public var body: some Modifier {
-        ModifyTuple2(m0: ModifyMethod(method: .patch), m1: self.initialURL)
+    public var m0: some Modifier {
+        Tuple2(Method(method: .patch), self.initialURL)
     }
     
     public init(_ path: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(path: path)
+        self.initialURL = InitialURL(path: path)
     }
     
     public init(url: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(url: url)
+        self.initialURL = InitialURL(url: url)
     }
 }
 
 
-public struct DELETE<Parameters, Returns>: Method {
+public struct DELETE<Parameters, Returns>: API {
 
-    public let initialURL: ModifyInitialURL
+    public let initialURL: InitialURL
     
-    public var body: some Modifier {
-        ModifyTuple2(m0: ModifyMethod(method: .delete), m1: self.initialURL)
+    public var m0: some Modifier {
+        Tuple2(Method(method: .delete), self.initialURL)
     }
     
     public init(_ path: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(path: path)
+        self.initialURL = InitialURL(path: path)
     }
     
     public init(url: @escaping Compute<String>) {
-        self.initialURL = ModifyInitialURL(url: url)
+        self.initialURL = InitialURL(url: url)
     }
 }
 
