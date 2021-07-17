@@ -92,7 +92,7 @@ GET<P, R>(path/full)
 
 // cURLDescription
 .cURLDescription(on queue: DispatchQueue, calling handler: @escaping (String) -> Void)
-.cURLDescription(calling handler: @escaping (String) -> Void)
+
 
 // onURLRequestCreation
 onURLRequestCreation(on queue: DispatchQueue = .main, perform handler: @escaping (URLRequest) -> Void)
@@ -137,3 +137,53 @@ onURLSessionTaskCreation(on queue: DispatchQueue = .main, perform handler: @esca
 .uploadRequest(fileURL: URL)
 .uploadRequest(stream: InputStream)
 .uploadRequest(multipartFormData: MultipartFormData, usingThreshold encodingMemoryThreshold: UInt64)
+
+
+
+// MARK: - Response
+// ResponseQueue
+.responseQueue()
+
+// Serialize
+// UploadRequest/DataRequest: Request
+.serializeDataResponse<Serializer: DataResponseSerializerProtocol>(using: Serializer)
+   DataResponseSerializer
+   StringResponseSerializer
+   JSONResponseSerializer
+   DecodableResponseSerializer
+
+// DataStreamRequest: Request
+ .serializeDataStream<Serializer: DataStreamSerializer>(using: Serializer)
+   DecodableStreamSerializer
+
+// DownloadRequest: Request
+ .serializeDownloadResponse<Serializer: DownloadResponseSerializerProtocol>(using: Serializer)
+   URLResponseSerializer
+   DataResponseSerializer
+   StringResponseSerializer
+   JSONResponseSerializer
+   DecodableResponseSerializer
+
+
+// Serialize Handy Modify
+.serializeDataResponse(DataResponseSerializer)             // DownloadRequest/UploadRequest/DataRequest
+.serializeStringResponse(StringResponseSerializer)         // DownloadRequest/UploadRequest/DataRequest
+.serializeJSONResponse(JSONResponseSerializer)             // DownloadRequest/UploadRequest/DataRequest
+.serializeDecodableResponse(DecodableResponseSerializer)   // DownloadRequest/UploadRequest/DataRequest
+.serializeURLResponse(URLResponseSerializer)               // DownloadRequest
+.serializeDataStream(DecodableStreamSerializer)            // DataStreamRequest
+
+
+// CompletionHandler
+// UploadRequest/DataRequest
+ completionHandler(Data)
+ completionHandler<DataResponseSerializerProtocol>
+
+// DataStreamRequest: Request
+ completionHandler(Data)
+ completionHandler(String)
+ completionHandler<DataStreamSerializer>
+
+// DownloadRequest: Request
+ completionHandler(URL)
+ completionHandler<DownloadResponseSerializerProtocol>

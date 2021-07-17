@@ -6,45 +6,46 @@
 public protocol API {
     
     /// Parameters
-    associatedtype Parameters
+    associatedtype P
     
     /// Returns
-    associatedtype Returns
+    associatedtype R
     
-    /// M0
-    associatedtype M0: Modifier
+    /// Modifier
+    associatedtype M: Modifier
     
-    /// M0
-    var m0: Self.M0 { get }
+    /// modifier
+    var m: Self.M { get }
 }
 
 
 extension API {
     
-    public func modifier<M1>(_ m1: M1) -> ModifiedAPI<Parameters, Returns, Tuple2<Self.M0, M1>>
+    public func modifier<M1>(_ m1: M1) -> _API<P, R, Tuple2<Self.M, M1>>
     where M1: Modifier {
-        ModifiedAPI(Tuple2(self.m0, m1))
+        _API(Tuple2(self.m, m1))
     }
     
-    public func modifier<M1, M2>(_ m1: M1, _ m2: M2) -> ModifiedAPI<Parameters, Returns, Tuple3<Self.M0, M1, M2>>
+    public func modifier<M1, M2>(_ m1: M1, _ m2: M2) -> _API<P, R, Tuple3<Self.M, M1, M2>>
     where M1: Modifier, M2: Modifier {
-        ModifiedAPI(Tuple3(self.m0, m1, m2))
+        _API(Tuple3(self.m, m1, m2))
     }
     
-    public func modifier<M1, M2, M3>(_ m1: M1, _ m2: M2, _ m3: M3) -> ModifiedAPI<Parameters, Returns, Tuple4<Self.M0, M1, M2, M3>>
+    public func modifier<M1, M2, M3>(_ m1: M1, _ m2: M2, _ m3: M3) -> _API<P, R, Tuple4<Self.M, M1, M2, M3>>
     where M1: Modifier, M2: Modifier, M3: Modifier {
-        ModifiedAPI(Tuple4(self.m0, m1, m2, m3))
+        _API(Tuple4(self.m, m1, m2, m3))
     }
 }
 
 
-// MARK: - ModifiedAPI
-public struct ModifiedAPI<Parameters, Returns, M0: Modifier>: API {
+// MARK: - _API
+public struct _API<P, R, M: Modifier>: API {
     
-    public let m0: M0
+    public let m: M
     
-    init(_ m0: M0) {
-        self.m0 = m0
+    // MARK: Internal
+    init(_ m: M) {
+        self.m = m
     }
 }
 
