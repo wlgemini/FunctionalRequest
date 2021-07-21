@@ -3,43 +3,43 @@
 //
 
 
-public struct Tuple2<T0, T1> {
+public struct T2<C0, C1> {
     
-    public let t0: T0
-    public let t1: T1
+    public let c0: C0
+    public let c1: C1
     
-    public init(_ t0: T0, _ t1: T1) {
-        self.t0 = t0
-        self.t1 = t1
+    public init(_ c0: C0, _ c1: C1) {
+        self.c0 = c0
+        self.c1 = c1
     }
 }
 
 
-public struct Tuple3<T0, T1, T2> {
+public struct T3<C0, C1, C2> {
 
-    public let t0: T0
-    public let t1: T1
-    public let t2: T2
+    public let c0: C0
+    public let c1: C1
+    public let c2: C2
     
-    public init(_ t0: T0, _ t1: T1, _ t2: T2) {
-        self.t0 = t0
-        self.t1 = t1
-        self.t2 = t2
+    public init(_ c0: C0, _ c1: C1, _ c2: C2) {
+        self.c0 = c0
+        self.c1 = c1
+        self.c2 = c2
     }
 }
 
 
-public struct Tuple4<T0, T1, T2, T3> {
+public struct T4<C0, C1, C2, C3> {
     
-    public let t0: T0
-    public let t1: T1
-    public let t2: T2
-    public let t3: T3
+    public let c0: C0
+    public let c1: C1
+    public let c2: C2
+    public let c3: C3
     
-    public init(_ t0: T0, _ t1: T1, _ t2: T2, _ t3: T3) {
-        self.t0 = t0
-        self.t1 = t1
-        self.t2 = t2
-        self.t3 = t3
+    public init(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3) {
+        self.c0 = c0
+        self.c1 = c1
+        self.c2 = c2
+        self.c3 = c3
     }
 }

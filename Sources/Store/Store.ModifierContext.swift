@@ -1,5 +1,5 @@
 //
-//  Store.ModifierContext.swift
+//  Store.ModifyContext.swift
 //
 
 import Foundation
@@ -8,21 +8,18 @@ import Alamofire
 
 extension Store {
     
-    public final class ModifierContext {
+    public final class ModifyContext {
         /// request location
         let requestLocation: _Location
         
+        /// request api
         let forAPI = _ForAPI()
         
+        /// request
         let forRequest = _ForRequest()
 
+        /// data request
         let forDataRequest = _ForDataRequest()
-
-        let forDataStreamRequest = _ForDataStreamRequest()
-
-        let forUploadRequest = _ForUploadRequest()
-
-        let forDownloadRequest = _ForDownloadRequest()
         
         /// init
         init(requestLocation: _Location) {
@@ -31,12 +28,12 @@ extension Store {
     }
 }
 
-extension Store.ModifierContext {
+extension Store.ModifyContext {
     
     // MARK: _ForAPI
     final class _ForAPI {
         // Initial URL
-        var initialURL: InitialURL._Type?
+        var initialURL: RM.InitialURL._Type?
         
         // Modify URL
         var base: Compute<String>?
@@ -67,7 +64,7 @@ extension Store.ModifierContext {
         var cacheResponseUsing: Alamofire.CachedResponseHandler?
         
         // authenticate
-        var authenticate: AuthenticateType?
+        var authenticate: RM.Authenticate._Type?
     }
     
     
@@ -75,22 +72,4 @@ extension Store.ModifierContext {
     final class _ForDataRequest {
         
     }
-    
-    
-    // MARK: _ForDataStreamRequest
-    final class _ForDataStreamRequest {
-        
-    }
-    
-    
-    // MARK: _ForUploadRequest
-    final class _ForUploadRequest {
-        
-    }
-    
-    // MARK: _ForDownloadRequest
-    final class _ForDownloadRequest {
-        
-    }
-    
 }

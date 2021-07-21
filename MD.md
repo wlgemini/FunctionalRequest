@@ -55,6 +55,9 @@
 
 
 
+
+
+/*
 // MARK: - Make URLRequest
 // URL/Method
 GET<P, R>(path/full)
@@ -187,3 +190,4 @@ onURLSessionTaskCreation(on queue: DispatchQueue = .main, perform handler: @esca
 // DownloadRequest: Request
  completionHandler(URL)
  completionHandler<DownloadResponseSerializerProtocol>
+*/
