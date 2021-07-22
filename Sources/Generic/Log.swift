@@ -6,17 +6,17 @@
 /// _Log
 enum _Log {
     
-    static func warning(_ item: Any, location: _Location) {
+    static func warning(_ item: @escaping @autoclosure () -> Any, location: @escaping @autoclosure () -> _Location) {
         Swift.assert({
-            let str = "🟡 \(_Location.selfModule).\(location): \(item)"
+            let str = "🟡 \(_Location.selfModule).\(location()): \(item())"
             print(str)
             return true
         }())
     }
     
-    static func error(_ item: Any, location: _Location) {
+    static func error(_ item: @escaping @autoclosure () -> Any, location: @escaping @autoclosure () -> _Location) {
         Swift.assert({
-            let str = "🔴 \(_Location.selfModule).\(location): \(item)"
+            let str = "🔴 \(_Location.selfModule)\(location()): \(item())"
             print(str)
             return true
         }())
@@ -30,13 +30,17 @@ struct _Location: CustomStringConvertible {
     /// self module name
     static let selfModule: String = String(#fileID.split(separator: "/").first ?? "")
     
-    /// file
+    /// file: #fileID
     let file: String
     
-    /// line
+    /// line: #line
     let line: UInt
     
+    
     /// init
+    /// - Parameters:
+    ///   - file: #fileID
+    ///   - line: #line
     init(_ file: String, _ line: UInt) {
         self.file = file
         self.line = line

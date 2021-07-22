@@ -1,79 +1,15 @@
 //
-//  RequestModifier.swift
+//  DataRequestModifier.swift
 //
 
 import Foundation
 import Alamofire
 
 
-/// RM
-public typealias RM = RequestModifier
+/// DataRequestModifier
+public enum DataRequestModifier {
 
-
-/// RequestModifier
-public enum RequestModifier {
-
-    // MARK: - Method/URL
-    /// HTTPMethod
-    public struct HTTPMethod: Modify {
-        
-        public init(method: Alamofire.HTTPMethod) {
-            self.method = method
-        }
-        
-        public func modify(context: Context) {
-            if context.forAPI.method == nil {
-                context.forAPI.method = self.method
-            } else {
-                fatalError("Can not modify `HTTPMethod`")
-            }
-        }
-        
-        let method: Alamofire.HTTPMethod
-    }
-
-
-    /// InitialURL
-    ///
-    /// some type examples:
-    ///
-    ///     http://www.example.com/some/path/to/file
-    ///     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-    ///                                         full
-    ///
-    ///     http://www.example.com/some/path/to/file
-    ///                           ~~~~~~~~~~~~~~~~~^
-    ///                                         path
-    ///
-    public struct InitialURL: Modify {
-        
-        public init(url: @escaping Compute<String>) {
-            self._type = .full(url)
-        }
-        
-        public init(path: @escaping Compute<String>) {
-            self._type = .path(path)
-        }
-        
-        public func modify(context: Context) {
-            if context.forAPI.initialURL == nil {
-                context.forAPI.initialURL = self._type
-            } else {
-                _Log.warning("`InitialURL` should set only once", location: context.requestLocation)
-            }
-        }
-        
-        let _type: _Type
-        
-        enum _Type {
-            
-            case full(Compute<String>)
-            
-            case path(Compute<String>)
-        }
-    }
-
-
+    // MARK: - URL
     /// URL
     ///
     /// some type examples:
@@ -105,20 +41,20 @@ public enum RequestModifier {
         }
         
         public func modify(context: Context) {
-            guard context.forAPI.initialURL != nil else {
+            guard context.dataRequest.api.initialURL != nil else {
                 _Log.error("Modifier `InitialURL` not set", location: context.requestLocation)
                 return
             }
             
             switch self._type {
             case .base(let base):
-                context.forAPI.base = base
+                context.dataRequest.api.base = base
                 
             case .appendPath(let appendPath):
-                context.forAPI.appendPaths.append(appendPath)
+                context.dataRequest.api.appendPaths.append(appendPath)
                 
             case .mock(let mock):
-                context.forAPI.mock = mock
+                context.dataRequest.api.mock = mock
             }
         }
         
@@ -222,50 +158,7 @@ public enum RequestModifier {
         
         let _handler: Alamofire.RedirectHandler
     }
-    
-    
-    // MARK: - CacheResponse
-    /// CacheResponse
-    public struct CacheResponse: Modify {
-        
-        public init(using handler: Alamofire.CachedResponseHandler) {
-            self._handler = handler
-        }
-        
-        public func modify(context: Context) {
-            
-        }
-        
-        let _handler: Alamofire.CachedResponseHandler
-    }
-    
-    
-    // MARK: - Validation
-    /// Validation
-    public struct Validation<S: Sequence>: Modify {
-        
-        public init(statusCode acceptableStatusCodes: S)
-        where S.Iterator.Element == Int {
-            self._type = .statusCode(acceptableStatusCodes)
-        }
-        
-        public init(contentType acceptableContentTypes: @escaping Compute<S>)
-        where S.Iterator.Element == String {
-            self._type = .contentType(acceptableContentTypes)
-        }
-        
-        public func modify(context: Context) {
-            
-        }
-        
-        let _type: _Type<S>
-        
-        enum _Type<T> {
-            
-            case statusCode(T)
-            
-            case contentType(Compute<T>)
-        }
-    }
 }
+
+
 

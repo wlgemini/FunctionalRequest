@@ -11,11 +11,11 @@ public protocol API {
     /// Returns
     associatedtype R
     
-    /// Modifier
+    /// Modifiers
     associatedtype M: Modify
     
-    /// modifier
-    var m: Self.M { get }
+    /// modifiers
+    var modifiers: Self.M { get }
 }
 
 
@@ -23,17 +23,17 @@ extension API {
     
     public func modifier<M1>(_ m1: M1) -> _API<P, R, T2<M, M1>>
     where M1: Modify {
-        _API(T2(self.m, m1))
+        _API(T2(self.modifiers, m1))
     }
     
     public func modifier<M1, M2>(_ m1: M1, _ m2: M2) -> _API<P, R, T3<M, M1, M2>>
     where M1: Modify, M2: Modify {
-        _API(T3(self.m, m1, m2))
+        _API(T3(self.modifiers, m1, m2))
     }
     
     public func modifier<M1, M2, M3>(_ m1: M1, _ m2: M2, _ m3: M3) -> _API<P, R, T4<M, M1, M2, M3>>
     where M1: Modify, M2: Modify, M3: Modify {
-        _API(T4(self.m, m1, m2, m3))
+        _API(T4(self.modifiers, m1, m2, m3))
     }
 }
 
@@ -41,11 +41,11 @@ extension API {
 // MARK: - _API
 public struct _API<P, R, M: Modify>: API {
     
-    public let m: M
+    public let modifiers: M
     
     // MARK: Internal
     init(_ m: M) {
-        self.m = m
+        self.modifiers = m
     }
 }
 

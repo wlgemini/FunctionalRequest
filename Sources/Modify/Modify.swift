@@ -11,4 +11,4 @@ public protocol Modify {
 
 
 /// Context
-public typealias Context = Store.ModifyContext
+public typealias Context = Store._Context
