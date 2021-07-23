@@ -33,6 +33,18 @@ extension Store {
         
         public var eventMonitors: [EventMonitor]? = nil
         
+        public var shared: Alamofire.Session? {
+            get {
+                if Store._sessionFinalized {
+                    return Store._sessionRaw
+                } else {
+                    return nil
+                }
+            }
+            
+            nonmutating set { _ = newValue }
+        }
+        
         init() { }
     }
 }

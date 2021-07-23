@@ -10,63 +10,59 @@ import Alamofire
 public extension API {
     
     /// modify base url
-    func base(_ base: @escaping @autoclosure Compute<String>)
-    -> _API<P, R, T2<M, DataRequestModifier.URL>> {
-        self.modifier(DataRequestModifier.URL(base: base))
+    func base(_ base: @escaping @autoclosure Compute<String>) -> Self {
+        self._modifier(DataRequestModifier.URL(base: base))
     }
     
     /// append path
-    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>)
-    -> _API<P, R, T2<M, DataRequestModifier.URL>> {
-        self.modifier(DataRequestModifier.URL(appendPath: appendPath))
+    func appendPath(_ appendPath: @escaping @autoclosure Compute<String>) -> Self {
+        self._modifier(DataRequestModifier.URL(appendPath: appendPath))
     }
     
     /// mocking with full url
-    func mock(_ mock: @escaping @autoclosure Compute<String>)
-    -> _API<P, R, T2<M, DataRequestModifier.URL>> {
-        self.modifier(DataRequestModifier.URL(mock: mock))
+    func mock(_ mock: @escaping @autoclosure Compute<String>) -> Self {
+        self._modifier(DataRequestModifier.URL(mock: mock))
     }
     
-    /// set additional headers
-    func headers(_ headers: Alamofire.HTTPHeaders)
-    -> _API<P, R, T2<M, DataRequestModifier.HTTPHeaders>> {
-        self.modifier(DataRequestModifier.HTTPHeaders(headers))
+    /// set additional header
+    func header(_ header: Alamofire.HTTPHeader) -> Self {
+        self._modifier(DataRequestModifier.HTTPHeader(header))
     }
     
     /// modify encoder
-    func encoder(_ encoder: Alamofire.ParameterEncoder)
-    -> _API<P, R, T2<M, DataRequestModifier.Encoder>>
+    func encoder(_ encoder: Alamofire.ParameterEncoder) -> Self
     where Self.P: Encodable {
-        self.modifier(DataRequestModifier.Encoder(encoder))
+        self._modifier(DataRequestModifier.Encoder(encoder))
     }
     
     /// modify encoding
-    func encoding(_ encoding: Alamofire.ParameterEncoding)
-    -> _API<P, R, T2<M, DataRequestModifier.Encoding>>
+    func encoding(_ encoding: Alamofire.ParameterEncoding) -> Self
     where Self.P == [String: Any] {
-        self.modifier(DataRequestModifier.Encoding(encoding))
+        self._modifier(DataRequestModifier.Encoding(encoding))
     }
     
     /// modify authenticate
     func authenticate(username: String,
                       password: String,
-                      persistence: URLCredential.Persistence = .forSession)
-    -> _API<P, R, T2<M, DataRequestModifier.Authenticate>> {
-        self.modifier(DataRequestModifier.Authenticate(username: username,
-                                                       password: password,
-                                                       persistence: persistence))
+                      persistence: URLCredential.Persistence = .forSession) -> Self {
+        self._modifier(DataRequestModifier.Authenticate(username: username,
+                                                        password: password,
+                                                        persistence: persistence))
+    }
+    
+    /// modify URLRequest.timeoutInterval
+    func timeoutInterval(_ timeoutInterval: TimeInterval) -> Self {
+        self._modifier(DataRequestModifier.TimeoutInterval(timeoutInterval))
     }
     
     /// modify authenticate
-    func authenticate(credential: URLCredential)
-    -> _API<P, R, T2<M, DataRequestModifier.Authenticate>> {
-        self.modifier(DataRequestModifier.Authenticate(credential: credential))
+    func authenticate(credential: URLCredential) -> Self {
+        self._modifier(DataRequestModifier.Authenticate(credential: credential))
     }
     
     /// modify redirect
-    func redirect(using handler: Alamofire.RedirectHandler)
-    -> _API<P, R, T2<M, DataRequestModifier.Redirect>> {
-        self.modifier(DataRequestModifier.Redirect(using: handler))
+    func redirect(using handler: Alamofire.RedirectHandler) -> Self {
+        self._modifier(DataRequestModifier.Redirect(using: handler))
     }
 }
 
@@ -75,74 +71,67 @@ public extension API {
 public extension API {
     
     /// validate statusCode
-    func validate(statusCode acceptableStatusCodes: Range<Int>)
-    -> _API<P, R, T2<M, DataResponseModifier.Validation>> {
-        self.modifier(DataResponseModifier.Validation(statusCode: acceptableStatusCodes))
+    func validate(statusCode acceptableStatusCodes: Range<Int>) -> Self {
+        self._modifier(DataResponseModifier.Validation(statusCode: acceptableStatusCodes))
     }
     
     /// validate contentType
-    func validate(contentType acceptableContentTypes: @escaping @autoclosure Compute<[String]>)
-    -> _API<P, R, T2<M, DataResponseModifier.Validation>> {
-        self.modifier(DataResponseModifier.Validation(contentType: acceptableContentTypes))
+    func validate(contentType acceptableContentTypes: @escaping @autoclosure Compute<[String]>) -> Self {
+        self._modifier(DataResponseModifier.Validation(contentType: acceptableContentTypes))
     }
     
     /// serialize data
     func serialize(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DataResponseSerializer.defaultDataPreprocessor,
                    emptyResponseCodes: Set<Int> = Alamofire.DataResponseSerializer.defaultEmptyResponseCodes,
-                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DataResponseSerializer.defaultEmptyRequestMethods)
-    -> _API<P, R, T2<M, DataResponseModifier.Serializer<Alamofire.DataResponseSerializer>>>
+                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DataResponseSerializer.defaultEmptyRequestMethods) -> Self
     where R == Data {
         let serializer = Alamofire.DataResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                           emptyResponseCodes: emptyResponseCodes,
                                                           emptyRequestMethods: emptyRequestMethods)
-        return self.modifier(DataResponseModifier.Serializer(serializer))
+        return self._modifier(DataResponseModifier.SerializeData(serializer))
     }
     
     /// serialize string
     func serialize(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.StringResponseSerializer.defaultDataPreprocessor,
                    encoding: String.Encoding? = nil,
                    emptyResponseCodes: Set<Int> = Alamofire.StringResponseSerializer.defaultEmptyResponseCodes,
-                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
-    -> _API<P, R, T2<M, DataResponseModifier.Serializer<Alamofire.StringResponseSerializer>>>
+                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.StringResponseSerializer.defaultEmptyRequestMethods) -> Self
     where R == String {
         let serializer = Alamofire.StringResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                             encoding: encoding,
                                                             emptyResponseCodes: emptyResponseCodes,
                                                             emptyRequestMethods: emptyRequestMethods)
-        return self.modifier(DataResponseModifier.Serializer(serializer))
+        return self._modifier(DataResponseModifier.SerializeString(serializer))
     }
     
     /// serialize json
     func serialize(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.JSONResponseSerializer.defaultDataPreprocessor,
                    emptyResponseCodes: Set<Int> = Alamofire.JSONResponseSerializer.defaultEmptyResponseCodes,
                    emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.JSONResponseSerializer.defaultEmptyRequestMethods,
-                   options: JSONSerialization.ReadingOptions = .allowFragments)
-    -> _API<P, R, T2<M, DataResponseModifier.Serializer<Alamofire.JSONResponseSerializer>>>
+                   options: JSONSerialization.ReadingOptions = .allowFragments) -> Self
     where R == [String: Any] {
         let serializer = Alamofire.JSONResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                           emptyResponseCodes: emptyResponseCodes,
                                                           emptyRequestMethods: emptyRequestMethods,
                                                           options: options)
-        return self.modifier(DataResponseModifier.Serializer(serializer))
+        return self._modifier(DataResponseModifier.SerializeJSON(serializer))
     }
     
     /// serialize decodable
     func serialize(dataPreprocessor: Alamofire.DataPreprocessor = Alamofire.DecodableResponseSerializer<R>.defaultDataPreprocessor,
                    decoder: Alamofire.DataDecoder = JSONDecoder(),
                    emptyResponseCodes: Set<Int> = Alamofire.DecodableResponseSerializer<R>.defaultEmptyResponseCodes,
-                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DecodableResponseSerializer<R>.defaultEmptyRequestMethods)
-    -> _API<P, R, T2<M, DataResponseModifier.Serializer<Alamofire.DecodableResponseSerializer<R>>>>
+                   emptyRequestMethods: Set<Alamofire.HTTPMethod> = Alamofire.DecodableResponseSerializer<R>.defaultEmptyRequestMethods) -> Self
     where R: Decodable {
         let serializer = Alamofire.DecodableResponseSerializer<R>(dataPreprocessor: dataPreprocessor,
                                                                   decoder: decoder,
                                                                   emptyResponseCodes: emptyResponseCodes,
                                                                   emptyRequestMethods: emptyRequestMethods)
-        return self.modifier(DataResponseModifier.Serializer(serializer))
+        return self._modifier(DataResponseModifier.SerializeDecodable<R>(serializer))
     }
     
     /// modify cache response
-    func cacheResponse(using handler: Alamofire.CachedResponseHandler)
-    -> _API<P, R, T2<M, DataResponseModifier.CacheResponse>> {
-        self.modifier(DataResponseModifier.CacheResponse(using: handler))
+    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> Self {
+        self._modifier(DataResponseModifier.CacheResponse(using: handler))
     }
 }

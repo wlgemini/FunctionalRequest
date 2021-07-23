@@ -18,7 +18,11 @@ extension Setting {
         
         public var wrappedValue: Value {
             get {
-                Store._session[keyPath: self._keyPath]
+                if Value.self == Alamofire.Session.self, Store._sessionFinalized == false {
+                    _Log.warning("accessing session, but session hasn't finalized", location: self._location)
+                }
+                
+                return Store._session[keyPath: self._keyPath]
             }
             
             nonmutating set {
@@ -36,23 +40,7 @@ extension Setting {
             }
         }
         
-    //    public var projectedValue: Alamofire.Session? {
-    //        if let session = Store._session {
-    //            return session
-    //        } else {
-    //            _Log.warning("accessing session, but session hasn't finalized", location: self._location)
-    //            return nil
-    //        }
-    //    }
-        
         let _keyPath: WritableKeyPath<Store.Session, Value>
         let _location: _Location
     }
 }
-
-
-
-
-
-
-

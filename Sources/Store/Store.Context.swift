@@ -37,7 +37,7 @@ extension Store._Context {
     final class _API {
         
         // Initial URL
-        var initialURL: NonmutatingModifier.InitialURL._Type?
+        var initialURL: DataRequestModifier.InitialURL._Type?
         
         // Modify URL
         var base: Compute<String>?
@@ -59,14 +59,17 @@ extension Store._Context {
         let api = Store._Context._API()
         
         // Headers
-        var headers: Alamofire.HTTPHeaders?
+        var headers: Alamofire.HTTPHeaders = Alamofire.HTTPHeaders()
         
         // Encoder/Encoding
         var encoder: Alamofire.ParameterEncoder?
         var encoding: Alamofire.ParameterEncoding?
         
+        // URLRequest Modifiers
+        var urlRequestModifiers: [MutatingAvailable<URLRequest>] = []
+        
         // Authentication
-        var authenticate: DataRequestModifier.Authenticate._Type?
+        var authenticate: URLCredential?
         
         // Redirect
         var redirectHandler: Alamofire.RedirectHandler?
