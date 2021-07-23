@@ -44,9 +44,6 @@ extension Store._Context {
         var appendPaths: [Compute<String>] = []
         var mock: Compute<String>?
         
-        // Final URL
-        var finalURL: String?
-        
         // Method
         var method: Alamofire.HTTPMethod?
     }
