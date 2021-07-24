@@ -40,6 +40,21 @@ public enum DataResponseModifier {
             case contentType(Compute<[String]>)
         }
     }
+    
+    
+    // MARK: - Queue
+    public struct Queue: Modifier {
+        
+        public init(_ queue: DispatchQueue) {
+            self._queue = queue
+        }
+        
+        public func modify(context: Context) {
+            context.dataResponse.queue = self._queue
+        }
+        
+        let _queue: DispatchQueue
+    }
 
     
     // MARK: - Serializer

@@ -8,300 +8,238 @@ import Alamofire
 
 public extension API {
     
-    // P == [String: Any], R == Data
-    func request(_ params: [String: Any], completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) where P == [String: Any], R == Data {
-        
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoding: self._encoding(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseData(queue: self._queue(),
-                         dataPreprocessor: self._dataDataPreprocessor(),
-                         emptyResponseCodes: self._dataEmptyResponseCodes(),
-                         emptyRequestMethods: self._dataEmptyRequestMethods(),
-                         completionHandler: completion)
+    // MARK: P == [String: Any], R == Data
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P == [String: Any], R == Data {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
     
-    // P == [String: Any], R == [String: Any]
-    func request(_ params: [String: Any], completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) where P == [String: Any], R == [String: Any] {
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoding: self._encoding(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseJSON(queue: self._queue(),
-                         dataPreprocessor: self._jsonDataPreprocessor(),
-                         emptyResponseCodes: self._jsonEmptyResponseCodes(),
-                         emptyRequestMethods: self._jsonEmptyRequestMethods(),
-                         options: self._options(),
-                         completionHandler: completion)
+    // MARK: P == [String: Any], R == String
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P == [String: Any], R == String {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
     
-    // P == [String: Any], R: Decodable
-    func request(_ params: [String: Any], completion: @escaping (Alamofire.AFDataResponse<R>) -> Void) where P == [String: Any], R: Decodable {
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoding: self._encoding(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseDecodable(of: R.self,
-                              queue: self._queue(),
-                              dataPreprocessor: self._decodableDataPreprocessor(),
-                              decoder: self._decoder(),
-                              emptyResponseCodes: self._decodableEmptyResponseCodes(),
-                              emptyRequestMethods: self._decodableEmptyRequestMethods(),
-                              completionHandler: completion)
+    // MARK: P == [String: Any], R == Any
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P == [String: Any], R == Any {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
     
-    // P: Encodable, R == Data
-    func request(_ params: P, completion: @escaping (Alamofire.AFDataResponse<Data>) -> Void) where P: Encodable, R == Data  {
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoder: self._encoder(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseData(queue: self._queue(),
-                         dataPreprocessor: self._dataDataPreprocessor(),
-                         emptyResponseCodes: self._dataEmptyResponseCodes(),
-                         emptyRequestMethods: self._dataEmptyRequestMethods(),
-                         completionHandler: completion)
+    // MARK: P == [String: Any], R: Decodable
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P == [String: Any], R: Decodable {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
     
-    // P: Encodable, R == [String: Any]
-    func request(_ params: P, completion: @escaping (Alamofire.AFDataResponse<Any>) -> Void) where P: Encodable, R == [String: Any] {
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoder: self._encoder(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseJSON(queue: self._queue(),
-                         dataPreprocessor: self._jsonDataPreprocessor(),
-                         emptyResponseCodes: self._jsonEmptyResponseCodes(),
-                         emptyRequestMethods: self._jsonEmptyRequestMethods(),
-                         options: self._options(),
-                         completionHandler: completion)
+    // MARK: P == Encodable, R == Data
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P: Encodable, R == Data {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
     
-    // P: Encodable, R: Decodable
-    func request(_ params: P, completion: @escaping (Alamofire.AFDataResponse<R>) -> Void) where P: Encodable, R: Decodable {
-        guard let url = self._url() else { return }
-        
-        let req = _FR.request(url,
-                              method: self.modifier.method,
-                              parameters: params,
-                              encoder: self._encoder(),
-                              headers: self._headers(),
-                              requestModifier: self._modifyURLRequest())
-        
-        self._modifyRequest(req)
-        self._modifyDataRequest(req)
-        
-        req.responseDecodable(of: R.self,
-                              queue: self._queue(),
-                              dataPreprocessor: self._decodableDataPreprocessor(),
-                              decoder: self._decoder(),
-                              emptyResponseCodes: self._decodableEmptyResponseCodes(),
-                              emptyRequestMethods: self._decodableEmptyRequestMethods(),
-                              completionHandler: completion)
+    // MARK: P == Encodable, R == String
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P: Encodable, R == String {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
+    }
+    
+    // MARK: P == Encodable, R == Any
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P: Encodable, R == Any {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
+    }
+    
+    // MARK: P == Encodable, R: Decodable
+    func request(_ parameters: P,
+                 completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
+                 file: String = #fileID,
+                 line: UInt = #line)
+    where P: Encodable, R: Decodable {
+        let context = self._context(file: file, line: line)
+        guard let request = self._request(parameters: parameters, context: context) else { return }
+        self._requestModify(request: request, context: context)
+        self._response(request: request, context: context, completion: completion)
+        self._requestAccessing(request: request, context: context)
     }
 }
 
 
-// MARK: Context for DataRequest
+// MARK: - Request Helper
 extension API {
     
-    /// 生成method
-    func _method(for ctx: Context) -> Alamofire.HTTPMethod? {
-        guard let method = ctx.dataRequest.api.method else {
-            _Log.error("HTTPMethod not set, request won't start", location: ctx.requestLocation)
-            return nil
+    /// context
+    func _context(file: String, line: UInt) -> Context {
+        let ctx = Context(requestLocation: _Location(file, line))
+        self.modifier.modify(context: ctx)
+        return ctx
+    }
+    
+    /// request encoding
+    func _request(parameters: P, context: Context) -> Alamofire.DataRequest?
+    where P == [String: Any] {
+        guard let url = self._url(context) else { return nil }
+        guard let method = self._method(context) else { return nil }
+        let encoding = self._encoding(context)
+        let headers = self._headers(context)
+        let requestModifier = self._urlRequestModifier(context)
+        return Store._sessionRaw.request(url,
+                                         method: method,
+                                         parameters: parameters,
+                                         encoding: encoding,
+                                         headers: headers,
+                                         interceptor: nil,
+                                         requestModifier: requestModifier)
+    }
+    
+    /// request encodable
+    func _request(parameters: P, context: Context) -> Alamofire.DataRequest?
+    where P: Encodable {
+        guard let url = self._url(context) else { return nil }
+        guard let method = self._method(context) else { return nil }
+        let encoder = self._encoder(context)
+        let headers = self._headers(context)
+        let requestModifier = self._urlRequestModifier(context)
+        return Store._sessionRaw.request(url,
+                                         method: method,
+                                         parameters: parameters,
+                                         encoder: encoder,
+                                         headers: headers,
+                                         interceptor: nil,
+                                         requestModifier: requestModifier)
+    }
+    
+    /// request modify
+    func _requestModify(request: Alamofire.DataRequest, context: Context) {
+        // authentication
+        if let credential = self._authenticate(context) {
+            request.authenticate(with: credential)
         }
         
-        return method
-    }
-    
-    /// 生成url
-    func _url(for ctx: Context) -> String? {
-        guard let initialURL = ctx.dataRequest.api.initialURL else {
-            _Log.error("Initial URL not set, request won't start", location: ctx.requestLocation)
-            return nil
+        // redirect
+        if let redirect = self._redirectHandler(context) {
+            request.redirect(using: redirect)
         }
         
-        var url: String?
-        switch initialURL {
-        case .full(let fullURL):
-            url = fullURL()
+        // validation
+        let validation = self._validation(context)
+        switch validation {
+        case (.some(let statusCode), .some(let contentType)):
+            request.validate(statusCode: statusCode).validate(contentType: contentType)
             
-        case .path(let pathURL):
-            guard let baseURL = ctx.dataRequest.api.base else {
-                _Log.error("Base URL not set, request won't start", location: ctx.requestLocation)
-                return nil
-            }
+        case (.some(let statusCode), .none):
+            request.validate(statusCode: statusCode)
             
-            let appendPath = ctx.dataRequest.api.appendPaths.reduce("", { $0 + $1() })
+        case (.none, .some(let contentType)):
+            request.validate(contentType: contentType)
             
-            url = baseURL() + pathURL() + appendPath
-        }
-        
-        // mock only in debug mode
-        #if DEBUG
-        if let mock = ctx.dataRequest.api.mock, let _url = url {
-            _Log.warning("Using mock `\(mock())` for `\(_url)`", location: ctx.requestLocation)
-            url = mock()
-        }
-        #endif
-        
-        return url
-    }
-    
-    /// 合并Headers，self.additionalHeaders会覆盖Configuration.headers中冲突的key-value
-    func _headers(for ctx: Context) -> Alamofire.HTTPHeaders {
-        // combinedHeaders init from `Config.DataRequest.headers()` or an empty headers
-        var combinedHeaders = Store._api.dataRequest.headers ?? Alamofire.HTTPHeaders()
-        
-        // additionalHeaders override or appends to combinedHeaders
-        for h in ctx.dataRequest.headers {
-            combinedHeaders.add(h)
-        }
-        
-        return combinedHeaders
-    }
-    
-    /// encoder
-    func _encoder(for ctx: Context) -> Alamofire.ParameterEncoder {
-        if let encoder = ctx.dataRequest.encoder {
-            return encoder
-            
-        } else {
-            guard let method = ctx.dataRequest.api.method else {
-                return Alamofire.URLEncodedFormParameterEncoder.default
-            }
-            
-            switch method {
-            // URLEncodedFormParameterEncoder
-            case .get: return Store._api.dataRequest.encoder.get ?? Alamofire.URLEncodedFormParameterEncoder.default
-            case .delete: return Store._api.dataRequest.encoder.delete ?? Alamofire.URLEncodedFormParameterEncoder.default
-                
-            // JSONEncoding
-            case .patch: return Store._api.dataRequest.encoder.patch ?? Alamofire.JSONParameterEncoder.default
-            case .post: return Store._api.dataRequest.encoder.post ?? Alamofire.JSONParameterEncoder.default
-            case .put: return Store._api.dataRequest.encoder.put ?? Alamofire.JSONParameterEncoder.default
-                
-            // default
-            default: return Alamofire.URLEncodedFormParameterEncoder.default
-            }
+        case (.none, .none):
+            request.validate()
         }
     }
     
-    /// encoding
-    func _encoding(for ctx: Context) -> Alamofire.ParameterEncoding {
-        if let encoding = ctx.dataRequest.encoding {
-            return encoding
-            
-        } else {
-            guard let method = ctx.dataRequest.api.method else {
-                return Alamofire.URLEncoding.default
-            }
-            
-            switch method {
-            // URLEncoding
-            case .get: return Store._api.dataRequest.encoding.get ?? Alamofire.URLEncoding.default
-            case .delete: return Store._api.dataRequest.encoding.delete ?? Alamofire.URLEncoding.default
-                
-            // JSONEncoding
-            case .patch: return Store._api.dataRequest.encoding.patch ?? Alamofire.JSONEncoding.default
-            case .post: return Store._api.dataRequest.encoding.post ?? Alamofire.JSONEncoding.default
-            case .put: return Store._api.dataRequest.encoding.put ?? Alamofire.JSONEncoding.default
-                
-            // default
-            default: return Alamofire.URLEncoding.default
-            }
+    /// response data
+    func _response(request: Alamofire.DataRequest,
+                   context: Context,
+                   completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
+    where R == Data {
+        let queue = self._queue(context)
+        let serializer = self._dataResponseSerializer(context)
+        request.response(queue: queue,
+                         responseSerializer: serializer,
+                         completionHandler: completion)
+    }
+    
+    /// response string
+    func _response(request: Alamofire.DataRequest,
+                   context: Context,
+                   completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
+    where R == String {
+        let queue = self._queue(context)
+        let serializer = self._stringResponseSerializer(context)
+        request.response(queue: queue,
+                         responseSerializer: serializer,
+                         completionHandler: completion)
+    }
+    
+    /// response json
+    func _response(request: Alamofire.DataRequest,
+                   context: Context,
+                   completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
+    where R == Any {
+        let queue = self._queue(context)
+        let serializer = self._jsonResponseSerializer(context)
+        request.response(queue: queue,
+                         responseSerializer: serializer,
+                         completionHandler: completion)
+    }
+    
+    /// response decodable
+    func _response(request: Alamofire.DataRequest,
+                   context: Context,
+                   completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
+    where R: Decodable {
+        let queue = self._queue(context)
+        let serializer = self._decodableResponseSerializer(context)
+        request.response(queue: queue,
+                         responseSerializer: serializer,
+                         completionHandler: completion)
+    }
+    
+    /// accessing data request
+    func _requestAccessing(request: Alamofire.DataRequest, context: Context) {
+        // onDataRequestAvailable
+        if let onDataRequestAvailable = self._accessingDataRequest(context) {
+            onDataRequestAvailable(request)
         }
     }
-    
-    /// 修改URLRequest
-    func _urlRequestModifiers(for ctx: Context) -> (_ req: inout URLRequest) throws -> Void {
-        // NOTE: Make sure not access `Context` in block
-        return { [urlRequestModifiers = ctx.dataRequest.urlRequestModifiers] (req) in
-            for modifier in urlRequestModifiers {
-                try modifier(&req)
-            }
-        }
-    }
-    
-    /// Authentication
-    func _authenticate(for ctx: Context) -> URLCredential? {
-        ctx.dataRequest.authenticate
-    }
-    
-    /// Redirect
-    func _redirectHandler(for ctx: Context) -> Alamofire.RedirectHandler? {
-        return ctx.dataRequest.redirectHandler ?? Store._api.dataRequest.redirect
-    }
-}
-
-
-// MARK: Context for DataResponse
-extension API {
-    
-    /// Validate DataResponse
-    func _acceptableStatusCodes(for ctx: Context) -> Range<Int>? {
-        ctx.dataResponse.acceptableStatusCodes ?? Store._api.dataResponse.acceptableStatusCodes
-    }
-    
-    func _acceptableContentTypes(for ctx: Context) -> [String]? {
-        let types = ctx.dataResponse.acceptableContentTypes ?? Store._api.dataResponse.acceptableContentTypes
-        return types?()
-    }
-
-    // Serialize DataResponse
-//    var serializeData = Store.SerializeData()
-//    var serializeString = Store.SerializeString()
-//    var serializeJSON = Store.SerializeJSON()
-//    var serializeDecodable = Store.SerializeDecodable()
-//    
-//    // Cache DataResponse
-//    var cacheHandler: Alamofire.CachedResponseHandler?
-}
-
-// MARK: Context for Accessing
-extension API {
-//    var onDataRequestAvailable: Available<Alamofire.DataRequest>?
-    
 }

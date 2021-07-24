@@ -48,9 +48,14 @@ extension Store {
     
     /// DataResponse
     public struct DataResponse {
+        // MARK: DispatchQueue
+        /// default: .main
+        var queue: DispatchQueue?
         
         // MARK: Validate DataResponse
+        /// default acceptable range: 200 ... 299
         public var acceptableStatusCodes: Range<Int>?
+        /// default acceptable content type: matches any specified in the Accept HTTP header field.
         public var acceptableContentTypes: Compute<[String]>?
         
         // MARK: Serialize DataResponse

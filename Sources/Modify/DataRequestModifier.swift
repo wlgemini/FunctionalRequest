@@ -55,7 +55,7 @@ public enum DataRequestModifier {
             if context.dataRequest.api.initialURL == nil {
                 context.dataRequest.api.initialURL = self._type
             } else {
-                _Log.error("`InitialURL` should set only once", location: context.requestLocation)
+                _Log.error("Can not modify `InitialURL`", location: context.requestLocation)
             }
         }
         
@@ -101,11 +101,6 @@ public enum DataRequestModifier {
         }
         
         public func modify(context: Context) {
-            guard context.dataRequest.api.initialURL != nil else {
-                _Log.error("Modifier `InitialURL` not set", location: context.requestLocation)
-                return
-            }
-            
             switch self._type {
             case .base(let base):
                 context.dataRequest.api.base = base
@@ -186,8 +181,8 @@ public enum DataRequestModifier {
         }
         
         public func modify(context: Context) {
-            context.dataRequest.urlRequestModifiers.append { [timeInterval = self._timeInterval] req in
-                req.timeoutInterval = timeInterval
+            context.dataRequest.urlRequestModifiers.append { [timeInterval = self._timeInterval] urlRequest in
+                urlRequest.timeoutInterval = timeInterval
             }
         }
         
@@ -230,6 +225,3 @@ public enum DataRequestModifier {
         let _handler: Alamofire.RedirectHandler
     }
 }
-
-
-

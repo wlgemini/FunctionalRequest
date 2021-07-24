@@ -76,6 +76,9 @@ extension Store._Context {
     // MARK: _DataResponse
     final class _DataResponse {
         
+        // DispatchQueue
+        var queue: DispatchQueue?
+        
         // Validate DataResponse
         var acceptableStatusCodes: Range<Int>?
         var acceptableContentTypes: Compute<[String]>?

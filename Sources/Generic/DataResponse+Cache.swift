@@ -16,7 +16,7 @@ public extension Alamofire.AFDataResponse {
 }
 
 
-public extension Alamofire.AFDataResponse where Success == JSON {
+public extension Alamofire.AFDataResponse where Success == Any {
     
     /// 解码过的缓存数据(URLCache.shared)，重定向过的数据不会被缓存
     func cachedValue(options: JSONSerialization.ReadingOptions = .allowFragments) -> Any? {
