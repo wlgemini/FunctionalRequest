@@ -11,16 +11,23 @@ let package = Package(
     ],
     
     products: [
-        .library(name: "FunctionalRequest", targets: ["FunctionalRequest"])
+        .library(name: "FunctionalRequest",
+                 targets: ["FunctionalRequest"])
     ],
     
     dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.0.0"))
+        .package(url: "https://github.com/Alamofire/Alamofire.git",
+                 .upToNextMajor(from: "5.0.0"))
     ],
     
     targets: [
-        .target(name: "FunctionalRequest", dependencies: ["Alamofire"], path: "Sources")
-        //#warning("testTarget")
-        //.testTarget(name: "FunctionalRequestTests", dependencies: ["FunctionalRequest"])
+        .target(name: "FunctionalRequest",
+                dependencies: ["Alamofire"],
+                path: "Source",
+                linkerSettings: [.linkedFramework("Foundation", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS]))]),
+        
+        .testTarget(name: "FunctionalRequestTests",
+                    dependencies: ["FunctionalRequest", "Alamofire"],
+                    path: "Tests")
     ]
 )

@@ -13,7 +13,7 @@ extension Store {
         
         public var configuration: URLSessionConfiguration = URLSessionConfiguration.af.default
         
-        public let delegate: SessionDelegate = SessionDelegate()
+        public let delegate: Alamofire.SessionDelegate = SessionDelegate()
         
         public let rootQueue: DispatchQueue = DispatchQueue(label: "FunctionalRequest.Session.rootQueue")
         
@@ -23,15 +23,15 @@ extension Store {
         
         public var serializationQueue: DispatchQueue? = nil
         
-        public var interceptor: RequestInterceptor? = nil
+        public var interceptor: Alamofire.RequestInterceptor? = nil
         
-        public var serverTrustManager: ServerTrustManager? = nil
+        public var serverTrustManager: Alamofire.ServerTrustManager? = nil
         
-        public var redirectHandler: RedirectHandler? = nil
+        public var redirectHandler: Alamofire.RedirectHandler? = nil
         
-        public var cachedResponseHandler: CachedResponseHandler? = nil
+        public var cachedResponseHandler: Alamofire.CachedResponseHandler? = nil
         
-        public var eventMonitors: [EventMonitor]? = nil
+        public var eventMonitors: [Alamofire.EventMonitor]? = nil
         
         public var shared: Alamofire.Session? {
             get {
