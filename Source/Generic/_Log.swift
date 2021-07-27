@@ -6,17 +6,17 @@
 /// _Log
 enum _Log {
     
-    static func warning(_ item: @escaping @autoclosure () -> Any, location: @escaping @autoclosure () -> _Location) {
+    static func warning(_ item: @escaping @autoclosure () -> Any, location: Location) {
         Swift.assert({
-            let str = "🟡 \(_Location.selfModule).\(location()): \(item())"
+            let str = "🟡 <\(Location.selfModule)>\(location): \(item())"
             print(str)
             return true
         }())
     }
     
-    static func error(_ item: @escaping @autoclosure () -> Any, location: @escaping @autoclosure () -> _Location) {
+    static func error(_ item: @escaping @autoclosure () -> Any, location: Location) {
         Swift.assert({
-            let str = "🔴 \(_Location.selfModule)\(location()): \(item())"
+            let str = "🔴 <\(Location.selfModule)>\(location): \(item())"
             print(str)
             return true
         }())

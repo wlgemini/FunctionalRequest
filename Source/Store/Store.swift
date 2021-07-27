@@ -19,17 +19,17 @@ extension Store {
     
     static var _sessionRaw: Alamofire.Session = {
         Self._sessionFinalized = true
-        return Alamofire.Session(configuration: Self._session.configuration,
-                                             delegate: Self._session.delegate,
-                                             rootQueue: Self._session.rootQueue,
-                                             startRequestsImmediately: Self._session.startRequestsImmediately,
-                                             requestQueue: Self._session.requestQueue,
-                                             serializationQueue: Self._session.serializationQueue,
-                                             interceptor: Self._session.interceptor,
-                                             serverTrustManager: Self._session.serverTrustManager,
-                                             redirectHandler: Self._session.redirectHandler,
-                                             cachedResponseHandler: Self._session.cachedResponseHandler,
-                                             eventMonitors: Self._session.eventMonitors ?? [])
+        return Alamofire.Session(configuration: Self._session.configuration._value,
+                                 delegate: Self._session.delegate._value,
+                                 rootQueue: Self._session.rootQueue._value,
+                                 startRequestsImmediately: Self._session.startRequestsImmediately._value,
+                                 requestQueue: Self._session.requestQueue._value,
+                                 serializationQueue: Self._session.serializationQueue._value,
+                                 interceptor: Self._session.interceptor._value,
+                                 serverTrustManager: Self._session.serverTrustManager._value,
+                                 redirectHandler: Self._session.redirectHandler._value,
+                                 cachedResponseHandler: Self._session.cachedResponseHandler._value,
+                                 eventMonitors: Self._session.eventMonitors._value ?? [])
     }()
 }
 

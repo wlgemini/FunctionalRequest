@@ -9,41 +9,29 @@ import Alamofire
 extension Store {
     
     /// Session
-    public struct Session {
+    public final class Session {
         
-        public var configuration: URLSessionConfiguration = URLSessionConfiguration.af.default
+        public var configuration = Setter.Copy.Nonnil<URLSessionConfiguration>(URLSessionConfiguration.af.default)
         
-        public let delegate: Alamofire.SessionDelegate = SessionDelegate()
+        public var delegate = Setter.Copy.Nonnil<Alamofire.SessionDelegate>(SessionDelegate())
         
-        public let rootQueue: DispatchQueue = DispatchQueue(label: "FunctionalRequest.Session.rootQueue")
+        public var rootQueue = Setter.Copy.Nonnil<DispatchQueue>(DispatchQueue(label: "FunctionalRequest.Session.rootQueue"))
         
-        public let startRequestsImmediately: Bool = true
+        public var startRequestsImmediately = Setter.Copy.Nonnil<Bool>(true)
         
-        public var requestQueue: DispatchQueue? = nil
+        public var requestQueue = Setter.Copy.Nillable<DispatchQueue>()
         
-        public var serializationQueue: DispatchQueue? = nil
+        public var serializationQueue = Setter.Copy.Nillable<DispatchQueue>()
         
-        public var interceptor: Alamofire.RequestInterceptor? = nil
+        public var interceptor = Setter.Copy.Nillable<Alamofire.RequestInterceptor>()
         
-        public var serverTrustManager: Alamofire.ServerTrustManager? = nil
+        public var serverTrustManager = Setter.Copy.Nillable<Alamofire.ServerTrustManager>()
         
-        public var redirectHandler: Alamofire.RedirectHandler? = nil
+        public var redirectHandler = Setter.Copy.Nillable<Alamofire.RedirectHandler>()
         
-        public var cachedResponseHandler: Alamofire.CachedResponseHandler? = nil
+        public var cachedResponseHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()
         
-        public var eventMonitors: [Alamofire.EventMonitor]? = nil
-        
-        public var shared: Alamofire.Session? {
-            get {
-                if Store._sessionFinalized {
-                    return Store._sessionRaw
-                } else {
-                    return nil
-                }
-            }
-            
-            nonmutating set { _ = newValue }
-        }
+        public var eventMonitors = Setter.Copy.Nillable<[Alamofire.EventMonitor]>()
         
         init() { }
     }

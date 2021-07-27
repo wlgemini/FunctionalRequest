@@ -1,10 +1,18 @@
 //
-//  _Location.swift
+//  Locatable.swift
 //
 
 
-/// _Location
-struct _Location: CustomStringConvertible {
+/// Locatable
+public protocol Locatable {
+    
+    /// file & line
+    var location: Location { get }
+}
+
+
+/// Location
+public struct Location: CustomStringConvertible {
     
     /// self module name
     static let selfModule: String = String(#fileID.split(separator: "/").first ?? "")
@@ -29,7 +37,7 @@ struct _Location: CustomStringConvertible {
     ///
     ///     "@ViewController#23"
     ///
-    var description: String {
+    public var description: String {
         let fileName = self.file.split(separator: "/").last?.split(separator: ".").first ?? ""
         return "@\(String(fileName))#\(self.line)"
     }

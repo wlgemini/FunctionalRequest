@@ -7,7 +7,7 @@ import XCTest
 @testable import FunctionalRequest
 
 
-class SettingAPITests: SessionTests {
+class SettingAPITests {
     
     // DataRequest
     @Setting.API(\.dataRequest.base)
@@ -136,4 +136,9 @@ class SettingAPITests: SessionTests {
 
     @Setting.API(\.dataResponse.cacheHandler)
     var cacheHandler
+    
+    func case0APIConfig() {
+        self.base("http://www.xyz.com")
+        
+    }
 }
