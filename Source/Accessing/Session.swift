@@ -12,7 +12,7 @@ public typealias SharedSession = Accessing.Session
 
 extension Accessing {
     
-    /// Accessing Session/Alamofire.Session
+    /// Accessing Store.Session/Alamofire.Session
     @propertyWrapper
     public final class Session {
         

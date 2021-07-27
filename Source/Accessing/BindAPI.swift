@@ -6,7 +6,7 @@ import Foundation
 import Alamofire
 
 
-/// typealias `Accessing.Binding`
+/// typealias `Accessing.BindAPI`
 public typealias Binding<A: API> = Accessing.BindAPI<A>
 
 
