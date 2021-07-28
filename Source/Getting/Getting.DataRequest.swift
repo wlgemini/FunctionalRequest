@@ -1,18 +1,18 @@
 //
-//  Accessing.DataRequest.swift
+//  Getting.DataRequest.swift
 //
 
 import Foundation
 import Alamofire
 
 
-/// typealias `Accessing.DataRequest`
-public typealias DataRequest<A: API> = Accessing.DataRequest<A>
+/// typealias `Getting.DataRequest`
+public typealias DataRequest<A: API> = Getting.DataRequest<A>
 
 
-extension Accessing {
+extension Getting {
     
-    /// Accessing `Alamofire.DataRequest`
+    /// Getting `Alamofire.DataRequest`
     @propertyWrapper
     public final class DataRequest<A: API> {
         
@@ -34,7 +34,7 @@ extension Accessing {
             self._modifiedAPI
         }
         
-        public var projectedValue: Accessing.DataRequest<A> {
+        public var projectedValue: Getting.DataRequest<A> {
             self
         }
         

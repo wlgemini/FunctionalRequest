@@ -84,7 +84,7 @@ extension Store._Context {
     /// _Accessing
     final class _Accessing {
         
-        var onDataRequestAvailable: Available<Alamofire.DataRequest>?
+        var onRequestAvailable: Available<Alamofire.Request>?
     }
     
     

@@ -23,15 +23,16 @@ extension Setter.Copy {
     /// Nillable
     public struct Nillable<T>: Settable {
         
-        public let location: Location
+        public private(set) var location: Location
         
-        public mutating func callAsFunction(_ value: T?) {
+        public mutating func callAsFunction(_ value: T?, file: String = #fileID, line: UInt = #line) {
             self._value = value
+            self.location = Location(file, line)
         }
         
-        init(file: String = #fileID, line: UInt = #line) {
+        init() {
             self._value = nil
-            self.location = Location(file, line)
+            self.location = Location(nil, nil)
         }
         
         var _value: T?
@@ -40,15 +41,16 @@ extension Setter.Copy {
     /// Nonnil
     public struct Nonnil<T>: Settable {
         
-        public let location: Location
+        public private(set) var location: Location
         
-        public mutating func callAsFunction(_ value: T) {
-            self._value = value
-        }
-        
-        init(_ value: T, file: String = #fileID, line: UInt = #line) {
+        public mutating func callAsFunction(_ value: T, file: String = #fileID, line: UInt = #line) {
             self._value = value
             self.location = Location(file, line)
+        }
+        
+        init(_ value: T) {
+            self._value = value
+            self.location = Location(nil, nil)
         }
         
         var _value: T
@@ -61,15 +63,16 @@ extension Setter.AutoClosure {
     /// Nillable
     public struct Nillable<T>: Settable {
         
-        public let location: Location
+        public private(set) var location: Location
         
-        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T?>) {
+        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T?>, file: String = #fileID, line: UInt = #line) {
             self._value = value
+            self.location = Location(file, line)
         }
         
-        init(file: String = #fileID, line: UInt = #line) {
+        init() {
             self._value = { nil }
-            self.location = Location(file, line)
+            self.location = Location(nil, nil)
         }
         
         var _value: Compute<T?>
@@ -78,15 +81,16 @@ extension Setter.AutoClosure {
     /// Nonnil
     public struct Nonnil<T>: Settable {
         
-        public let location: Location
+        public private(set) var location: Location
         
-        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T>) {
-            self._value = value
-        }
-        
-        init(_ value: @escaping @autoclosure Compute<T>, file: String = #fileID, line: UInt = #line) {
+        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T>, file: String = #fileID, line: UInt = #line) {
             self._value = value
             self.location = Location(file, line)
+        }
+        
+        init(_ value: @escaping @autoclosure Compute<T>) {
+            self._value = value
+            self.location = Location(nil, nil)
         }
         
         var _value: Compute<T>

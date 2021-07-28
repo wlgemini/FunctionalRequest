@@ -17,7 +17,7 @@ extension Store {
     
     static var _sessionFinalized: Bool = false
     
-    static var _sessionRaw: Alamofire.Session = {
+    static let _sessionRaw: Alamofire.Session = {
         Self._sessionFinalized = true
         return Alamofire.Session(configuration: Self._session.configuration._value,
                                  delegate: Self._session.delegate._value,

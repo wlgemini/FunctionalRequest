@@ -1,7 +1,7 @@
 //
-//  Accessing.swift
+//  Getting.swift
 //  
 
 
-/// Namespace for `Accessing`
-public enum Accessing { }
+/// Namespace for `Getting`
+public enum Getting { }

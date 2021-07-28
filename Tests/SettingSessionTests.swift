@@ -33,8 +33,8 @@ class SettingSessionTests {
     @Setting.Session(\.eventMonitors)
     var eventMonitors
     
-    @SharedSession
-    var shared
+    @Getting.Session
+    var session
     
     
     func case0SessionSetting() {

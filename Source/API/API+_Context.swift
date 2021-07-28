@@ -245,8 +245,8 @@ extension API {
 // MARK: - Context for Accessing
 extension API {
     
-    // MARK: - Accessing DataRequest
-    func _accessingDataRequest(_ ctx: Context) -> Available<Alamofire.DataRequest>? {
-        ctx.accessing.onDataRequestAvailable
+    // MARK: - Accessing Request
+    func _accessingRequest(_ ctx: Context) -> Available<Alamofire.Request>? {
+        ctx.accessing.onRequestAvailable
     }
 }

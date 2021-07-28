@@ -13,7 +13,7 @@ extension Store {
         
         public var configuration = Setter.Copy.Nonnil<URLSessionConfiguration>(URLSessionConfiguration.af.default)
         
-        public var delegate = Setter.Copy.Nonnil<Alamofire.SessionDelegate>(SessionDelegate())
+        public var delegate = Setter.Copy.Nonnil<Alamofire.SessionDelegate>(Alamofire.SessionDelegate())
         
         public var rootQueue = Setter.Copy.Nonnil<DispatchQueue>(DispatchQueue(label: "FunctionalRequest.Session.rootQueue"))
         

@@ -1,18 +1,18 @@
 //
-//  Accessing.Session.swift
+//  Getting.Session.swift
 //
 
 import Foundation
 import Alamofire
 
 
-/// typealias `Accessing.Session`
-public typealias Session = Accessing.Session
+/// typealias `Getting.Session`
+public typealias Session = Getting.Session
 
 
-extension Accessing {
+extension Getting {
     
-    /// Accessing `Alamofire.Session`
+    /// Getting `Alamofire.Session`
     @propertyWrapper
     public final class Session {
         
@@ -21,7 +21,7 @@ extension Accessing {
             if Store._sessionFinalized {
                 return Store._sessionRaw
             } else {
-                _Log.warning("Accessing session, but session hasn't finalized", location: self._location)
+                _Log.warning("Getting session, but session hasn't finalized", location: self._location)
                 return nil
             }
         }
@@ -40,7 +40,7 @@ extension Accessing {
             Store._session
         }
         
-        public var projectedValue: Accessing.Session {
+        public var projectedValue: Getting.Session {
             self
         }
         

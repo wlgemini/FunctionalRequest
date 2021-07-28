@@ -237,9 +237,9 @@ extension API {
     
     /// accessing data request
     func _requestAccessing(request: Alamofire.DataRequest, context: Context) {
-        // onDataRequestAvailable
-        if let onDataRequestAvailable = self._accessingDataRequest(context) {
-            onDataRequestAvailable(request)
+        // onRequestAvailable
+        if let onRequestAvailable = self._accessingRequest(context) {
+            onRequestAvailable(request)
         }
     }
 }
