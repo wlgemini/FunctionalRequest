@@ -28,10 +28,10 @@ extension Store {
     public final class DataRequest {
         
         // MARK: URL
-        public var base = Setter.AutoClosure.Nillable<String>()
+        public var base = Setter.Compute.Nillable<String>()
         
         // MARK: Headers
-        public var headers = Setter.AutoClosure.Nillable<Alamofire.HTTPHeaders>()
+        public var headers = Setter.Compute.Nillable<Alamofire.HTTPHeaders>()
         
         // MARK: Encoder/Encoding
         public let encoder = Encoder()
@@ -57,7 +57,7 @@ extension Store {
         /// default acceptable range: 200 ... 299
         public var acceptableStatusCodes = Setter.Copy.Nillable<Range<Int>>()
         /// default acceptable content type: matches any specified in the Accept HTTP header field.
-        public var acceptableContentTypes = Setter.AutoClosure.Nillable<[String]>()
+        public var acceptableContentTypes = Setter.Copy.Nillable<[String]>()
         
         // MARK: Serialize DataResponse
         public let serializeData = SerializeData()

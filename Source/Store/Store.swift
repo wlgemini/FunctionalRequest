@@ -19,17 +19,17 @@ extension Store {
     
     static let _sessionRaw: Alamofire.Session = {
         Self._sessionFinalized = true
-        return Alamofire.Session(configuration: Self._session.configuration._value,
-                                 delegate: Self._session.delegate._value,
-                                 rootQueue: Self._session.rootQueue._value,
-                                 startRequestsImmediately: Self._session.startRequestsImmediately._value,
-                                 requestQueue: Self._session.requestQueue._value,
-                                 serializationQueue: Self._session.serializationQueue._value,
-                                 interceptor: Self._session.interceptor._value,
-                                 serverTrustManager: Self._session.serverTrustManager._value,
-                                 redirectHandler: Self._session.redirectHandler._value,
-                                 cachedResponseHandler: Self._session.cachedResponseHandler._value,
-                                 eventMonitors: Self._session.eventMonitors._value ?? [])
+        return Alamofire.Session(configuration: Self._session.configuration.value,
+                                 delegate: Self._session.delegate.value,
+                                 rootQueue: Self._session.rootQueue.value,
+                                 startRequestsImmediately: Self._session.startRequestsImmediately.value,
+                                 requestQueue: Self._session.requestQueue.value,
+                                 serializationQueue: Self._session.serializationQueue.value,
+                                 interceptor: Self._session.interceptor.value,
+                                 serverTrustManager: Self._session.serverTrustManager.value,
+                                 redirectHandler: Self._session.redirectHandler.value,
+                                 cachedResponseHandler: Self._session.cachedResponseHandler.value,
+                                 eventMonitors: Self._session.eventMonitors.value ?? [])
     }()
 }
 

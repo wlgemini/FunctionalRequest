@@ -66,29 +66,29 @@ class SettingSessionTests {
         
         // URLSessionConfiguration.af.default
         for header in sessionRaw.sessionConfiguration.headers {
-            XCTAssert(self.configuration._value.headers.contains(header), "configuration.header not match")
+            XCTAssert(self.configuration.value.headers.contains(header), "configuration.header not match")
         }
         
         // requestQueue
-        XCTAssert(sessionRaw.requestQueue.label == self.requestQueue._value?.label, "requestQueue not equal")
+        XCTAssert(sessionRaw.requestQueue.label == self.requestQueue.value?.label, "requestQueue not equal")
         
         // serializationQueue
-        XCTAssert(sessionRaw.serializationQueue.label == self.serializationQueue._value?.label, "serializationQueue not equal")
+        XCTAssert(sessionRaw.serializationQueue.label == self.serializationQueue.value?.label, "serializationQueue not equal")
         
         // interceptor
-        XCTAssert(sessionRaw.interceptor != nil && self.interceptor._value != nil, "interceptor is nil")
+        XCTAssert(sessionRaw.interceptor != nil && self.interceptor.value != nil, "interceptor is nil")
         
         // serverTrustManager
-        XCTAssert(sessionRaw.serverTrustManager === self.serverTrustManager._value, "serverTrustManager not equal")
+        XCTAssert(sessionRaw.serverTrustManager === self.serverTrustManager.value, "serverTrustManager not equal")
         
         // redirectHandler
-        XCTAssert(sessionRaw.redirectHandler != nil && self.redirectHandler._value != nil, "redirectHandler is nil")
+        XCTAssert(sessionRaw.redirectHandler != nil && self.redirectHandler.value != nil, "redirectHandler is nil")
         
         // cachedResponseHandler
-        XCTAssert(sessionRaw.cachedResponseHandler != nil && self.redirectHandler._value != nil, "cachedResponseHandler is nil")
+        XCTAssert(sessionRaw.cachedResponseHandler != nil && self.redirectHandler.value != nil, "cachedResponseHandler is nil")
         
         // eventMonitors
-        let isMonitorsEqual = sessionRaw.eventMonitor.monitors.count == sessionRaw.defaultEventMonitors.count + (self.eventMonitors._value?.count ?? 0)
+        let isMonitorsEqual = sessionRaw.eventMonitor.monitors.count == sessionRaw.defaultEventMonitors.count + (self.eventMonitors.value?.count ?? 0)
         XCTAssert(isMonitorsEqual, "eventMonitors not equal")
     }
     
@@ -97,6 +97,6 @@ class SettingSessionTests {
         XCTAssert(Store._sessionFinalized == true, "session not finalized")
         
         self.requestQueue(nil)
-        XCTAssert(self.requestQueue._value != nil, "requestQueue is nil")
+        XCTAssert(self.requestQueue.value != nil, "requestQueue is nil")
     }
 }
