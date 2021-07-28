@@ -3,5 +3,5 @@
 //  
 
 
-/// namespace for `Accessing`
+/// Namespace for `Accessing`
 public enum Accessing { }
