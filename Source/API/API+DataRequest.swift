@@ -119,7 +119,7 @@ extension API {
     
     /// context
     func _context(file: String, line: UInt) -> Context {
-        let ctx = Context(requestLocation: Location(file, line))
+        let ctx = Context(requestLocation: _Location(file, line))
         self.modifier.modify(context: ctx)
         return ctx
     }

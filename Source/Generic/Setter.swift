@@ -3,12 +3,21 @@
 //
 
 
+/// for Getter type
+public protocol Gettable {
+    
+    associatedtype G
+    
+    var value: G { get }
+}
+
+
 /// for Setter type
-public protocol Settable: Locatable {
+public protocol Settable: Gettable {
     
-    associatedtype V
+    associatedtype S
     
-    var value: V { mutating get }
+    mutating func callAsFunction(_ value: S, file: String, line: UInt)
 }
 
 
@@ -20,45 +29,17 @@ public enum Setter {
     
     /// for compute value
     public enum Compute { }
-    
-    /// for lazy value
-    public enum Lazy { }
 }
 
 
 extension Setter.Copy {
     
-    /// Nillable
-    public struct Nillable<T>: Settable {
-        
-        public typealias V = T?
-        
-        public private(set) var location: Location
-        
-        public var value: T? {
-            self._value
-        }
-        
-        public mutating func callAsFunction(_ value: T?, file: String = #fileID, line: UInt = #line) {
-            self._value = value
-            self.location = Location(file, line)
-        }
-        
-        init() {
-            self._value = nil
-            self.location = Location(nil, nil)
-        }
-        
-        var _value: T?
-    }
-    
-    
     /// Nonnil
-    public struct Nonnil<T>: Settable {
+    public struct Nonnil<T>: Settable, _Locatable {
         
-        public typealias V = T
+        public typealias G = T
         
-        public private(set) var location: Location
+        public typealias S = T
         
         public var value: T {
             self._value
@@ -66,27 +47,80 @@ extension Setter.Copy {
         
         public mutating func callAsFunction(_ value: T, file: String = #fileID, line: UInt = #line) {
             self._value = value
-            self.location = Location(file, line)
+            self._location = _Location(file, line)
         }
         
         init(_ value: T) {
             self._value = value
-            self.location = Location(nil, nil)
+            self._location = .nowhere
         }
         
         var _value: T
+        var _location: _Location
+    }
+    
+    
+    /// Nillable
+    public struct Nillable<T>: Settable, _Locatable {
+        
+        public typealias G = T?
+        
+        public typealias S = T?
+        
+        public var value: T? {
+            self._value
+        }
+        
+        public mutating func callAsFunction(_ value: T?, file: String = #fileID, line: UInt = #line) {
+            self._value = value
+            self._location = _Location(file, line)
+        }
+        
+        init() {
+            self._value = nil
+            self._location = .nowhere
+        }
+        
+        var _value: T?
+        var _location: _Location
     }
 }
 
 
 extension Setter.Compute {
     
+    /// Nonnil
+    public struct Nonnil<T>: Settable, _Locatable {
+    
+        public typealias G = T
+        
+        public typealias S = Compute<T>
+        
+        public var value: T {
+            self._value()
+        }
+        
+        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T>, file: String = #fileID, line: UInt = #line) {
+            self._value = value
+            self._location = _Location(file, line)
+        }
+        
+        init(_ value: @escaping @autoclosure Compute<T>) {
+            self._value = value
+            self._location = .nowhere
+        }
+        
+        var _value: Compute<T>
+        var _location: _Location
+    }
+    
+    
     /// Nillable
-    public struct Nillable<T>: Settable {
+    public struct Nillable<T>: Settable, _Locatable {
         
-        public typealias V = T?
+        public typealias G = T?
         
-        public private(set) var location: Location
+        public typealias S = Compute<T?>
         
         public var value: T? {
             self._value()
@@ -94,91 +128,15 @@ extension Setter.Compute {
         
         public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T?>, file: String = #fileID, line: UInt = #line) {
             self._value = value
-            self.location = Location(file, line)
+            self._location = _Location(file, line)
         }
         
         init() {
             self._value = { nil }
-            self.location = Location(nil, nil)
+            self._location = .nowhere
         }
         
         var _value: Compute<T?>
-    }
-    
-    
-    /// Nonnil
-    public struct Nonnil<T>: Settable {
-        
-        public typealias V = T
-        
-        public private(set) var location: Location
-        
-        public var value: T {
-            self._value()
-        }
-        
-        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T>, file: String = #fileID, line: UInt = #line) {
-            self._value = value
-            self.location = Location(file, line)
-        }
-        
-        init(_ value: @escaping @autoclosure Compute<T>) {
-            self._value = value
-            self.location = Location(nil, nil)
-        }
-        
-        var _value: Compute<T>
-    }
-}
-
-
-extension Setter.Lazy {
-    
-    /// Nillable
-    public struct Nillable<T>: Settable {
-        
-        public typealias V = T?
-        
-        public private(set) var location: Location
-        
-        public var value: T? {
-            mutating get { self._value.finalize() }
-        }
-        
-        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T?>, file: String = #fileID, line: UInt = #line) {
-            self._value = .unset(initializer: value)
-            self.location = Location(file, line)
-        }
-        
-        init() {
-            self._value = .unset(initializer: { nil })
-            self.location = Location(nil, nil)
-        }
-        
-        var _value: _Lazy<T?>
-    }
-    
-    /// Nonnil
-    public struct Nonnil<T>: Settable {
-        
-        public typealias V = T
-        
-        public private(set) var location: Location
-        
-        public var value: T {
-            mutating get { self._value.finalize() }
-        }
-        
-        public mutating func callAsFunction(_ value: @escaping @autoclosure Compute<T>, file: String = #fileID, line: UInt = #line) {
-            self._value = .unset(initializer: value)
-            self.location = Location(file, line)
-        }
-        
-        init(_ value: @escaping @autoclosure Compute<T>) {
-            self._value = .unset(initializer: value)
-            self.location = Location(nil, nil)
-        }
-        
-        var _value: _Lazy<T>
+        var _location: _Location
     }
 }

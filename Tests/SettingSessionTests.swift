@@ -4,10 +4,12 @@
 
 import XCTest
 @testable import Alamofire
-@testable import FunctionalRequest
+import FunctionalRequest
 
 
 class SettingSessionTests {
+    
+    init() {}
     
     @Setting.Session(\.configuration)
     var configuration
@@ -33,68 +35,65 @@ class SettingSessionTests {
     @Setting.Session(\.eventMonitors)
     var eventMonitors
     
-    @Getting.Session
+    @Getting.Session(\.configuration)
     var session
     
     
     func case0SessionSetting() {
         // session not finalized
-        XCTAssert(Store._sessionFinalized == false, "session finalized")
+        XCTAssert(self.$session.session == nil, "session finalized")
         
         self.configuration(URLSessionConfiguration.af.default)
-        self.requestQueue(DispatchQueue(label: "FunctionalRequest.Session.requestQueue"))
-        self.serializationQueue(DispatchQueue(label: "FunctionalRequest.Session.serializationQueue"))
+        self.requestQueue(DispatchQueue(label: "requestQueue"))
+        self.serializationQueue(DispatchQueue(label: "serializationQueue"))
         self.interceptor(Alamofire.Interceptor())
         self.serverTrustManager(Alamofire.ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:]))
         self.redirectHandler(Alamofire.Redirector.doNotFollow)
         self.cachedResponseHandler(Alamofire.ResponseCacher.doNotCache)
         self.eventMonitors([Alamofire.ClosureEventMonitor()])
-        
-        // session not finalized
-        XCTAssert(Store._sessionFinalized == false, "session finalized")
     }
     
     func case1SessionInit() {
         // session not finalized
-        XCTAssert(Store._sessionFinalized == false, "session finalized")
+        XCTAssert(self.$session.session == nil, "session finalized")
+    
+        // session finalize
+        self.$session.finalize()
         
         // session finalized
-        let sessionRaw = Store._sessionRaw
-        
-        // session finalized
-        XCTAssert(Store._sessionFinalized == true, "session not finalized")
+        XCTAssert(self.$session.session != nil, "session not finalized")
         
         // URLSessionConfiguration.af.default
-        for header in sessionRaw.sessionConfiguration.headers {
+        for header in self.$session.finalize().sessionConfiguration.headers {
             XCTAssert(self.configuration.value.headers.contains(header), "configuration.header not match")
         }
         
         // requestQueue
-        XCTAssert(sessionRaw.requestQueue.label == self.requestQueue.value?.label, "requestQueue not equal")
+        XCTAssert(self.$session.finalize().requestQueue.label == self.requestQueue.value?.label, "requestQueue not equal")
         
         // serializationQueue
-        XCTAssert(sessionRaw.serializationQueue.label == self.serializationQueue.value?.label, "serializationQueue not equal")
+        XCTAssert(self.$session.finalize().serializationQueue.label == self.serializationQueue.value?.label, "serializationQueue not equal")
         
         // interceptor
-        XCTAssert(sessionRaw.interceptor != nil && self.interceptor.value != nil, "interceptor is nil")
+        XCTAssert(self.$session.finalize().interceptor != nil && self.interceptor.value != nil, "interceptor is nil")
         
         // serverTrustManager
-        XCTAssert(sessionRaw.serverTrustManager === self.serverTrustManager.value, "serverTrustManager not equal")
+        XCTAssert(self.$session.finalize().serverTrustManager === self.serverTrustManager.value, "serverTrustManager not equal")
         
         // redirectHandler
-        XCTAssert(sessionRaw.redirectHandler != nil && self.redirectHandler.value != nil, "redirectHandler is nil")
+        XCTAssert(self.$session.finalize().redirectHandler != nil && self.redirectHandler.value != nil, "redirectHandler is nil")
         
         // cachedResponseHandler
-        XCTAssert(sessionRaw.cachedResponseHandler != nil && self.redirectHandler.value != nil, "cachedResponseHandler is nil")
+        XCTAssert(self.$session.finalize().cachedResponseHandler != nil && self.redirectHandler.value != nil, "cachedResponseHandler is nil")
         
         // eventMonitors
-        let isMonitorsEqual = sessionRaw.eventMonitor.monitors.count == sessionRaw.defaultEventMonitors.count + (self.eventMonitors.value?.count ?? 0)
+        let isMonitorsEqual = self.$session.finalize().eventMonitor.monitors.count == self.$session.finalize().defaultEventMonitors.count + (self.eventMonitors.value?.count ?? 0)
         XCTAssert(isMonitorsEqual, "eventMonitors not equal")
     }
     
     func case2SessonNonmutating() {
         // session finalized
-        XCTAssert(Store._sessionFinalized == true, "session not finalized")
+        XCTAssert(self.$session.session != nil, "session not finalized")
         
         self.requestQueue(nil)
         XCTAssert(self.requestQueue.value != nil, "requestQueue is nil")

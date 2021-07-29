@@ -1,28 +1,27 @@
 //
-//  Locatable.swift
+//  _Location.swift
 //
 
 
 /// Locatable
-public protocol Locatable {
+protocol _Locatable {
     
     /// file & line
-    var location: Location { get }
+    var _location: _Location { get }
 }
 
 
 /// Location
-public struct Location: CustomStringConvertible {
+struct _Location: CustomStringConvertible {
     
-    /// framework module name
-    static let frameworkModuleName: String = String(#fileID.split(separator: "/").first ?? "")
+    /// a location from nowhere
+    static let nowhere = _Location(nil, nil)
     
     /// file: #fileID
     let file: String?
     
     /// line: #line
     let line: UInt?
-    
     
     /// init
     /// - Parameters:

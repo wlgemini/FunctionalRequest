@@ -12,9 +12,9 @@ extension Store {
     /// API
     public struct API {
         
-        public let dataRequest = DataRequest()
+        public var dataRequest = DataRequest()
         
-        public let dataResponse = DataResponse()
+        public var dataResponse = DataResponse()
         
         init() { }
     }
@@ -25,7 +25,7 @@ extension Store {
 extension Store {
     
     /// DataRequest
-    public final class DataRequest {
+    public struct DataRequest {
         
         // MARK: URL
         public var base = Setter.Compute.Nillable<String>()
@@ -34,8 +34,8 @@ extension Store {
         public var headers = Setter.Compute.Nillable<Alamofire.HTTPHeaders>()
         
         // MARK: Encoder/Encoding
-        public let encoder = Encoder()
-        public let encoding = Encoding()
+        public var encoder = Encoder()
+        public var encoding = Encoding()
         
         // MARK: Authentication
         public var authenticate = Setter.Copy.Nillable<URLCredential>()
@@ -47,7 +47,7 @@ extension Store {
     }
     
     /// DataResponse
-    public final class DataResponse {
+    public struct DataResponse {
         
         // MARK: DispatchQueue
         /// default: .main
@@ -60,10 +60,10 @@ extension Store {
         public var acceptableContentTypes = Setter.Copy.Nillable<[String]>()
         
         // MARK: Serialize DataResponse
-        public let serializeData = SerializeData()
-        public let serializeString = SerializeString()
-        public let serializeJSON = SerializeJSON()
-        public let serializeDecodable = SerializeDecodable()
+        public var serializeData = SerializeData()
+        public var serializeString = SerializeString()
+        public var serializeJSON = SerializeJSON()
+        public var serializeDecodable = SerializeDecodable()
 
         // MARK: Cache DataResponse
         public var cacheHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()
@@ -77,7 +77,7 @@ extension Store {
 extension Store {
     
     /// Encoder
-    public final class Encoder {
+    public struct Encoder {
         
         /// for `get` encoder. default: `Alamofire.URLEncodedFormParameterEncoder.default`
         public var get = Setter.Copy.Nonnil<Alamofire.ParameterEncoder>(Alamofire.URLEncodedFormParameterEncoder.default)
@@ -98,7 +98,7 @@ extension Store {
     }
     
     /// Encoding
-    public final class Encoding {
+    public struct Encoding {
         
         /// for `get` encoding. default: `Alamofire.URLEncoding.default`
         public var get = Setter.Copy.Nonnil<Alamofire.ParameterEncoding>(Alamofire.URLEncoding.default)
@@ -124,7 +124,7 @@ extension Store {
 extension Store {
     
     /// SerializeData
-    public final class SerializeData {
+    public struct SerializeData {
         
         /// default `Alamofire.DataResponseSerializer.defaultDataPreprocessor`
         public var dataPreprocessor = Setter.Copy.Nonnil<Alamofire.DataPreprocessor>(Alamofire.DataResponseSerializer.defaultDataPreprocessor)
@@ -139,7 +139,7 @@ extension Store {
     }
     
     /// SerializeString
-    public final class SerializeString {
+    public struct SerializeString {
         
         /// default `Alamofire.StringResponseSerializer.defaultDataPreprocessor`
         public var dataPreprocessor = Setter.Copy.Nonnil<Alamofire.DataPreprocessor>(Alamofire.StringResponseSerializer.defaultDataPreprocessor)
@@ -157,7 +157,7 @@ extension Store {
     }
     
     /// SerializeJSON
-    public final class SerializeJSON {
+    public struct SerializeJSON {
         
         /// default `Alamofire.JSONResponseSerializer.defaultDataPreprocessor`
         public var dataPreprocessor = Setter.Copy.Nonnil<Alamofire.DataPreprocessor>(Alamofire.JSONResponseSerializer.defaultDataPreprocessor)
@@ -175,7 +175,7 @@ extension Store {
     }
     
     /// SerializeDecodable
-    public final class SerializeDecodable {
+    public struct SerializeDecodable {
         
         /// default `Alamofire.DecodableResponseSerializer<API.R>.defaultDataPreprocessor`
         public var dataPreprocessor = Setter.Copy.Nillable<Alamofire.DataPreprocessor>()

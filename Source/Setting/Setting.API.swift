@@ -9,21 +9,23 @@ import Alamofire
 extension Setting {
     
     @propertyWrapper
-    public struct API<Value>
-    where Value: Settable {
+    public struct API<S>
+    where S: Settable {
         
-        public init(_ keyPath: WritableKeyPath<Store.API, Value>) {
+        public init(_ keyPath: WritableKeyPath<Store.API, S>) {
             self._keyPath = keyPath
         }
         
-        public var wrappedValue: Value {
-            get { Store._api[keyPath: self._keyPath] }
+        public var wrappedValue: S {
+            get {
+                Store._api[keyPath: self._keyPath]
+            }
             
             nonmutating set {
                 Store._api[keyPath: self._keyPath] = newValue
             }
         }
         
-        let _keyPath: WritableKeyPath<Store.API, Value>
+        let _keyPath: WritableKeyPath<Store.API, S>
     }
 }

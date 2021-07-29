@@ -9,7 +9,7 @@ import Alamofire
 extension Store {
     
     /// Session
-    public final class Session {
+    public struct Session {
         
         public var configuration = Setter.Copy.Nonnil<URLSessionConfiguration>(URLSessionConfiguration.af.default)
         
@@ -32,6 +32,8 @@ extension Store {
         public var cachedResponseHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()
         
         public var eventMonitors = Setter.Copy.Nillable<[Alamofire.EventMonitor]>()
+        
+        public var never = Setter.Copy.Nillable<Never>()
         
         init() { }
     }

@@ -4,4 +4,4 @@
 
 
 /// namespace for `Setting`
-enum Setting { }
+public enum Setting { }

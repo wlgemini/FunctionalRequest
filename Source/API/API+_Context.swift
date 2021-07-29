@@ -55,7 +55,7 @@ extension API {
     // MARK: HTTPHeaders
     func _headers(_ ctx: Context) -> Alamofire.HTTPHeaders {
         // combinedHeaders init from `Store._api.dataRequest.headers()` or an empty headers
-        var combinedHeaders = Store._api.dataRequest.headers.value ?? Alamofire.HTTPHeaders()
+        var combinedHeaders = Store._api.dataRequest.headers._value() ?? Alamofire.HTTPHeaders()
         
         // Context.dataRequest.headers override or appends to combinedHeaders
         for h in ctx.dataRequest.headers {
@@ -77,13 +77,13 @@ extension API {
             
             switch method {
             // URLEncodedFormParameterEncoder
-            case .get: return Store._api.dataRequest.encoder.get.value
-            case .delete: return Store._api.dataRequest.encoder.delete.value
+            case .get: return Store._api.dataRequest.encoder.get._value
+            case .delete: return Store._api.dataRequest.encoder.delete._value
                 
             // JSONEncoding
-            case .patch: return Store._api.dataRequest.encoder.patch.value
-            case .post: return Store._api.dataRequest.encoder.post.value
-            case .put: return Store._api.dataRequest.encoder.put.value
+            case .patch: return Store._api.dataRequest.encoder.patch._value
+            case .post: return Store._api.dataRequest.encoder.post._value
+            case .put: return Store._api.dataRequest.encoder.put._value
                 
             // default
             default: return Alamofire.URLEncodedFormParameterEncoder.default
@@ -103,13 +103,13 @@ extension API {
             
             switch method {
             // URLEncoding
-            case .get: return Store._api.dataRequest.encoding.get.value
-            case .delete: return Store._api.dataRequest.encoding.delete.value
+            case .get: return Store._api.dataRequest.encoding.get._value
+            case .delete: return Store._api.dataRequest.encoding.delete._value
                 
             // JSONEncoding
-            case .patch: return Store._api.dataRequest.encoding.patch.value
-            case .post: return Store._api.dataRequest.encoding.post.value
-            case .put: return Store._api.dataRequest.encoding.put.value
+            case .patch: return Store._api.dataRequest.encoding.patch._value
+            case .post: return Store._api.dataRequest.encoding.post._value
+            case .put: return Store._api.dataRequest.encoding.put._value
                 
             // default
             default: return Alamofire.URLEncoding.default
@@ -134,7 +134,7 @@ extension API {
     
     // MARK: Redirect
     func _redirectHandler(_ ctx: Context) -> Alamofire.RedirectHandler? {
-        ctx.dataRequest.redirectHandler ?? Store._api.dataRequest.redirect.value
+        ctx.dataRequest.redirectHandler ?? Store._api.dataRequest.redirect._value
     }
 }
 
@@ -144,30 +144,30 @@ extension API {
     
     // MARK: DispatchQueue
     func _queue(_ ctx: Context) -> DispatchQueue {
-        ctx.dataResponse.queue ?? Store._api.dataResponse.queue.value
+        ctx.dataResponse.queue ?? Store._api.dataResponse.queue._value
     }
     
     // MARK: Validate DataResponse
     func _validation(_ ctx: Context) -> (Range<Int>?, [String]?) {
         let acceptableStatusCodes = ctx.dataResponse.acceptableStatusCodes ??
-            Store._api.dataResponse.acceptableStatusCodes.value
+            Store._api.dataResponse.acceptableStatusCodes._value
         
         let acceptableContentTypes = ctx.dataResponse.acceptableContentTypes?() ??
-            Store._api.dataResponse.acceptableContentTypes.value
+            Store._api.dataResponse.acceptableContentTypes._value
         
         return (acceptableStatusCodes, acceptableContentTypes)
     }
 
     // MARK: Serialize DataResponse
     func _dataResponseSerializer(_ ctx: Context) -> Alamofire.DataResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeData.dataPreprocessor.value ??
-            Store._api.dataResponse.serializeData.dataPreprocessor.value
+        let dataPreprocessor = ctx.dataResponse.serializeData.dataPreprocessor._value ??
+            Store._api.dataResponse.serializeData.dataPreprocessor._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeData.emptyResponseCodes.value ??
-            Store._api.dataResponse.serializeData.emptyResponseCodes.value
+        let emptyResponseCodes = ctx.dataResponse.serializeData.emptyResponseCodes._value ??
+            Store._api.dataResponse.serializeData.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeData.emptyRequestMethods.value ??
-            Store._api.dataResponse.serializeData.emptyRequestMethods.value
+        let emptyRequestMethods = ctx.dataResponse.serializeData.emptyRequestMethods._value ??
+            Store._api.dataResponse.serializeData.emptyRequestMethods._value
         
         return Alamofire.DataResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                 emptyResponseCodes: emptyResponseCodes,
@@ -175,17 +175,17 @@ extension API {
     }
     
     func _stringResponseSerializer(_ ctx: Context) -> Alamofire.StringResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeString.dataPreprocessor.value ??
-            Store._api.dataResponse.serializeString.dataPreprocessor.value
+        let dataPreprocessor = ctx.dataResponse.serializeString.dataPreprocessor._value ??
+            Store._api.dataResponse.serializeString.dataPreprocessor._value
         
-        let encoding = ctx.dataResponse.serializeString.encoding.value ??
-            Store._api.dataResponse.serializeString.encoding.value
+        let encoding = ctx.dataResponse.serializeString.encoding._value ??
+            Store._api.dataResponse.serializeString.encoding._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeString.emptyResponseCodes.value ??
-            Store._api.dataResponse.serializeString.emptyResponseCodes.value
+        let emptyResponseCodes = ctx.dataResponse.serializeString.emptyResponseCodes._value ??
+            Store._api.dataResponse.serializeString.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeString.emptyRequestMethods.value ??
-            Store._api.dataResponse.serializeString.emptyRequestMethods.value
+        let emptyRequestMethods = ctx.dataResponse.serializeString.emptyRequestMethods._value ??
+            Store._api.dataResponse.serializeString.emptyRequestMethods._value
         
         return Alamofire.StringResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                   encoding: encoding,
@@ -194,17 +194,17 @@ extension API {
     }
     
     func _jsonResponseSerializer(_ ctx: Context) -> Alamofire.JSONResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeJSON.dataPreprocessor.value ??
-            Store._api.dataResponse.serializeJSON.dataPreprocessor.value
+        let dataPreprocessor = ctx.dataResponse.serializeJSON.dataPreprocessor._value ??
+            Store._api.dataResponse.serializeJSON.dataPreprocessor._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeJSON.emptyResponseCodes.value ??
-            Store._api.dataResponse.serializeJSON.emptyResponseCodes.value
+        let emptyResponseCodes = ctx.dataResponse.serializeJSON.emptyResponseCodes._value ??
+            Store._api.dataResponse.serializeJSON.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeJSON.emptyRequestMethods.value ??
-            Store._api.dataResponse.serializeJSON.emptyRequestMethods.value
+        let emptyRequestMethods = ctx.dataResponse.serializeJSON.emptyRequestMethods._value ??
+            Store._api.dataResponse.serializeJSON.emptyRequestMethods._value
         
-        let options = ctx.dataResponse.serializeJSON.options.value ??
-            Store._api.dataResponse.serializeJSON.options.value
+        let options = ctx.dataResponse.serializeJSON.options._value ??
+            Store._api.dataResponse.serializeJSON.options._value
          
         return Alamofire.JSONResponseSerializer(dataPreprocessor: dataPreprocessor,
                                                 emptyResponseCodes: emptyResponseCodes,
@@ -214,20 +214,20 @@ extension API {
     
     func _decodableResponseSerializer(_ ctx: Context) -> Alamofire.DecodableResponseSerializer<R>
     where R: Decodable {
-        let dataPreprocessor = ctx.dataResponse.serializeDecodable.dataPreprocessor.value ??
-            Store._api.dataResponse.serializeDecodable.dataPreprocessor.value ??
+        let dataPreprocessor = ctx.dataResponse.serializeDecodable.dataPreprocessor._value ??
+            Store._api.dataResponse.serializeDecodable.dataPreprocessor._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultDataPreprocessor
         
-        let decoder = ctx.dataResponse.serializeDecodable.decoder.value ??
-            Store._api.dataResponse.serializeDecodable.decoder.value ??
+        let decoder = ctx.dataResponse.serializeDecodable.decoder._value ??
+            Store._api.dataResponse.serializeDecodable.decoder._value ??
             JSONDecoder()
         
-        let emptyResponseCodes = ctx.dataResponse.serializeDecodable.emptyResponseCodes.value ??
-            Store._api.dataResponse.serializeDecodable.emptyResponseCodes.value ??
+        let emptyResponseCodes = ctx.dataResponse.serializeDecodable.emptyResponseCodes._value ??
+            Store._api.dataResponse.serializeDecodable.emptyResponseCodes._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultEmptyResponseCodes
         
-        let emptyRequestMethods = ctx.dataResponse.serializeDecodable.emptyRequestMethods.value ??
-            Store._api.dataResponse.serializeDecodable.emptyRequestMethods.value ??
+        let emptyRequestMethods = ctx.dataResponse.serializeDecodable.emptyRequestMethods._value ??
+            Store._api.dataResponse.serializeDecodable.emptyRequestMethods._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultEmptyRequestMethods
         
         return Alamofire.DecodableResponseSerializer(dataPreprocessor: dataPreprocessor,
@@ -238,7 +238,7 @@ extension API {
     
     // MARK: Cache DataResponse
     func _cachedResponseHandler(_ ctx: Context) -> Alamofire.CachedResponseHandler? {
-        ctx.dataResponse.cacheHandler ?? Store._api.dataResponse.cacheHandler.value
+        ctx.dataResponse.cacheHandler ?? Store._api.dataResponse.cacheHandler._value
     }
 }
 

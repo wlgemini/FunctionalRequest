@@ -6,7 +6,7 @@
 /// _Log
 enum _Log {
     
-    static func trace(_ item: @escaping @autoclosure () -> Any, location: Location) {
+    static func trace(_ item: @escaping @autoclosure () -> Any, location: _Location) {
         Swift.assert({
             let str = "🟢 \(location): \(item())"
             print(str)
@@ -14,7 +14,7 @@ enum _Log {
         }())
     }
     
-    static func warning(_ item: @escaping @autoclosure () -> Any, location: Location) {
+    static func warning(_ item: @escaping @autoclosure () -> Any, location: _Location) {
         Swift.assert({
             let str = "🟡 \(location): \(item())"
             print(str)
@@ -22,7 +22,7 @@ enum _Log {
         }())
     }
     
-    static func error(_ item: @escaping @autoclosure () -> Any, location: Location) {
+    static func error(_ item: @escaping @autoclosure () -> Any, location: _Location) {
         Swift.assert({
             let str = "🔴 \(location): \(item())"
             print(str)

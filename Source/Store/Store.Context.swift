@@ -12,7 +12,7 @@ extension Store {
     public final class _Context {
         
         // DataRequest Location
-        let requestLocation: Location
+        let requestLocation: _Location
         
         // DataRequest
         let dataRequest = _Context._DataRequest()
@@ -24,7 +24,7 @@ extension Store {
         let accessing = _Context._Accessing()
         
         /// init
-        init(requestLocation: Location) {
+        init(requestLocation: _Location) {
             self.requestLocation = requestLocation
         }
     }
