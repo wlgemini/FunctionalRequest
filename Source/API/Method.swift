@@ -17,9 +17,7 @@ public protocol Method: API {
 // MARK: - Methods
 public struct GET<P, R>: Method {
     
-    public var modifier: some Modifier {
-        self._modifier
-    }
+    public let modifier: AnyModifier
 
     public init(_ path: @escaping @autoclosure Compute<String>) {
         let modifier = AnyModifier(DataRequestModifier.HTTPMethod(method: .get),
@@ -34,18 +32,14 @@ public struct GET<P, R>: Method {
     }
     
     public init(modifier: AnyModifier) {
-        self._modifier = modifier
+        self.modifier = modifier
     }
-    
-    let _modifier: AnyModifier
 }
 
 
 public struct POST<P, R>: Method {
     
-    public var modifier: some Modifier {
-        self._modifier
-    }
+    public let modifier: AnyModifier
 
     public init(_ path: @escaping @autoclosure Compute<String>) {
         let modifier = AnyModifier(DataRequestModifier.HTTPMethod(method: .post),
@@ -60,18 +54,14 @@ public struct POST<P, R>: Method {
     }
     
     public init(modifier: AnyModifier) {
-        self._modifier = modifier
+        self.modifier = modifier
     }
-    
-    let _modifier: AnyModifier
 }
 
 
 public struct PUT<P, R>: Method {
     
-    public var modifier: some Modifier {
-        self._modifier
-    }
+    public let modifier: AnyModifier
 
     public init(_ path: @escaping @autoclosure Compute<String>) {
         let modifier = AnyModifier(DataRequestModifier.HTTPMethod(method: .put),
@@ -86,18 +76,14 @@ public struct PUT<P, R>: Method {
     }
     
     public init(modifier: AnyModifier) {
-        self._modifier = modifier
+        self.modifier = modifier
     }
-    
-    let _modifier: AnyModifier
 }
 
 
 public struct PATCH<P, R>: Method {
     
-    public var modifier: some Modifier {
-        self._modifier
-    }
+    public let modifier: AnyModifier
 
     public init(_ path: @escaping @autoclosure Compute<String>) {
         let modifier = AnyModifier(DataRequestModifier.HTTPMethod(method: .patch),
@@ -112,18 +98,14 @@ public struct PATCH<P, R>: Method {
     }
     
     public init(modifier: AnyModifier) {
-        self._modifier = modifier
+        self.modifier = modifier
     }
-    
-    let _modifier: AnyModifier
 }
 
 
 public struct DELETE<P, R>: Method {
 
-    public var modifier: some Modifier {
-        self._modifier
-    }
+    public let modifier: AnyModifier
 
     public init(_ path: @escaping @autoclosure Compute<String>) {
         let modifier = AnyModifier(DataRequestModifier.HTTPMethod(method: .delete),
@@ -138,8 +120,6 @@ public struct DELETE<P, R>: Method {
     }
     
     public init(modifier: AnyModifier) {
-        self._modifier = modifier
+        self.modifier = modifier
     }
-    
-    let _modifier: AnyModifier
 }

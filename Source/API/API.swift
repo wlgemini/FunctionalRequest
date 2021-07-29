@@ -12,11 +12,8 @@ public protocol API {
     /// Returns
     associatedtype R
     
-    /// Modifier
-    associatedtype M: Modifier
-    
     /// modifier
-    var modifier: Self.M { get }
+    var modifier: AnyModifier { get }
     
     /// init
     init(modifier: AnyModifier)
@@ -25,8 +22,8 @@ public protocol API {
 
 extension API {
     
-    func _modifier<NM>(_ nm: NM) -> Self
-    where NM: Modifier {
-        Self(modifier: AnyModifier(self.modifier, nm))
+    func _modifier<M>(_ m: M) -> Self
+    where M: Modifier {
+        Self(modifier: AnyModifier(self.modifier, m))
     }
 }

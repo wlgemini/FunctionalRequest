@@ -9,7 +9,7 @@ enum _Lazy<Value> {
     
     case unset(initializer: Compute<Value>)
     
-    var value: Value? {
+    var hasValue: Value? {
         switch self {
         case .hasValue(let value):
             return value
