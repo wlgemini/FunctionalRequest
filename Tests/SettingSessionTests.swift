@@ -9,8 +9,6 @@ import FunctionalRequest
 
 class SettingSessionTests {
     
-    init() {}
-    
     @Setting.Session(\.configuration)
     var configuration
     
@@ -35,7 +33,7 @@ class SettingSessionTests {
     @Setting.Session(\.eventMonitors)
     var eventMonitors
     
-    @Getting.Session(\.configuration)
+    @Getting.Session(\.never)
     var session
     
     
@@ -56,7 +54,7 @@ class SettingSessionTests {
     func case1SessionInit() {
         // session not finalized
         XCTAssert(self.$session.session == nil, "session finalized")
-    
+        
         // session finalize
         self.$session.finalize()
         
