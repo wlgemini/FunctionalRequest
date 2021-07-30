@@ -3,8 +3,8 @@
 //  
 
 import XCTest
-@testable import Alamofire
-@testable import FunctionalRequest
+import Alamofire
+import FunctionalRequest
 
 
 class AllTests: XCTestCase {
@@ -12,15 +12,16 @@ class AllTests: XCTestCase {
     let settingSessionTests = SettingSessionTests()
     let settingAPITests = SettingAPITests()
     
-    func testSession() {
+    func testALL() {
+        // session
         settingSessionTests.case0SessionSetting()
         settingSessionTests.case1SessionInit()
         settingSessionTests.case2SessonNonmutating()
-    }
-    
-    func testAPI() {
         
-        
+        // API
+        settingAPITests.caseRequestMethod()
+        settingAPITests.caseRequestURL()
+        settingAPITests.caseRequestHeaders()
+        settingAPITests.caseRequestModifier()
     }
-
 }

@@ -25,8 +25,13 @@ public extension API {
     }
     
     /// set additional header
-    func header(_ header: Alamofire.HTTPHeader) -> Self {
-        self._modifier(DataRequestModifier.HTTPHeader(header))
+    func header(name: String, value: String) -> Self {
+        self._modifier(DataRequestModifier.HTTPHeader(name: name, value: value))
+    }
+    
+    /// set additional headers
+    func headers(_ dictionary: [String: String]) -> Self {
+        self._modifier(DataRequestModifier.HTTPHeaders(dictionary))
     }
     
     /// modify encoder

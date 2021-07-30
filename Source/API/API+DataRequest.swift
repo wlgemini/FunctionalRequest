@@ -9,7 +9,7 @@ import Alamofire
 public extension API {
     
     // MARK: P == [String: Any], R == Data
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -22,7 +22,7 @@ public extension API {
     }
     
     // MARK: P == [String: Any], R == String
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -35,7 +35,7 @@ public extension API {
     }
     
     // MARK: P == [String: Any], R == Any
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -48,7 +48,7 @@ public extension API {
     }
     
     // MARK: P == [String: Any], R: Decodable
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -61,7 +61,7 @@ public extension API {
     }
     
     // MARK: P == Encodable, R == Data
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -74,7 +74,7 @@ public extension API {
     }
     
     // MARK: P == Encodable, R == String
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -87,7 +87,7 @@ public extension API {
     }
     
     // MARK: P == Encodable, R == Any
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -100,7 +100,7 @@ public extension API {
     }
     
     // MARK: P == Encodable, R: Decodable
-    func request(_ parameters: P,
+    func request(_ parameters: P?,
                  completion: @escaping (Alamofire.AFDataResponse<R>) -> Void,
                  file: String = #fileID,
                  line: UInt = #line)
@@ -125,13 +125,13 @@ extension API {
     }
     
     /// request encoding
-    func _request(parameters: P, context: Context) -> Alamofire.DataRequest?
+    func _request(parameters: P?, context: Context) -> Alamofire.DataRequest?
     where P == [String: Any] {
-        guard let url = self._url(context) else { return nil }
-        guard let method = self._method(context) else { return nil }
-        let encoding = self._encoding(context)
-        let headers = self._headers(context)
-        let requestModifier = self._urlRequestModifier(context)
+        guard let method = context._method() else { return nil }
+        guard let url = context._url() else { return nil }
+        let encoding = context._encoding()
+        let headers = context._headers()
+        let requestModifier = context._urlRequestModifier()
         return Store._sessionRaw.request(url,
                                          method: method,
                                          parameters: parameters,
@@ -142,13 +142,13 @@ extension API {
     }
     
     /// request encodable
-    func _request(parameters: P, context: Context) -> Alamofire.DataRequest?
+    func _request(parameters: P?, context: Context) -> Alamofire.DataRequest?
     where P: Encodable {
-        guard let url = self._url(context) else { return nil }
-        guard let method = self._method(context) else { return nil }
-        let encoder = self._encoder(context)
-        let headers = self._headers(context)
-        let requestModifier = self._urlRequestModifier(context)
+        guard let method = context._method() else { return nil }
+        guard let url = context._url() else { return nil }
+        let encoder = context._encoder()
+        let headers = context._headers()
+        let requestModifier = context._urlRequestModifier()
         return Store._sessionRaw.request(url,
                                          method: method,
                                          parameters: parameters,
@@ -161,17 +161,17 @@ extension API {
     /// request modify
     func _requestModify(request: Alamofire.DataRequest, context: Context) {
         // authentication
-        if let credential = self._authenticate(context) {
+        if let credential = context._authenticate() {
             request.authenticate(with: credential)
         }
         
         // redirect
-        if let redirect = self._redirectHandler(context) {
+        if let redirect = context._redirectHandler() {
             request.redirect(using: redirect)
         }
         
         // validation
-        let validation = self._validation(context)
+        let validation = context._validation()
         switch validation {
         case (.some(let statusCode), .some(let contentType)):
             request.validate(statusCode: statusCode).validate(contentType: contentType)
@@ -192,8 +192,8 @@ extension API {
                    context: Context,
                    completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
     where R == Data {
-        let queue = self._queue(context)
-        let serializer = self._dataResponseSerializer(context)
+        let queue = context._queue()
+        let serializer = context._dataResponseSerializer()
         request.response(queue: queue,
                          responseSerializer: serializer,
                          completionHandler: completion)
@@ -204,8 +204,8 @@ extension API {
                    context: Context,
                    completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
     where R == String {
-        let queue = self._queue(context)
-        let serializer = self._stringResponseSerializer(context)
+        let queue = context._queue()
+        let serializer = context._stringResponseSerializer()
         request.response(queue: queue,
                          responseSerializer: serializer,
                          completionHandler: completion)
@@ -216,8 +216,8 @@ extension API {
                    context: Context,
                    completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
     where R == Any {
-        let queue = self._queue(context)
-        let serializer = self._jsonResponseSerializer(context)
+        let queue = context._queue()
+        let serializer = context._jsonResponseSerializer()
         request.response(queue: queue,
                          responseSerializer: serializer,
                          completionHandler: completion)
@@ -228,8 +228,8 @@ extension API {
                    context: Context,
                    completion: @escaping (Alamofire.AFDataResponse<R>) -> Void)
     where R: Decodable {
-        let queue = self._queue(context)
-        let serializer = self._decodableResponseSerializer(context)
+        let queue = context._queue()
+        let serializer: Alamofire.DecodableResponseSerializer<R> = context._decodableResponseSerializer()
         request.response(queue: queue,
                          responseSerializer: serializer,
                          completionHandler: completion)
@@ -238,7 +238,7 @@ extension API {
     /// accessing data request
     func _requestAccessing(request: Alamofire.DataRequest, context: Context) {
         // onRequestAvailable
-        if let onRequestAvailable = self._accessingRequest(context) {
+        if let onRequestAvailable = context._accessingRequest() {
             onRequestAvailable(request)
         }
     }

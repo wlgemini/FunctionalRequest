@@ -1,18 +1,18 @@
 //
-//  API+_Context.swift
-//  
+//  Store.Context+Helper.swift
+//
 
 import Foundation
 import Alamofire
 
 
 // MARK: - Context for DataRequest
-extension API {
+extension Store._Context {
     
     // MARK: HTTPMethod
-    func _method(_ ctx: Context) -> Alamofire.HTTPMethod? {
-        guard let method = ctx.dataRequest.api.method else {
-            _Log.error("`HTTPMethod` not set, request won't start", location: ctx.requestLocation)
+    func _method() -> Alamofire.HTTPMethod? {
+        guard let method = self.dataRequest.api.method else {
+            _Log.error("`HTTPMethod` not set, request won't start", location: self.requestLocation)
             return nil
         }
         
@@ -20,45 +20,54 @@ extension API {
     }
     
     // MARK: - URL
-    func _url(_ ctx: Context) -> String? {
-        guard let initialURL = ctx.dataRequest.api.initialURL else {
-            _Log.error("`InitialURL` not set, request won't start", location: ctx.requestLocation)
+    func _url() -> String? {
+        guard let initialURL = self.dataRequest.api.initialURL else {
+            _Log.error("`InitialURL` not set, request won't start", location: self.requestLocation)
             return nil
         }
         
-        var url: String?
+        var anyFullURL: String?
+        
         switch initialURL {
         case .full(let fullURL):
-            url = fullURL()
+            anyFullURL = fullURL()
             
         case .path(let pathURL):
-            guard let baseURL = ctx.dataRequest.api.base else {
-                _Log.error("Base URL not set, request won't start", location: ctx.requestLocation)
-                return nil
-            }
+            // modify `base url` or setting `base url`
+            let anyBaseURL = self.dataRequest.api.base?() ?? Store._api.dataRequest.base.value
             
-            let appendPathURL = ctx.dataRequest.api.appendPaths.reduce("", { $0 + $1() })
-            url = baseURL() + pathURL() + appendPathURL
+            if let baseURL = anyBaseURL {
+                anyFullURL = baseURL + pathURL()
+            } else {
+                _Log.error("Base URL not set, request won't start", location: self.requestLocation)
+            }
         }
+        
+        guard var fullURL = anyFullURL else { return nil }
+        
+        // append paths
+        let appendPaths = self.dataRequest.api.appendPaths.reduce("", { $0 + $1() })
+        fullURL += appendPaths
         
         // mock only in debug mode
         _Debug.only {
-            if let mock = ctx.dataRequest.api.mock, let _url = url {
-                _Log.warning("Using mock `\(mock())` for `\(_url)`", location: ctx.requestLocation)
-                url = mock()
+            if let mock = self.dataRequest.api.mock {
+                let mockURL = mock()
+                _Log.warning("Using mock `\(mockURL)` for `\(fullURL)`", location: self.requestLocation)
+                fullURL = mockURL
             }
         }
         
-        return url
+        return fullURL
     }
     
     // MARK: HTTPHeaders
-    func _headers(_ ctx: Context) -> Alamofire.HTTPHeaders {
+    func _headers() -> Alamofire.HTTPHeaders {
         // combinedHeaders init from `Store._api.dataRequest.headers()` or an empty headers
         var combinedHeaders = Store._api.dataRequest.headers._value() ?? Alamofire.HTTPHeaders()
         
         // Context.dataRequest.headers override or appends to combinedHeaders
-        for h in ctx.dataRequest.headers {
+        for h in self.dataRequest.headers {
             combinedHeaders.add(h)
         }
         
@@ -66,12 +75,12 @@ extension API {
     }
     
     // MARK: Encoder
-    func _encoder(_ ctx: Context) -> Alamofire.ParameterEncoder {
-        if let encoder = ctx.dataRequest.encoder {
+    func _encoder() -> Alamofire.ParameterEncoder {
+        if let encoder = self.dataRequest.encoder {
             return encoder
             
         } else {
-            guard let method = ctx.dataRequest.api.method else {
+            guard let method = self.dataRequest.api.method else {
                 return Alamofire.URLEncodedFormParameterEncoder.default
             }
             
@@ -92,12 +101,12 @@ extension API {
     }
     
     // MARK: Encoding
-    func _encoding(_ ctx: Context) -> Alamofire.ParameterEncoding {
-        if let encoding = ctx.dataRequest.encoding {
+    func _encoding() -> Alamofire.ParameterEncoding {
+        if let encoding = self.dataRequest.encoding {
             return encoding
             
         } else {
-            guard let method = ctx.dataRequest.api.method else {
+            guard let method = self.dataRequest.api.method else {
                 return Alamofire.URLEncoding.default
             }
             
@@ -118,9 +127,9 @@ extension API {
     }
     
     // MARK: Modify URLRequest
-    func _urlRequestModifier(_ ctx: Context) -> (_ req: inout URLRequest) throws -> Void {
+    func _urlRequestModifier() -> (_ req: inout URLRequest) throws -> Void {
         // NOTE: Make sure not access `Context` in block
-        return { [urlRequestModifiers = ctx.dataRequest.urlRequestModifiers] (urlRequest) in
+        return { [urlRequestModifiers = self.dataRequest.urlRequestModifiers] (urlRequest) in
             for modifier in urlRequestModifiers {
                 try modifier(&urlRequest)
             }
@@ -128,45 +137,45 @@ extension API {
     }
     
     // MARK: Authentication
-    func _authenticate(_ ctx: Context) -> URLCredential? {
-        ctx.dataRequest.authenticate
+    func _authenticate() -> URLCredential? {
+        self.dataRequest.authenticate
     }
     
     // MARK: Redirect
-    func _redirectHandler(_ ctx: Context) -> Alamofire.RedirectHandler? {
-        ctx.dataRequest.redirectHandler ?? Store._api.dataRequest.redirect._value
+    func _redirectHandler() -> Alamofire.RedirectHandler? {
+        self.dataRequest.redirectHandler ?? Store._api.dataRequest.redirect._value
     }
 }
 
 
 // MARK: - Context for DataResponse
-extension API {
+extension Store._Context {
     
     // MARK: DispatchQueue
-    func _queue(_ ctx: Context) -> DispatchQueue {
-        ctx.dataResponse.queue ?? Store._api.dataResponse.queue._value
+    func _queue() -> DispatchQueue {
+        self.dataResponse.queue ?? Store._api.dataResponse.queue._value
     }
     
     // MARK: Validate DataResponse
-    func _validation(_ ctx: Context) -> (Range<Int>?, [String]?) {
-        let acceptableStatusCodes = ctx.dataResponse.acceptableStatusCodes ??
+    func _validation() -> (Range<Int>?, [String]?) {
+        let acceptableStatusCodes = self.dataResponse.acceptableStatusCodes ??
             Store._api.dataResponse.acceptableStatusCodes._value
         
-        let acceptableContentTypes = ctx.dataResponse.acceptableContentTypes?() ??
+        let acceptableContentTypes = self.dataResponse.acceptableContentTypes?() ??
             Store._api.dataResponse.acceptableContentTypes._value
         
         return (acceptableStatusCodes, acceptableContentTypes)
     }
 
     // MARK: Serialize DataResponse
-    func _dataResponseSerializer(_ ctx: Context) -> Alamofire.DataResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeData.dataPreprocessor._value ??
+    func _dataResponseSerializer() -> Alamofire.DataResponseSerializer {
+        let dataPreprocessor = self.dataResponse.serializeData.dataPreprocessor._value ??
             Store._api.dataResponse.serializeData.dataPreprocessor._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeData.emptyResponseCodes._value ??
+        let emptyResponseCodes = self.dataResponse.serializeData.emptyResponseCodes._value ??
             Store._api.dataResponse.serializeData.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeData.emptyRequestMethods._value ??
+        let emptyRequestMethods = self.dataResponse.serializeData.emptyRequestMethods._value ??
             Store._api.dataResponse.serializeData.emptyRequestMethods._value
         
         return Alamofire.DataResponseSerializer(dataPreprocessor: dataPreprocessor,
@@ -174,17 +183,17 @@ extension API {
                                                 emptyRequestMethods: emptyRequestMethods)
     }
     
-    func _stringResponseSerializer(_ ctx: Context) -> Alamofire.StringResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeString.dataPreprocessor._value ??
+    func _stringResponseSerializer() -> Alamofire.StringResponseSerializer {
+        let dataPreprocessor = self.dataResponse.serializeString.dataPreprocessor._value ??
             Store._api.dataResponse.serializeString.dataPreprocessor._value
         
-        let encoding = ctx.dataResponse.serializeString.encoding._value ??
+        let encoding = self.dataResponse.serializeString.encoding._value ??
             Store._api.dataResponse.serializeString.encoding._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeString.emptyResponseCodes._value ??
+        let emptyResponseCodes = self.dataResponse.serializeString.emptyResponseCodes._value ??
             Store._api.dataResponse.serializeString.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeString.emptyRequestMethods._value ??
+        let emptyRequestMethods = self.dataResponse.serializeString.emptyRequestMethods._value ??
             Store._api.dataResponse.serializeString.emptyRequestMethods._value
         
         return Alamofire.StringResponseSerializer(dataPreprocessor: dataPreprocessor,
@@ -193,17 +202,17 @@ extension API {
                                                   emptyRequestMethods: emptyRequestMethods)
     }
     
-    func _jsonResponseSerializer(_ ctx: Context) -> Alamofire.JSONResponseSerializer {
-        let dataPreprocessor = ctx.dataResponse.serializeJSON.dataPreprocessor._value ??
+    func _jsonResponseSerializer() -> Alamofire.JSONResponseSerializer {
+        let dataPreprocessor = self.dataResponse.serializeJSON.dataPreprocessor._value ??
             Store._api.dataResponse.serializeJSON.dataPreprocessor._value
         
-        let emptyResponseCodes = ctx.dataResponse.serializeJSON.emptyResponseCodes._value ??
+        let emptyResponseCodes = self.dataResponse.serializeJSON.emptyResponseCodes._value ??
             Store._api.dataResponse.serializeJSON.emptyResponseCodes._value
         
-        let emptyRequestMethods = ctx.dataResponse.serializeJSON.emptyRequestMethods._value ??
+        let emptyRequestMethods = self.dataResponse.serializeJSON.emptyRequestMethods._value ??
             Store._api.dataResponse.serializeJSON.emptyRequestMethods._value
         
-        let options = ctx.dataResponse.serializeJSON.options._value ??
+        let options = self.dataResponse.serializeJSON.options._value ??
             Store._api.dataResponse.serializeJSON.options._value
          
         return Alamofire.JSONResponseSerializer(dataPreprocessor: dataPreprocessor,
@@ -212,21 +221,21 @@ extension API {
                                                 options: options)
     }
     
-    func _decodableResponseSerializer(_ ctx: Context) -> Alamofire.DecodableResponseSerializer<R>
+    func _decodableResponseSerializer<R>() -> Alamofire.DecodableResponseSerializer<R>
     where R: Decodable {
-        let dataPreprocessor = ctx.dataResponse.serializeDecodable.dataPreprocessor._value ??
+        let dataPreprocessor = self.dataResponse.serializeDecodable.dataPreprocessor._value ??
             Store._api.dataResponse.serializeDecodable.dataPreprocessor._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultDataPreprocessor
         
-        let decoder = ctx.dataResponse.serializeDecodable.decoder._value ??
+        let decoder = self.dataResponse.serializeDecodable.decoder._value ??
             Store._api.dataResponse.serializeDecodable.decoder._value ??
             JSONDecoder()
         
-        let emptyResponseCodes = ctx.dataResponse.serializeDecodable.emptyResponseCodes._value ??
+        let emptyResponseCodes = self.dataResponse.serializeDecodable.emptyResponseCodes._value ??
             Store._api.dataResponse.serializeDecodable.emptyResponseCodes._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultEmptyResponseCodes
         
-        let emptyRequestMethods = ctx.dataResponse.serializeDecodable.emptyRequestMethods._value ??
+        let emptyRequestMethods = self.dataResponse.serializeDecodable.emptyRequestMethods._value ??
             Store._api.dataResponse.serializeDecodable.emptyRequestMethods._value ??
             Alamofire.DecodableResponseSerializer<R>.defaultEmptyRequestMethods
         
@@ -237,16 +246,17 @@ extension API {
     }
     
     // MARK: Cache DataResponse
-    func _cachedResponseHandler(_ ctx: Context) -> Alamofire.CachedResponseHandler? {
-        ctx.dataResponse.cacheHandler ?? Store._api.dataResponse.cacheHandler._value
+    func _cachedResponseHandler() -> Alamofire.CachedResponseHandler? {
+        self.dataResponse.cacheHandler ?? Store._api.dataResponse.cacheHandler._value
     }
 }
 
 // MARK: - Context for Accessing
-extension API {
+extension Store._Context {
     
     // MARK: - Accessing Request
-    func _accessingRequest(_ ctx: Context) -> Available<Alamofire.Request>? {
-        ctx.accessing.onRequestAvailable
+    func _accessingRequest() -> Available<Alamofire.Request>? {
+        self.accessing.onRequestAvailable
     }
 }
+

@@ -51,7 +51,7 @@ extension Store {
         
         // MARK: DispatchQueue
         /// default: .main
-        var queue = Setter.Copy.Nonnil<DispatchQueue>(.main)
+        public var queue = Setter.Copy.Nonnil<DispatchQueue>(.main)
         
         // MARK: Validate DataResponse
         /// default acceptable range: 200 ... 299

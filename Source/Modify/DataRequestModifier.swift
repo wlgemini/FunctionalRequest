@@ -126,11 +126,11 @@ public enum DataRequestModifier {
     }
 
     // MARK: - HTTPHeader
-    /// Headers
+    /// Header
     public struct HTTPHeader: Modifier {
         
-        public init(_ header: Alamofire.HTTPHeader) {
-            self._header = header
+        public init(name: String, value: String) {
+            self._header = Alamofire.HTTPHeader(name: name, value: value)
         }
         
         public func modify(context: Context) {
@@ -138,6 +138,23 @@ public enum DataRequestModifier {
         }
         
         let _header: Alamofire.HTTPHeader
+    }
+    
+    
+    /// Headers
+    public struct HTTPHeaders: Modifier {
+        
+        public init(_ dictionary: [String: String]) {
+            self._headers = Alamofire.HTTPHeaders(dictionary)
+        }
+        
+        public func modify(context: Context) {
+            for h in self._headers {
+                context.dataRequest.headers.add(h)
+            }
+        }
+        
+        let _headers: Alamofire.HTTPHeaders
     }
     
     
