@@ -109,9 +109,11 @@ class SettingAPITests {
     @Setting.API(\.dataResponse.serializeDecodable.emptyRequestMethods)
     var serializeDecodable_emptyRequestMethods
 
-    @Setting.API(\.dataResponse.cacheHandler)
-    var cacheHandler
+    @Setting.API(\.dataResponse.cachedResponseHandler)
+    var cachedResponseHandler
     
+    @Getting.DataRequest(APIs.echoGet.base("http://www.xyz.com/"))
+    var dataRequestEchoGet
     
     func caseRequestMethod() {
         let contextEchoGet = APIs.echoGet._context(file: #fileID, line: #line)
@@ -209,7 +211,6 @@ class SettingAPITests {
             XCTAssert(nil == url3)
         }
     }
-
     
     func caseRequestHeaders() {
         let BaseURL = "http://www.xyz.com/"
@@ -259,8 +260,206 @@ class SettingAPITests {
             }
         }
     }
+
+    func caseRequestEncoding() {
+        // Default
+        let get0 = APIs.echoJSONGet._context(file: #fileID, line: #line)._encoding()
+        let delete0 = APIs.echoJSONDelete._context(file: #fileID, line: #line)._encoding()
+        let patch0 = APIs.echoJSONPatch._context(file: #fileID, line: #line)._encoding()
+        let post0 = APIs.echoJSONPost._context(file: #fileID, line: #line)._encoding()
+        let put0 = APIs.echoJSONPut._context(file: #fileID, line: #line)._encoding()
+        
+        XCTAssert(get0 is Alamofire.URLEncoding)
+        XCTAssert(delete0 is Alamofire.URLEncoding)
+        XCTAssert(patch0 is Alamofire.JSONEncoding)
+        XCTAssert(post0 is Alamofire.JSONEncoding)
+        XCTAssert(put0 is Alamofire.JSONEncoding)
+        
+        // Modify
+        let get1 = APIs.echoJSONGet.encoding(Alamofire.JSONEncoding.default)._context(file: #fileID, line: #line)._encoding()
+        let delete1 = APIs.echoJSONDelete.encoding(Alamofire.JSONEncoding.default)._context(file: #fileID, line: #line)._encoding()
+        let patch1 = APIs.echoJSONPatch.encoding(Alamofire.URLEncoding.default)._context(file: #fileID, line: #line)._encoding()
+        let post1 = APIs.echoJSONPost.encoding(Alamofire.URLEncoding.default)._context(file: #fileID, line: #line)._encoding()
+        let put1 = APIs.echoJSONPut.encoding(Alamofire.URLEncoding.default)._context(file: #fileID, line: #line)._encoding()
+        
+        XCTAssert(get1 is Alamofire.JSONEncoding)
+        XCTAssert(delete1 is Alamofire.JSONEncoding)
+        XCTAssert(patch1 is Alamofire.URLEncoding)
+        XCTAssert(post1 is Alamofire.URLEncoding)
+        XCTAssert(put1 is Alamofire.URLEncoding)
+    }
+    
+    func caseRequestEncoder() {
+        // Default
+        let get0 = APIs.echoGet._context(file: #fileID, line: #line)._encoder()
+        let delete0 = APIs.echoDelete._context(file: #fileID, line: #line)._encoder()
+        let patch0 = APIs.echoPatch._context(file: #fileID, line: #line)._encoder()
+        let post0 = APIs.echoPost._context(file: #fileID, line: #line)._encoder()
+        let put0 = APIs.echoPut._context(file: #fileID, line: #line)._encoder()
+        
+        XCTAssert(get0 is Alamofire.URLEncodedFormParameterEncoder)
+        XCTAssert(delete0 is Alamofire.URLEncodedFormParameterEncoder)
+        XCTAssert(patch0 is Alamofire.JSONParameterEncoder)
+        XCTAssert(post0 is Alamofire.JSONParameterEncoder)
+        XCTAssert(put0 is Alamofire.JSONParameterEncoder)
+        
+        // Modify
+        let get1 = APIs.echoGet.encoder(Alamofire.JSONParameterEncoder.default)._context(file: #fileID, line: #line)._encoder()
+        let delete1 = APIs.echoDelete.encoder(Alamofire.JSONParameterEncoder.default)._context(file: #fileID, line: #line)._encoder()
+        let patch1 = APIs.echoPatch.encoder(Alamofire.URLEncodedFormParameterEncoder.default)._context(file: #fileID, line: #line)._encoder()
+        let post1 = APIs.echoPost.encoder(Alamofire.URLEncodedFormParameterEncoder.default)._context(file: #fileID, line: #line)._encoder()
+        let put1 = APIs.echoPut.encoder(Alamofire.URLEncodedFormParameterEncoder.default)._context(file: #fileID, line: #line)._encoder()
+        
+        XCTAssert(get1 is Alamofire.JSONParameterEncoder)
+        XCTAssert(delete1 is Alamofire.JSONParameterEncoder)
+        XCTAssert(patch1 is Alamofire.URLEncodedFormParameterEncoder)
+        XCTAssert(post1 is Alamofire.URLEncodedFormParameterEncoder)
+        XCTAssert(put1 is Alamofire.URLEncodedFormParameterEncoder)
+    }
     
     func caseRequestModifier() {
+        let BaseURL = "http://www.xyz.com/"
+        let Path = "echo/"
+        let FullURL = BaseURL + Path
         
+        let expPost = XCTestExpectation()
+        let timeoutInterval: TimeInterval = 2
+        let api0 = GET<Echo, Echo>(url: FullURL).timeoutInterval(timeoutInterval)
+        api0.request(nil) { resp in
+            XCTAssert(resp.request?.timeoutInterval == timeoutInterval)
+            expPost.fulfill()
+        }
+        
+        _ = XCTWaiter.wait(for: [expPost], timeout: timeoutInterval * 2)
+    }
+    
+    func caseRequestModify() {
+        // Authentication
+        let auth0 = APIs.echoGet._context(file: #file, line: #line)._authenticate()
+        XCTAssert(auth0 == nil)
+        
+        let username = "xyz"
+        let password = "123"
+        let auth1 = APIs.echoGet.authenticate(username: username, password: password)._context(file: #file, line: #line)._authenticate()
+        XCTAssert(auth1?.user == username)
+        XCTAssert(auth1?.password == password)
+        
+        // Redirect
+        let redir0 = APIs.echoGet._context(file: #file, line: #line)._redirectHandler()
+        XCTAssert(redir0 == nil)
+        
+        self.redirect(Alamofire.Redirector.doNotFollow)
+        let redir1 = APIs.echoGet._context(file: #file, line: #line)._redirectHandler()
+        XCTAssert(redir1 is Alamofire.Redirector)
+        
+        self.redirect(nil)
+        let redir2 = APIs.echoGet._context(file: #file, line: #line)._redirectHandler()
+        XCTAssert(redir2 == nil)
+        
+        let redir3 = APIs.echoGet.redirect(using: Alamofire.Redirector.follow)._context(file: #file, line: #line)._redirectHandler()
+        XCTAssert(redir3 is Alamofire.Redirector)
+    }
+    
+    func caseResponseModify() {
+        // validation
+        let statusCode0: Range<Int> = 200 ..< 300
+        let contentType0: [String] = ["type0", "type1"]
+        
+        let statusCode1: Range<Int> = 300 ..< 400
+        let contentType1: [String] = ["type2", "type3"]
+        
+        let valid0 = APIs.echoGet._context(file: #file, line: #line)._validation()
+        XCTAssert(valid0.0 == nil && valid0.1 == nil)
+        
+        self.acceptableStatusCodes(statusCode0)
+        self.acceptableContentTypes(contentType0)
+        let valid1 = APIs.echoGet._context(file: #file, line: #line)._validation()
+        XCTAssert(valid1.0 == statusCode0 && valid1.1 == contentType0)
+        
+        let valid2 = APIs.echoGet
+            .validate(statusCode: statusCode1)
+            .validate(contentType: contentType1)
+            ._context(file: #file, line: #line)._validation()
+        XCTAssert(valid2.0 == statusCode1 && valid2.1 == contentType1)
+        
+        // cacheResponse
+        let cacheResponse0 = APIs.echoGet._context(file: #file, line: #line)._cachedResponseHandler()
+        XCTAssert(cacheResponse0 == nil)
+        
+        self.cachedResponseHandler(Alamofire.ResponseCacher.doNotCache)
+        let cacheResponse1 = APIs.echoGet._context(file: #file, line: #line)._cachedResponseHandler()
+        XCTAssert(cacheResponse1 is Alamofire.ResponseCacher)
+        
+        self.cachedResponseHandler(nil)
+        let cacheResponse2 = APIs.echoGet._context(file: #file, line: #line)._cachedResponseHandler()
+        XCTAssert(cacheResponse2 == nil)
+        
+        let cacheResponse3 = APIs.echoGet.cacheResponse(using: Alamofire.ResponseCacher.cache)._context(file: #file, line: #line)._cachedResponseHandler()
+        XCTAssert(cacheResponse3 is Alamofire.ResponseCacher)
+    }
+    
+    func caseResponseQueue() {
+        let mainQueue = DispatchQueue.main
+        let myQueue = DispatchQueue(label: "my.queue")
+        
+        let queue0 = APIs.echoGet._context(file: #file, line: #line)._queue()
+        XCTAssert(queue0 === mainQueue)
+        
+        self.queue(myQueue)
+        let queue1 = APIs.echoGet._context(file: #file, line: #line)._queue()
+        XCTAssert(queue1 === myQueue)
+        
+        self.queue(mainQueue)
+        let queue2 = APIs.echoGet.queue(myQueue)._context(file: #file, line: #line)._queue()
+        XCTAssert(queue2 === myQueue)
+        
+        self.queue(myQueue)
+        let queue3 = APIs.echoGet.queue(mainQueue)._context(file: #file, line: #line)._queue()
+        XCTAssert(queue3 === mainQueue)
+    }
+    
+    func caseResponseDataResponseSerializer() {
+        let echo0 = GET<Echo, Data>(url: "http://www.xyz.com/echo")
+        let serializer0 = echo0._context(file: #file, line: #line)._dataResponseSerializer()
+        XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
+        XCTAssert(serializer0.emptyResponseCodes == Alamofire.DataResponseSerializer.defaultEmptyResponseCodes)
+        XCTAssert(serializer0.emptyRequestMethods == Alamofire.DataResponseSerializer.defaultEmptyRequestMethods)
+    }
+    
+    func caseResponseStringResponseSerializer() {
+        let echo0 = GET<Echo, String>(url: "http://www.xyz.com/echo")
+        let serializer0 = echo0._context(file: #file, line: #line)._stringResponseSerializer()
+        XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
+        XCTAssert(serializer0.encoding == nil)
+        XCTAssert(serializer0.emptyResponseCodes == Alamofire.StringResponseSerializer.defaultEmptyResponseCodes)
+        XCTAssert(serializer0.emptyRequestMethods == Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
+    }
+    
+    func caseResponseJSONResponseSerializer() {
+        let echo0 = GET<Echo, [String: Any]>(url: "http://www.xyz.com/echo")
+        let serializer0 = echo0._context(file: #file, line: #line)._jsonResponseSerializer()
+        XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
+        XCTAssert(serializer0.emptyResponseCodes == Alamofire.StringResponseSerializer.defaultEmptyResponseCodes)
+        XCTAssert(serializer0.emptyRequestMethods == Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
+        XCTAssert(serializer0.options == .allowFragments)
+    }
+    
+    func caseResponseDecodableResponseSerializer() {
+        let echo0 = GET<Echo, Echo>(url: "http://www.xyz.com/echo")
+        let serializer0: Alamofire.DecodableResponseSerializer<Echo> = echo0._context(file: #file, line: #line)._decodableResponseSerializer()
+        XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
+        XCTAssert(serializer0.decoder is JSONDecoder)
+        XCTAssert(serializer0.emptyResponseCodes == Alamofire.StringResponseSerializer.defaultEmptyResponseCodes)
+        XCTAssert(serializer0.emptyRequestMethods == Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
+    }
+    
+    func caseAccessing() {
+        
+        // accessingRequest
+        XCTAssert(self.$dataRequestEchoGet.request == nil)
+        
+        self.dataRequestEchoGet.request(nil) { resp in }
+        
+        XCTAssert(self.$dataRequestEchoGet.request != nil)
     }
 }

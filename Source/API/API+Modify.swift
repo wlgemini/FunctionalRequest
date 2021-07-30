@@ -34,16 +34,21 @@ public extension API {
         self._modifier(DataRequestModifier.HTTPHeaders(dictionary))
     }
     
+    /// modify encoding
+    func encoding(_ encoding: Alamofire.ParameterEncoding) -> Self
+    where Self.P == [String: Any] {
+        self._modifier(DataRequestModifier.Encoding(encoding))
+    }
+    
     /// modify encoder
     func encoder(_ encoder: Alamofire.ParameterEncoder) -> Self
     where Self.P: Encodable {
         self._modifier(DataRequestModifier.Encoder(encoder))
     }
     
-    /// modify encoding
-    func encoding(_ encoding: Alamofire.ParameterEncoding) -> Self
-    where Self.P == [String: Any] {
-        self._modifier(DataRequestModifier.Encoding(encoding))
+    /// modify URLRequest.timeoutInterval
+    func timeoutInterval(_ timeoutInterval: TimeInterval) -> Self {
+        self._modifier(DataRequestModifier.TimeoutInterval(timeoutInterval))
     }
     
     /// modify authenticate
@@ -53,11 +58,6 @@ public extension API {
         self._modifier(DataRequestModifier.Authenticate(username: username,
                                                         password: password,
                                                         persistence: persistence))
-    }
-    
-    /// modify URLRequest.timeoutInterval
-    func timeoutInterval(_ timeoutInterval: TimeInterval) -> Self {
-        self._modifier(DataRequestModifier.TimeoutInterval(timeoutInterval))
     }
     
     /// modify authenticate
@@ -83,6 +83,16 @@ public extension API {
     /// validate contentType
     func validate(contentType acceptableContentTypes: @escaping @autoclosure Compute<[String]>) -> Self {
         self._modifier(DataResponseModifier.Validation(contentType: acceptableContentTypes))
+    }
+    
+    /// modify cache response
+    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> Self {
+        self._modifier(DataResponseModifier.CacheResponse(using: handler))
+    }
+    
+    /// The queue on which the completion handler is dispatched
+    func queue(_ queue: DispatchQueue) -> Self {
+        self._modifier(DataResponseModifier.Queue(queue))
     }
     
     /// serialize data
@@ -133,10 +143,5 @@ public extension API {
                                                                   emptyResponseCodes: emptyResponseCodes,
                                                                   emptyRequestMethods: emptyRequestMethods)
         return self._modifier(DataResponseModifier.SerializeDecodable<R>(serializer))
-    }
-    
-    /// modify cache response
-    func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> Self {
-        self._modifier(DataResponseModifier.CacheResponse(using: handler))
     }
 }

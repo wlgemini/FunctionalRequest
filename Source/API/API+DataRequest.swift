@@ -17,6 +17,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -30,6 +31,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -43,6 +45,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -56,6 +59,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -69,6 +73,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -82,6 +87,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -95,6 +101,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -108,6 +115,7 @@ public extension API {
         let context = self._context(file: file, line: line)
         guard let request = self._request(parameters: parameters, context: context) else { return }
         self._requestModify(request: request, context: context)
+        self._responseModify(request: request, context: context)
         self._response(request: request, context: context, completion: completion)
         self._requestAccessing(request: request, context: context)
     }
@@ -129,8 +137,8 @@ extension API {
     where P == [String: Any] {
         guard let method = context._method() else { return nil }
         guard let url = context._url() else { return nil }
-        let encoding = context._encoding()
         let headers = context._headers()
+        let encoding = context._encoding()
         let requestModifier = context._urlRequestModifier()
         return Store._sessionRaw.request(url,
                                          method: method,
@@ -146,8 +154,8 @@ extension API {
     where P: Encodable {
         guard let method = context._method() else { return nil }
         guard let url = context._url() else { return nil }
-        let encoder = context._encoder()
         let headers = context._headers()
+        let encoder = context._encoder()
         let requestModifier = context._urlRequestModifier()
         return Store._sessionRaw.request(url,
                                          method: method,
@@ -166,10 +174,13 @@ extension API {
         }
         
         // redirect
-        if let redirect = context._redirectHandler() {
-            request.redirect(using: redirect)
+        if let redirectHandler = context._redirectHandler() {
+            request.redirect(using: redirectHandler)
         }
-        
+    }
+    
+    /// response modify
+    func _responseModify(request: Alamofire.DataRequest, context: Context) {
         // validation
         let validation = context._validation()
         switch validation {
@@ -184,6 +195,11 @@ extension API {
             
         case (.none, .none):
             request.validate()
+        }
+        
+        // cacheResponse
+        if let cachedResponseHandler = context._cachedResponseHandler() {
+            request.cacheResponse(using: cachedResponseHandler)
         }
     }
     

@@ -74,32 +74,6 @@ extension Store._Context {
         return combinedHeaders
     }
     
-    // MARK: Encoder
-    func _encoder() -> Alamofire.ParameterEncoder {
-        if let encoder = self.dataRequest.encoder {
-            return encoder
-            
-        } else {
-            guard let method = self.dataRequest.api.method else {
-                return Alamofire.URLEncodedFormParameterEncoder.default
-            }
-            
-            switch method {
-            // URLEncodedFormParameterEncoder
-            case .get: return Store._api.dataRequest.encoder.get._value
-            case .delete: return Store._api.dataRequest.encoder.delete._value
-                
-            // JSONEncoding
-            case .patch: return Store._api.dataRequest.encoder.patch._value
-            case .post: return Store._api.dataRequest.encoder.post._value
-            case .put: return Store._api.dataRequest.encoder.put._value
-                
-            // default
-            default: return Alamofire.URLEncodedFormParameterEncoder.default
-            }
-        }
-    }
-    
     // MARK: Encoding
     func _encoding() -> Alamofire.ParameterEncoding {
         if let encoding = self.dataRequest.encoding {
@@ -126,8 +100,34 @@ extension Store._Context {
         }
     }
     
+    // MARK: Encoder
+    func _encoder() -> Alamofire.ParameterEncoder {
+        if let encoder = self.dataRequest.encoder {
+            return encoder
+            
+        } else {
+            guard let method = self.dataRequest.api.method else {
+                return Alamofire.URLEncodedFormParameterEncoder.default
+            }
+            
+            switch method {
+            // URLEncodedFormParameterEncoder
+            case .get: return Store._api.dataRequest.encoder.get._value
+            case .delete: return Store._api.dataRequest.encoder.delete._value
+                
+            // JSONEncoding
+            case .patch: return Store._api.dataRequest.encoder.patch._value
+            case .post: return Store._api.dataRequest.encoder.post._value
+            case .put: return Store._api.dataRequest.encoder.put._value
+                
+            // default
+            default: return Alamofire.URLEncodedFormParameterEncoder.default
+            }
+        }
+    }
+    
     // MARK: Modify URLRequest
-    func _urlRequestModifier() -> (_ req: inout URLRequest) throws -> Void {
+    func _urlRequestModifier() -> (inout URLRequest) throws -> Void {
         // NOTE: Make sure not access `Context` in block
         return { [urlRequestModifiers = self.dataRequest.urlRequestModifiers] (urlRequest) in
             for modifier in urlRequestModifiers {
@@ -151,11 +151,6 @@ extension Store._Context {
 // MARK: - Context for DataResponse
 extension Store._Context {
     
-    // MARK: DispatchQueue
-    func _queue() -> DispatchQueue {
-        self.dataResponse.queue ?? Store._api.dataResponse.queue._value
-    }
-    
     // MARK: Validate DataResponse
     func _validation() -> (Range<Int>?, [String]?) {
         let acceptableStatusCodes = self.dataResponse.acceptableStatusCodes ??
@@ -165,6 +160,16 @@ extension Store._Context {
             Store._api.dataResponse.acceptableContentTypes._value
         
         return (acceptableStatusCodes, acceptableContentTypes)
+    }
+    
+    // MARK: Cache DataResponse
+    func _cachedResponseHandler() -> Alamofire.CachedResponseHandler? {
+        self.dataResponse.cachedResponseHandler ?? Store._api.dataResponse.cachedResponseHandler._value
+    }
+    
+    // MARK: DispatchQueue
+    func _queue() -> DispatchQueue {
+        self.dataResponse.queue ?? Store._api.dataResponse.queue._value
     }
 
     // MARK: Serialize DataResponse
@@ -243,11 +248,6 @@ extension Store._Context {
                                                      decoder: decoder,
                                                      emptyResponseCodes: emptyResponseCodes,
                                                      emptyRequestMethods: emptyRequestMethods)
-    }
-    
-    // MARK: Cache DataResponse
-    func _cachedResponseHandler() -> Alamofire.CachedResponseHandler? {
-        self.dataResponse.cacheHandler ?? Store._api.dataResponse.cacheHandler._value
     }
 }
 

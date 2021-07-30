@@ -33,9 +33,9 @@ extension Store {
         // MARK: Headers
         public var headers = Setter.Compute.Nillable<Alamofire.HTTPHeaders>()
         
-        // MARK: Encoder/Encoding
-        public var encoder = Encoder()
+        // MARK: Encoding/Encoder
         public var encoding = Encoding()
+        public var encoder = Encoder()
         
         // MARK: Authentication
         public var authenticate = Setter.Copy.Nillable<URLCredential>()
@@ -49,24 +49,24 @@ extension Store {
     /// DataResponse
     public struct DataResponse {
         
-        // MARK: DispatchQueue
-        /// default: .main
-        public var queue = Setter.Copy.Nonnil<DispatchQueue>(.main)
-        
         // MARK: Validate DataResponse
         /// default acceptable range: 200 ... 299
         public var acceptableStatusCodes = Setter.Copy.Nillable<Range<Int>>()
         /// default acceptable content type: matches any specified in the Accept HTTP header field.
         public var acceptableContentTypes = Setter.Copy.Nillable<[String]>()
         
+        // MARK: Cache DataResponse
+        public var cachedResponseHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()
+        
+        // MARK: DispatchQueue
+        /// default: .main
+        public var queue = Setter.Copy.Nonnil<DispatchQueue>(.main)
+        
         // MARK: Serialize DataResponse
         public var serializeData = SerializeData()
         public var serializeString = SerializeString()
         public var serializeJSON = SerializeJSON()
         public var serializeDecodable = SerializeDecodable()
-
-        // MARK: Cache DataResponse
-        public var cacheHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()
         
         init() { }
     }

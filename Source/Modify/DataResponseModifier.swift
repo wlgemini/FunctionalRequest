@@ -42,6 +42,22 @@ public enum DataResponseModifier {
     }
     
     
+    // MARK: - CacheResponse
+    /// CacheResponse
+    public struct CacheResponse: Modifier {
+        
+        public init(using handler: Alamofire.CachedResponseHandler) {
+            self._handler = handler
+        }
+        
+        public func modify(context: Context) {
+            context.dataResponse.cachedResponseHandler = self._handler
+        }
+        
+        let _handler: Alamofire.CachedResponseHandler
+    }
+    
+    
     // MARK: - Queue
     public struct Queue: Modifier {
         
@@ -124,21 +140,5 @@ public enum DataResponseModifier {
         }
         
         let _serializer: Alamofire.DecodableResponseSerializer<T>
-    }
-    
-    
-    // MARK: - CacheResponse
-    /// CacheResponse
-    public struct CacheResponse: Modifier {
-        
-        public init(using handler: Alamofire.CachedResponseHandler) {
-            self._handler = handler
-        }
-        
-        public func modify(context: Context) {
-            
-        }
-        
-        let _handler: Alamofire.CachedResponseHandler
     }
 }

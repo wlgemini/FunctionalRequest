@@ -43,9 +43,9 @@ extension Store._Context {
         // Headers
         var headers: Alamofire.HTTPHeaders = Alamofire.HTTPHeaders()
         
-        // Encoder/Encoding
-        var encoder: Alamofire.ParameterEncoder?
+        // Encoding/Encoder
         var encoding: Alamofire.ParameterEncoding?
+        var encoder: Alamofire.ParameterEncoder?
         
         // URLRequest Modifiers
         var urlRequestModifiers: [MutatingAvailable<URLRequest>] = []
@@ -61,22 +61,22 @@ extension Store._Context {
     // MARK: DataResponse
     /// _DataResponse
     final class _DataResponse {
-        
-        // DispatchQueue
-        var queue: DispatchQueue?
-        
+                
         // Validate DataResponse
         var acceptableStatusCodes: Range<Int>?
         var acceptableContentTypes: Compute<[String]>?
+        
+        // Cache DataResponse
+        var cachedResponseHandler: Alamofire.CachedResponseHandler?
+        
+        // DispatchQueue
+        var queue: DispatchQueue?
         
         // Serialize DataResponse
         var serializeData = Store._Context._SerializeData()
         var serializeString = Store._Context._SerializeString()
         var serializeJSON = Store._Context._SerializeJSON()
         var serializeDecodable = Store._Context._SerializeDecodable()
-        
-        // Cache DataResponse
-        var cacheHandler: Alamofire.CachedResponseHandler?
     }
     
     
@@ -92,6 +92,9 @@ extension Store._Context {
     /// _API
     final class _API {
         
+        // Method
+        var method: Alamofire.HTTPMethod?
+        
         // Initial URL
         var initialURL: DataRequestModifier.InitialURL._Type?
         
@@ -99,9 +102,6 @@ extension Store._Context {
         var base: Compute<String>?
         var appendPaths: [Compute<String>] = []
         var mock: Compute<String>?
-        
-        // Method
-        var method: Alamofire.HTTPMethod?
     }
     
     

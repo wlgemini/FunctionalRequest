@@ -21,7 +21,22 @@ class AllTests: XCTestCase {
         // API
         settingAPITests.caseRequestMethod()
         settingAPITests.caseRequestURL()
+        settingAPITests.caseRequestEncoding()
+        settingAPITests.caseRequestEncoder()
         settingAPITests.caseRequestHeaders()
         settingAPITests.caseRequestModifier()
+        settingAPITests.caseRequestModify()
+        
+        settingAPITests.caseResponseModify()
+        settingAPITests.caseResponseQueue()
+        settingAPITests.caseResponseDataResponseSerializer()
+        settingAPITests.caseResponseStringResponseSerializer()
+        settingAPITests.caseResponseJSONResponseSerializer()
+        settingAPITests.caseResponseDecodableResponseSerializer()
+        settingAPITests.caseAccessing()
+    }
+    
+    func testRequest() {
+        
     }
 }
