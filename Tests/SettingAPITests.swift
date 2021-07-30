@@ -263,5 +263,4 @@ class SettingAPITests {
     func caseRequestModifier() {
         
     }
-    
 }

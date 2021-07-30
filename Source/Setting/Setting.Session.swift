@@ -23,12 +23,22 @@ extension Setting {
             
             nonmutating set {
                 guard Store._sessionFinalized == false else {
-                    if let locatable = newValue as? _Locatable {
-                        _Log.warning("can not mutating finalized session", location: locatable._location)
-                    } else {
-                        _Log.warning("can not mutating finalized session", location: .nowhere)
+                    _Debug.only {
+                        if let locatable = newValue as? _Locatable {
+                            _Log.warning("can not mutating finalized session", location: locatable._location)
+                        } else {
+                            _Log.warning("can not mutating finalized session", location: .nowhere)
+                        }
                     }
                     return
+                }
+                
+                _Debug.only {
+                    if let locatable = newValue as? _Locatable {
+                        let old = Store._session[keyPath: self._keyPath].value
+                        let new = newValue.value
+                        _Log.trace("mutating `\(S.G.self)` from `\(old)` to `\(new)`", location: locatable._location)
+                    }
                 }
                 
                 Store._session[keyPath: self._keyPath] = newValue

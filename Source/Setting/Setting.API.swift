@@ -22,6 +22,14 @@ extension Setting {
             }
             
             nonmutating set {
+                _Debug.only {
+                    if let locatable = newValue as? _Locatable {
+                        let old = Store._api[keyPath: self._keyPath].value
+                        let new = newValue.value
+                        _Log.trace("mutating \(S.G.self) from `\(old)` to `\(new)`", location: locatable._location)
+                    }
+                }
+                
                 Store._api[keyPath: self._keyPath] = newValue
             }
         }
