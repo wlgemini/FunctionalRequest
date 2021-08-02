@@ -33,7 +33,7 @@ extension Store {
         
         public var eventMonitors = Setter.Copy.Nillable<[Alamofire.EventMonitor]>()
         
-        public var never = Setter.Copy.Nillable<Never>()
+        public var never = Setter.Copy.Nillable<Bool>()
         
         init() { }
     }

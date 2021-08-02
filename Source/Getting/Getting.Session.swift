@@ -58,7 +58,7 @@ extension Getting.Session {
 
 extension Getting.Session {
     
-    public static var never: Getting.Session<Setter.Copy.Nillable<Never>> {
+    public static var never: Getting.Session<Setter.Copy.Nillable<Bool>> {
         .init(\.never)
     }
 }

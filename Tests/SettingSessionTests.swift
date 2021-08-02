@@ -37,7 +37,7 @@ class SettingSessionTests {
     var session
     
     
-    func case0SessionSetting() {
+    func sessionSetting() {
         // session not finalized
         XCTAssert(self.$session.session == nil, "session finalized")
         
@@ -51,7 +51,7 @@ class SettingSessionTests {
         self.eventMonitors([Alamofire.ClosureEventMonitor()])
     }
     
-    func case1SessionInit() {
+    func sessionInit() {
         // session not finalized
         XCTAssert(self.$session.session == nil, "session finalized")
         
@@ -89,7 +89,7 @@ class SettingSessionTests {
         XCTAssert(isMonitorsEqual, "eventMonitors not equal")
     }
     
-    func case2SessonNonmutating() {
+    func sessionNonmutating() {
         // session finalized
         XCTAssert(self.$session.session != nil, "session not finalized")
         

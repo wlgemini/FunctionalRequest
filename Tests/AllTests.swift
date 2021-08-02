@@ -9,34 +9,39 @@ import FunctionalRequest
 
 class AllTests: XCTestCase {
     
-    let settingSessionTests = SettingSessionTests()
-    let settingAPITests = SettingAPITests()
+    let settingSession = SettingSessionTests()
+    let settingAPI = SettingAPITests()
+    let dataRequest = DataRequestTests()
     
     func testALL() {
-        // session
-        settingSessionTests.case0SessionSetting()
-        settingSessionTests.case1SessionInit()
-        settingSessionTests.case2SessonNonmutating()
+        // Session
+        settingSession.sessionSetting()
+        settingSession.sessionInit()
+        settingSession.sessionNonmutating()
+        
         
         // API
-        settingAPITests.caseRequestMethod()
-        settingAPITests.caseRequestURL()
-        settingAPITests.caseRequestEncoding()
-        settingAPITests.caseRequestEncoder()
-        settingAPITests.caseRequestHeaders()
-        settingAPITests.caseRequestModifier()
-        settingAPITests.caseRequestModify()
+        settingAPI.requestMethod()
+        settingAPI.requestURL()
+        settingAPI.requestEncoding()
+        settingAPI.requestEncoder()
+        settingAPI.requestHeaders()
+        settingAPI.requestModifier()
+        settingAPI.requestModify()
         
-        settingAPITests.caseResponseModify()
-        settingAPITests.caseResponseQueue()
-        settingAPITests.caseResponseDataResponseSerializer()
-        settingAPITests.caseResponseStringResponseSerializer()
-        settingAPITests.caseResponseJSONResponseSerializer()
-        settingAPITests.caseResponseDecodableResponseSerializer()
-        settingAPITests.caseAccessing()
-    }
-    
-    func testRequest() {
+        settingAPI.responseModify()
+        settingAPI.responseQueue()
+        settingAPI.responseDataResponseSerializer()
+        settingAPI.responseStringResponseSerializer()
+        settingAPI.responseJSONResponseSerializer()
+        settingAPI.responseDecodableResponseSerializer()
+        settingAPI.accessing()
         
+        
+        // DataRequest
+        dataRequest.method(test: self)
+        dataRequest.auth(test: self)
+        dataRequest.statusCodes(test: self)
+        dataRequest.headers(test: self)
     }
 }

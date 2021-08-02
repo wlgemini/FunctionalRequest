@@ -9,6 +9,30 @@ import XCTest
 
 class SettingAPITests {
     
+    struct Bin: Codable, Equatable {
+        let foo: String
+        let bar: String
+        let baz: String
+    }
+    
+    enum APIs {
+        
+        static let echoGet = GET<Bin, Bin>("echo")
+        static let echoDelete = DELETE<Bin, Bin>("echo")
+        static let echoPatch = PATCH<Bin, Bin>("echo")
+        static let echoPost = POST<Bin, Bin>("echo")
+        static let echoPut = PUT<Bin, Bin>("echo")
+        
+        static let echoJSONGet = GET<[String: Any], Any>("echo")
+        static let echoJSONDelete = DELETE<[String: Any], Any>("echo")
+        static let echoJSONPatch = PATCH<[String: Any], Any>("echo")
+        static let echoJSONPost = POST<[String: Any], Any>("echo")
+        static let echoJSONPut = PUT<[String: Any], Any>("echo")
+        
+        static let redirectFrom = POST<Bin, Bin>("redirectFrom")
+        static let redirectTo = POST<Bin, Bin>("redirectTo")
+    }
+    
     // DataRequest
     @Setting.API(\.dataRequest.base)
     var base
@@ -115,7 +139,7 @@ class SettingAPITests {
     @Getting.DataRequest(APIs.echoGet.base("http://www.xyz.com/"))
     var dataRequestEchoGet
     
-    func caseRequestMethod() {
+    func requestMethod() {
         let contextEchoGet = APIs.echoGet._context(file: #fileID, line: #line)
         XCTAssert(contextEchoGet._method() == .get)
         
@@ -132,7 +156,7 @@ class SettingAPITests {
         XCTAssert(contextEchoPut._method() == .put)
     }
     
-    func caseRequestURL() {
+    func requestURL() {
         let BaseURL0 = "http://www.xyz.com/"
         let Path = "echo/"
         let FullURL = BaseURL0 + Path
@@ -143,13 +167,13 @@ class SettingAPITests {
         
         do {
             // URL = FullURL + AppendPath
-            let api0 = GET<Echo, Echo>(url: FullURL)
+            let api0 = GET<Bin, Bin>(url: FullURL)
                 .appendPath(AppendPath0)
                 .appendPath(AppendPath1)
             let url0 = api0._context(file: #fileID, line: #line)._url()
             
             // URL = BaseURL + Path + AppendPath
-            let api1 = GET<Echo, Echo>(Path)
+            let api1 = GET<Bin, Bin>(Path)
                 .base(BaseURL0)
                 .appendPath(AppendPath0)
                 .appendPath(AppendPath1)
@@ -172,7 +196,7 @@ class SettingAPITests {
         
         do {
             // Path + AppendPath
-            let api0 = GET<Echo, Echo>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
+            let api0 = GET<Bin, Bin>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
             let url0 = api0._context(file: #fileID, line: #line)._url()
             XCTAssert(url0 == nil)
             
@@ -188,7 +212,7 @@ class SettingAPITests {
             let BaseURL1 = "http://www.abc.com/"
             let AbsURL1 = BaseURL1 + Path + AppendPath0 + AppendPath1
             self.base(BaseURL1)
-            let api0 = GET<Echo, Echo>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
+            let api0 = GET<Bin, Bin>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
             let url0 = api0._context(file: #fileID, line: #line)._url()
             XCTAssert(AbsURL1 == url0)
             
@@ -200,7 +224,7 @@ class SettingAPITests {
             
             // Path + AppendPath
             self.base(nil)
-            let api2 = GET<Echo, Echo>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
+            let api2 = GET<Bin, Bin>(Path).appendPath(AppendPath0).appendPath(AppendPath1)
             let url2 = api2._context(file: #fileID, line: #line)._url()
             XCTAssert(nil == url2)
             
@@ -209,10 +233,13 @@ class SettingAPITests {
                 .mock(MockURL)
             let url3 = api3._context(file: #fileID, line: #line)._url()
             XCTAssert(nil == url3)
+            
+            // Clear
+            self.base(nil)
         }
     }
     
-    func caseRequestHeaders() {
+    func requestHeaders() {
         let BaseURL = "http://www.xyz.com/"
         let Path = "echo/"
         let FullURL = BaseURL + Path
@@ -231,7 +258,7 @@ class SettingAPITests {
 
         do {
             // Headers: []
-            let api0 = GET<Echo, Echo>(url: FullURL).header(name: kv0.0, value: kv0.1)
+            let api0 = GET<Bin, Bin>(url: FullURL).header(name: kv0.0, value: kv0.1)
             let header0 = api0._context(file: #file, line: #line)._headers()
             
             XCTAssert(header0.count == 1)
@@ -261,7 +288,7 @@ class SettingAPITests {
         }
     }
 
-    func caseRequestEncoding() {
+    func requestEncoding() {
         // Default
         let get0 = APIs.echoJSONGet._context(file: #fileID, line: #line)._encoding()
         let delete0 = APIs.echoJSONDelete._context(file: #fileID, line: #line)._encoding()
@@ -289,7 +316,7 @@ class SettingAPITests {
         XCTAssert(put1 is Alamofire.URLEncoding)
     }
     
-    func caseRequestEncoder() {
+    func requestEncoder() {
         // Default
         let get0 = APIs.echoGet._context(file: #fileID, line: #line)._encoder()
         let delete0 = APIs.echoDelete._context(file: #fileID, line: #line)._encoder()
@@ -317,14 +344,14 @@ class SettingAPITests {
         XCTAssert(put1 is Alamofire.URLEncodedFormParameterEncoder)
     }
     
-    func caseRequestModifier() {
+    func requestModifier() {
         let BaseURL = "http://www.xyz.com/"
         let Path = "echo/"
         let FullURL = BaseURL + Path
         
         let expPost = XCTestExpectation()
         let timeoutInterval: TimeInterval = 2
-        let api0 = GET<Echo, Echo>(url: FullURL).timeoutInterval(timeoutInterval)
+        let api0 = GET<Bin, Bin>(url: FullURL).timeoutInterval(timeoutInterval)
         api0.request(nil) { resp in
             XCTAssert(resp.request?.timeoutInterval == timeoutInterval)
             expPost.fulfill()
@@ -333,7 +360,7 @@ class SettingAPITests {
         _ = XCTWaiter.wait(for: [expPost], timeout: timeoutInterval * 2)
     }
     
-    func caseRequestModify() {
+    func requestModify() {
         // Authentication
         let auth0 = APIs.echoGet._context(file: #file, line: #line)._authenticate()
         XCTAssert(auth0 == nil)
@@ -358,9 +385,12 @@ class SettingAPITests {
         
         let redir3 = APIs.echoGet.redirect(using: Alamofire.Redirector.follow)._context(file: #file, line: #line)._redirectHandler()
         XCTAssert(redir3 is Alamofire.Redirector)
+        
+        // Clear
+        self.redirect(nil)
     }
     
-    func caseResponseModify() {
+    func responseModify() {
         // validation
         let statusCode0: Range<Int> = 200 ..< 300
         let contentType0: [String] = ["type0", "type1"]
@@ -396,9 +426,14 @@ class SettingAPITests {
         
         let cacheResponse3 = APIs.echoGet.cacheResponse(using: Alamofire.ResponseCacher.cache)._context(file: #file, line: #line)._cachedResponseHandler()
         XCTAssert(cacheResponse3 is Alamofire.ResponseCacher)
+        
+        // Clear
+        self.acceptableStatusCodes(nil)
+        self.acceptableContentTypes(nil)
+        self.cachedResponseHandler(nil)
     }
     
-    func caseResponseQueue() {
+    func responseQueue() {
         let mainQueue = DispatchQueue.main
         let myQueue = DispatchQueue(label: "my.queue")
         
@@ -416,18 +451,21 @@ class SettingAPITests {
         self.queue(myQueue)
         let queue3 = APIs.echoGet.queue(mainQueue)._context(file: #file, line: #line)._queue()
         XCTAssert(queue3 === mainQueue)
+        
+        // Clear
+        self.queue(.main)
     }
     
-    func caseResponseDataResponseSerializer() {
-        let echo0 = GET<Echo, Data>(url: "http://www.xyz.com/echo")
+    func responseDataResponseSerializer() {
+        let echo0 = GET<Bin, Data>(url: "http://www.xyz.com/echo")
         let serializer0 = echo0._context(file: #file, line: #line)._dataResponseSerializer()
         XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
         XCTAssert(serializer0.emptyResponseCodes == Alamofire.DataResponseSerializer.defaultEmptyResponseCodes)
         XCTAssert(serializer0.emptyRequestMethods == Alamofire.DataResponseSerializer.defaultEmptyRequestMethods)
     }
     
-    func caseResponseStringResponseSerializer() {
-        let echo0 = GET<Echo, String>(url: "http://www.xyz.com/echo")
+    func responseStringResponseSerializer() {
+        let echo0 = GET<Bin, String>(url: "http://www.xyz.com/echo")
         let serializer0 = echo0._context(file: #file, line: #line)._stringResponseSerializer()
         XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
         XCTAssert(serializer0.encoding == nil)
@@ -435,8 +473,8 @@ class SettingAPITests {
         XCTAssert(serializer0.emptyRequestMethods == Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
     }
     
-    func caseResponseJSONResponseSerializer() {
-        let echo0 = GET<Echo, [String: Any]>(url: "http://www.xyz.com/echo")
+    func responseJSONResponseSerializer() {
+        let echo0 = GET<Bin, [String: Any]>(url: "http://www.xyz.com/echo")
         let serializer0 = echo0._context(file: #file, line: #line)._jsonResponseSerializer()
         XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
         XCTAssert(serializer0.emptyResponseCodes == Alamofire.StringResponseSerializer.defaultEmptyResponseCodes)
@@ -444,16 +482,16 @@ class SettingAPITests {
         XCTAssert(serializer0.options == .allowFragments)
     }
     
-    func caseResponseDecodableResponseSerializer() {
-        let echo0 = GET<Echo, Echo>(url: "http://www.xyz.com/echo")
-        let serializer0: Alamofire.DecodableResponseSerializer<Echo> = echo0._context(file: #file, line: #line)._decodableResponseSerializer()
+    func responseDecodableResponseSerializer() {
+        let echo0 = GET<Bin, Bin>(url: "http://www.xyz.com/echo")
+        let serializer0: Alamofire.DecodableResponseSerializer<Bin> = echo0._context(file: #file, line: #line)._decodableResponseSerializer()
         XCTAssert(serializer0.dataPreprocessor is Alamofire.PassthroughPreprocessor)
         XCTAssert(serializer0.decoder is JSONDecoder)
         XCTAssert(serializer0.emptyResponseCodes == Alamofire.StringResponseSerializer.defaultEmptyResponseCodes)
         XCTAssert(serializer0.emptyRequestMethods == Alamofire.StringResponseSerializer.defaultEmptyRequestMethods)
     }
     
-    func caseAccessing() {
+    func accessing() {
         
         // accessingRequest
         XCTAssert(self.$dataRequestEchoGet.request == nil)
