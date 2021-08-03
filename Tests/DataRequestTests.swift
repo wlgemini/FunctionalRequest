@@ -116,5 +116,44 @@ class DataRequestTests {
         XCTAssert(body?.headers.Abc == "1")
         XCTAssert(body?.headers.Def == "2")
     }
+    
+    func echo(test: XCTestCase) {
+        // Given
+        struct Params: Codable, Equatable {
+            let foo: String
+            let bar: Int
+        }
+        
+        struct HTTPBinResponse: Decodable {
+            let headers: [String: String]
+            let origin: String
+            let url: String
+            let data: String?
+            let form: [String: String]?
+            let args: [String: String]
+        }
+        
+        self.baseURL("https://httpbin.org")
+        let expectation = XCTestExpectation(description: "")
+        var response: DataResponse<HTTPBinResponse, AFError>?
+        let post = POST<Params, HTTPBinResponse>("/anything")
+        let params = Params(foo: "foo", bar: 123)
+        
+        // When
+        post
+            .request(params) { resp in
+            response = resp
+            expectation.fulfill()
+        }
+        
+        test.wait(for: [expectation], timeout: 20)
+        
+        // Then
+        XCTAssertNotNil(response)
+        let bin = try? response?.result.get()
+        XCTAssertNotNil(bin)
+        let dataStr = (bin?.data ?? "").data(using: .utf8) ?? Data()
+        let data = try? JSONDecoder().decode(Params.self, from: dataStr)
+        XCTAssert(data == params)
+    }
 }
-

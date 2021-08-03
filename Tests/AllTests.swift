@@ -43,5 +43,6 @@ class AllTests: XCTestCase {
         dataRequest.auth(test: self)
         dataRequest.statusCodes(test: self)
         dataRequest.headers(test: self)
+        dataRequest.echo(test: self)
     }
 }
