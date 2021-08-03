@@ -7,7 +7,10 @@ let package = Package(
     name: "FunctionalRequest",
     
     platforms: [
-        .macOS(.v10_12), .iOS(.v10), .tvOS(.v10), .watchOS(.v3)
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10),
+        .watchOS(.v3)
     ],
     
     products: [
@@ -24,10 +27,15 @@ let package = Package(
         .target(name: "FunctionalRequest",
                 dependencies: ["Alamofire"],
                 path: "Source",
-                linkerSettings: [.linkedFramework("Foundation", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS]))]),
+                linkerSettings: [.linkedFramework("Foundation",
+                                                  .when(platforms: [.iOS,
+                                                                    .macOS,
+                                                                    .tvOS,
+                                                                    .watchOS]))]),
         
         .testTarget(name: "FunctionalRequestTests",
-                    dependencies: ["FunctionalRequest", "Alamofire"],
+                    dependencies: ["FunctionalRequest",
+                                   "Alamofire"],
                     path: "Tests")
     ]
 )
