@@ -14,6 +14,9 @@ class DataRequestTests {
     @Setting.API(\.dataRequest.base)
     var baseURL
     
+    @Setting.API(\.dataResponse.validations)
+    var customValidations
+    
     func method(test: XCTestCase) {
         // Given
         self.baseURL("https://httpbin.org")
@@ -68,17 +71,36 @@ class DataRequestTests {
     func statusCodes(test: XCTestCase) {
         // Given
         self.baseURL("https://httpbin.org")
-        let expectation = XCTestExpectation(description: "")
+        let vali0Filfill = XCTestExpectation(description: "")
+        let vali0: [String: Alamofire.DataRequest.Validation] = [
+            "vali0": { (req, resp, data) -> DataRequest.ValidationResult in
+                vali0Filfill.fulfill()
+                return .success(())
+            }
+        ]
+        
+        let vali1Filfill = XCTestExpectation(description: "")
+        let vali1: (String, Alamofire.DataRequest.Validation) = (
+            "vali1", { (req, resp, data) -> DataRequest.ValidationResult in
+                vali1Filfill.fulfill()
+                return .success(())
+            }
+        )
+        self.customValidations(vali0)
+        
+        let respFilfill = XCTestExpectation(description: "")
         var response: DataResponse<Any, AFError>?
         let get = GET<[String: Any], Any>("/status/400")
         
         // When
-        get.request(nil) { resp in
+        get
+            .validate(identifier: vali1.0, validation: vali1.1)
+            .request(nil) { resp in
             response = resp
-            expectation.fulfill()
+            respFilfill.fulfill()
         }
         
-        test.wait(for: [expectation], timeout: 20)
+        test.wait(for: [vali0Filfill, vali1Filfill, respFilfill], timeout: 60)
         
         // Then
         XCTAssertNotNil(response)

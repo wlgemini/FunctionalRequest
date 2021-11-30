@@ -50,10 +50,14 @@ extension Store {
     public struct DataResponse {
         
         // MARK: Validate DataResponse
-        /// default acceptable range: 200 ... 299
+        /// acceptable range, may override by API.
         public var acceptableStatusCodes = Setter.Copy.Nillable<Range<Int>>()
-        /// default acceptable content type: matches any specified in the Accept HTTP header field.
+        
+        /// acceptable content type, may override by API.
         public var acceptableContentTypes = Setter.Copy.Nillable<[String]>()
+        
+        /// custom validations, may override by API, default: nil
+        public var validations = Setter.Copy.Nillable<[String: Alamofire.DataRequest.Validation]>()
         
         // MARK: Cache DataResponse
         public var cachedResponseHandler = Setter.Copy.Nillable<Alamofire.CachedResponseHandler>()

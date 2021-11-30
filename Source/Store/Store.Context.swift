@@ -65,6 +65,7 @@ extension Store._Context {
         // Validate DataResponse
         var acceptableStatusCodes: Range<Int>?
         var acceptableContentTypes: Compute<[String]>?
+        var validations: [String: Alamofire.DataRequest.Validation] = [:]
         
         // Cache DataResponse
         var cachedResponseHandler: Alamofire.CachedResponseHandler?

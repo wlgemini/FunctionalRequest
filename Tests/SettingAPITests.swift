@@ -86,6 +86,9 @@ class SettingAPITests {
     @Setting.API(\.dataResponse.acceptableContentTypes)
     var acceptableContentTypes
     
+    @Setting.API(\.dataResponse.validations)
+    var validations
+    
     @Setting.API(\.dataResponse.serializeData.dataPreprocessor)
     var serializeData_dataPreprocessor
     
@@ -392,25 +395,41 @@ class SettingAPITests {
     
     func responseModify() {
         // validation
-        let statusCode0: Range<Int> = 200 ..< 300
-        let contentType0: [String] = ["type0", "type1"]
+        let statusCode0: Range<Int> = 2000 ..< 3000
+        let contentType0: [String] = ["type0"]
+        let custom0: [String: Alamofire.DataRequest.Validation] = [
+            "custom0": { _, _, _ in .success(()) },
+        ]
         
-        let statusCode1: Range<Int> = 300 ..< 400
-        let contentType1: [String] = ["type2", "type3"]
+        let statusCode1: Range<Int> = 3000 ..< 4000
+        let contentType1: [String] = ["type1"]
+        let custom1: (String, Alamofire.DataRequest.Validation) = ("custom1", { _, _, _ in .success(()) })
+        let custom2: (String, Alamofire.DataRequest.Validation) = ("custom2", { _, _, _ in .success(()) })
         
         let valid0 = APIs.echoGet._context(file: #file, line: #line)._validation()
-        XCTAssert(valid0.0 == nil && valid0.1 == nil)
+        XCTAssert(valid0.0 == nil ) // nil
+        XCTAssert(valid0.1 == nil) // nil
+        XCTAssert(valid0.2.isEmpty == true) // empty
         
         self.acceptableStatusCodes(statusCode0)
         self.acceptableContentTypes(contentType0)
+        self.validations(custom0)
         let valid1 = APIs.echoGet._context(file: #file, line: #line)._validation()
-        XCTAssert(valid1.0 == statusCode0 && valid1.1 == contentType0)
+        XCTAssert(valid1.0 == statusCode0)
+        XCTAssert(valid1.1 == contentType0)
+        XCTAssert(valid1.2["custom0"] != nil)
         
         let valid2 = APIs.echoGet
             .validate(statusCode: statusCode1)
             .validate(contentType: contentType1)
+            .validate(identifier: custom1.0, validation: custom1.1)
+            .validate(identifier: custom2.0, validation: custom2.1)
             ._context(file: #file, line: #line)._validation()
-        XCTAssert(valid2.0 == statusCode1 && valid2.1 == contentType1)
+        XCTAssert(valid2.0 == statusCode1)
+        XCTAssert(valid2.1 == contentType1)
+        XCTAssert(valid2.2["custom0"] != nil &&
+                  valid2.2["custom1"] != nil &&
+                  valid2.2["custom2"] != nil)
         
         // cacheResponse
         let cacheResponse0 = APIs.echoGet._context(file: #file, line: #line)._cachedResponseHandler()
@@ -430,6 +449,7 @@ class SettingAPITests {
         // Clear
         self.acceptableStatusCodes(nil)
         self.acceptableContentTypes(nil)
+        self.validations(nil)
         self.cachedResponseHandler(nil)
     }
     

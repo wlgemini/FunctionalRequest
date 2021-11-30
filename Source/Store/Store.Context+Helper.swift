@@ -152,14 +152,16 @@ extension Store._Context {
 extension Store._Context {
     
     // MARK: Validate DataResponse
-    func _validation() -> (Range<Int>?, [String]?) {
+    func _validation() -> (Range<Int>?, [String]?, [String : DataRequest.Validation]) {
         let acceptableStatusCodes = self.dataResponse.acceptableStatusCodes ??
             Store._api.dataResponse.acceptableStatusCodes._value
         
         let acceptableContentTypes = self.dataResponse.acceptableContentTypes?() ??
             Store._api.dataResponse.acceptableContentTypes._value
         
-        return (acceptableStatusCodes, acceptableContentTypes)
+        let validations = self.dataResponse.validations.merging(Store._api.dataResponse.validations._value ?? [:], uniquingKeysWith: { (current, _) in current }) /* merging using API value */
+        
+        return (acceptableStatusCodes, acceptableContentTypes, validations)
     }
     
     // MARK: Cache DataResponse

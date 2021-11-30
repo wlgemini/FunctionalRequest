@@ -182,19 +182,30 @@ extension API {
     /// response modify
     func _responseModify(request: Alamofire.DataRequest, context: Context) {
         // validation
-        let validation = context._validation()
-        switch validation {
-        case (.some(let statusCode), .some(let contentType)):
-            request.validate(statusCode: statusCode).validate(contentType: contentType)
-            
-        case (.some(let statusCode), .none):
-            request.validate(statusCode: statusCode)
-            
-        case (.none, .some(let contentType)):
-            request.validate(contentType: contentType)
-            
-        case (.none, .none):
-            request.validate()
+        let (acceptableStatusCodes, acceptableContentTypes, validations) = context._validation()
+        
+        // statusCodes validation
+        if let statusCodes = acceptableStatusCodes {
+            request.validate(statusCode: statusCodes)
+        } else {
+            request.validate(statusCode: 200 ..< 300)
+        }
+        
+        // contentTypes validation
+        if let contentTypes = acceptableContentTypes {
+            request.validate(contentType: contentTypes)
+        } else {
+            if let accept = request.request?.value(forHTTPHeaderField: "Accept") {
+                let contentTypes = accept.components(separatedBy: ",")
+                request.validate(contentType: contentTypes)
+            } else {
+                request.validate(contentType: ["*/*"])
+            }
+        }
+        
+        // custom validations
+        validations.values.forEach {
+            request.validate($0)
         }
         
         // cacheResponse

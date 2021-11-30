@@ -21,13 +21,20 @@ public enum DataResponseModifier {
             self._type = .contentType(acceptableContentTypes)
         }
         
+        public init(identifier: String, validation: @escaping Alamofire.DataRequest.Validation) {
+            self._type = .custom(identifier, validation)
+        }
+        
         public func modify(context: Context) {
             switch self._type {
-            case .statusCode(let acceptableStatusCodes):
-                context.dataResponse.acceptableStatusCodes = acceptableStatusCodes
-                
-            case .contentType(let acceptableContentTypes):
-                context.dataResponse.acceptableContentTypes = acceptableContentTypes
+                case .statusCode(let acceptableStatusCodes):
+                    context.dataResponse.acceptableStatusCodes = acceptableStatusCodes
+                    
+                case .contentType(let acceptableContentTypes):
+                    context.dataResponse.acceptableContentTypes = acceptableContentTypes
+                    
+                case .custom(let identifier, let validation):
+                    context.dataResponse.validations[identifier] = validation
             }
         }
         
@@ -38,6 +45,8 @@ public enum DataResponseModifier {
             case statusCode(Range<Int>)
             
             case contentType(Compute<[String]>)
+            
+            case custom(String, Alamofire.DataRequest.Validation)
         }
     }
     

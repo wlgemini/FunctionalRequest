@@ -85,6 +85,14 @@ public extension API {
         self._modifier(DataResponseModifier.Validation(contentType: acceptableContentTypes))
     }
     
+    /// validates the request, using the specified closure.
+    /// - Parameters:
+    ///   - identifier: Same identifier will be override.
+    ///   - validation: Custom validation
+    func validate(identifier: String, validation: @escaping Alamofire.DataRequest.Validation) -> Self {
+        self._modifier(DataResponseModifier.Validation(identifier: identifier, validation: validation))
+    }
+    
     /// modify cache response
     func cacheResponse(using handler: Alamofire.CachedResponseHandler) -> Self {
         self._modifier(DataResponseModifier.CacheResponse(using: handler))
